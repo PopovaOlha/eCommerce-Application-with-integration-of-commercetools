@@ -3,7 +3,6 @@ import './App.css'
 
 function App() {
   const [counter, setCounter] = useState<number>(0)
-
   return (
     <>
       <p>Local Counter in App: {counter}</p>
@@ -13,5 +12,4 @@ function App() {
     </>
   )
 }
-
 export default App
