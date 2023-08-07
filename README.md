@@ -1,7 +1,7 @@
 # eCommerce-Application
 
 ## Dev
-`nmp run dev`
+`npm run dev`
 
 ## Production build
 `npm run build`
