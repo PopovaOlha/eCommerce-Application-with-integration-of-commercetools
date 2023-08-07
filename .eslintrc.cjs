@@ -32,5 +32,6 @@ module.exports = {
     ],
     "rules": {
         "react/react-in-jsx-scope": "off",
+        "ban-ts-comment": "off"
     }
 }
