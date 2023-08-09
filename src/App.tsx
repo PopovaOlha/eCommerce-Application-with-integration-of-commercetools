@@ -7,7 +7,6 @@ function App() {
     <>
       <p>Local Counter in App: {counter}</p>
       <button onClick={() => setCounter(counter + 1)}>Increase</button>
-
       <br />
     </>
   )

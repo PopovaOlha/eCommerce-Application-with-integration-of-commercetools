@@ -11,8 +11,11 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@commercetools/platform-sdk": "^4.11.0",
+    "@commercetools/sdk-client-v2": "^2.2.0",
     "mobx": "^6.10.0",
     "mobx-react-lite": "^4.0.3",
+    "node-fetch": "^3.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.14.2"
@@ -26,6 +29,7 @@
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/jest": "^29.5.3",
+    "@types/node-fetch": "^2.6.4",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.2.1",
