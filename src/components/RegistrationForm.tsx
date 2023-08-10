@@ -57,7 +57,6 @@ const RegistrationForm: React.FC = () => {
 
     if (!emailError && !passwordError) {
       handleRegistration()
-      // Здесь вызови функцию для отправки данных на сервер Commercetools
     }
   }
 
