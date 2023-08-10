@@ -1,26 +1,15 @@
-// import fetch from 'node-fetch'
-import {
-  ClientBuilder,
-  Client,
-  AuthMiddlewareOptions,
-  HttpMiddlewareOptions,
-} from '@commercetools/sdk-client-v2'
-import {
-  createApiBuilderFromCtpClient,
-  ApiRoot,
-} from '@commercetools/platform-sdk'
+import { ClientBuilder, Client, AuthMiddlewareOptions, HttpMiddlewareOptions } from '@commercetools/sdk-client-v2'
+import { createApiBuilderFromCtpClient, ApiRoot } from '@commercetools/platform-sdk'
 
-export const projectKey = process.env.VITE_CTP_PROJECT_KEY || ''
+export const projectKey = 'ecommerceapl'
 const authMiddlewareOptions: AuthMiddlewareOptions = {
   host: 'https://auth.europe-west1.gcp.commercetools.com',
-  projectKey,
+  projectKey: 'ecommerceapl',
   credentials: {
-    // clientId: process.env.CTP_CLIENT_ID || '',
-    // clientSecret: process.env.CTP_CLIENT_SECRET || '',
-    clientId: process.env.VITE_CTP_CLIENT_ID || '',
-    clientSecret: process.env.VITE_CTP_CLIENT_SECRET || '',
+    clientId: '4kLyKQZdTuzWnVXZ49PHdL2w',
+    clientSecret: 'KhoW4Or8xc53f3e9x0lUUdeCdBm4mm1H',
   },
-  scopes: [`manage_project:${projectKey}`],
+  scopes: ['manage_project:ecommerceapl'],
   fetch,
 }
 

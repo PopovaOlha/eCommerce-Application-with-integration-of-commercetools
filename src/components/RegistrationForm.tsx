@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { registerCustomer } from '../api/registrationApi'
 
 const RegistrationForm: React.FC = () => {
   const [email, setEmail] = useState('')
@@ -6,9 +7,15 @@ const RegistrationForm: React.FC = () => {
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
 
-  const handleRegistration = () => {
-    setEmail('')
-    setPassword('')
+  const handleRegistration = async () => {
+    try {
+      await registerCustomer(email, password)
+      setEmail('')
+      setPassword('')
+      console.log('Registration successful!')
+    } catch (error) {
+      console.error('Registration failed', error)
+    }
   }
 
   const validateEmail = (emailValue: string) => {
