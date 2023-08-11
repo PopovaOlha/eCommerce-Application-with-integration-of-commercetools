@@ -1,34 +1,26 @@
-import { useEffect, useState } from 'react'
-import './App.css'
-import { getApiRoot, projectKey } from './commercetoolsConfig'
-import RegistrationForm from './components/RegistrationForm'
+// stores/index.tsport
+import { createContext, useContext } from 'react'
+import RootStore from './stores/RootStore'
+import LoginForm from './components/RegistrationForm'
+
+const RootStoreContext = createContext<RootStore | null>(null)
 
 function App() {
-  const [projectDetails, setProjectDetails] = useState<{ limit: number } | null>(null)
-
-  const getProject = async () => {
-    try {
-      const project = await getApiRoot().withProjectKey({ projectKey }).products().get().execute()
-
-      // .customers()
-      // .get()
-      // .execute()
-
-      setProjectDetails(project.body)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
-  useEffect(() => {
-    getProject()
-  }, [])
-
+  const rootStore = new RootStore()
   return (
-    <div>
-      {projectDetails?.limit}
-      <RegistrationForm />
-    </div>
+    <RootStoreContext.Provider value={rootStore}>
+      {/*  */}
+      <LoginForm />
+    </RootStoreContext.Provider>
   )
 }
+
 export default App
+
+export function useRootStore() {
+  const context = useContext(RootStoreContext)
+  if (!context) {
+    throw new Error('useRootStore must be used within a RootStoreProvider')
+  }
+  return context
+}

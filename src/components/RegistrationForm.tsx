@@ -1,28 +1,20 @@
 import React, { useState } from 'react'
-import { registerCustomer } from '../api/registrationApi'
+import { authenticateUser, registerUser } from '../utils/authUtils'
+import { observer } from 'mobx-react-lite'
+import { useRootStore } from '../App'
 
-const RegistrationForm: React.FC = () => {
+function RegistrationForm() {
+  const rootStore = useRootStore()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
 
-  const handleRegistration = async () => {
-    try {
-      await registerCustomer(email, password)
-      setEmail('')
-      setPassword('')
-      console.log('Registration successful!')
-    } catch (error) {
-      console.error('Registration failed', error)
-    }
-  }
-
   const validateEmail = (emailValue: string) => {
     if (!emailValue) {
-      setEmailError('Email is required')
+      setEmailError('Email обязателен')
     } else if (!/\S+@\S+\.\S+/.test(emailValue)) {
-      setEmailError('Invalid email format')
+      setEmailError('Неверный формат email')
     } else {
       setEmailError('')
     }
@@ -30,11 +22,24 @@ const RegistrationForm: React.FC = () => {
 
   const validatePassword = (passwordValue: string) => {
     if (!passwordValue) {
-      setPasswordError('Password is required')
+      setPasswordError('Пароль обязателен')
     } else if (passwordValue.length < 6) {
-      setPasswordError('Password must be at least 6 characters long')
+      setPasswordError('Пароль должен содержать не менее 6 символов')
     } else {
       setPasswordError('')
+    }
+  }
+
+  const handleRegistration = async () => {
+    try {
+      const isRegistered = await registerUser(email, password)
+      if (isRegistered) {
+        rootStore.userStore.setTokenAndProfile
+      } else {
+        console.log('error')
+      }
+    } catch (error) {
+      // Обработка ошибки регистрации.
     }
   }
 
@@ -50,13 +55,17 @@ const RegistrationForm: React.FC = () => {
     validatePassword(newPassword)
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    validateEmail(email)
-    validatePassword(password)
-
-    if (!emailError && !passwordError) {
-      handleRegistration()
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    try {
+      const isAuthenticated = await authenticateUser(email, password)
+      if (isAuthenticated) {
+        // Успешная аутентификация: выполнить действия.
+      } else {
+        console.log('error')
+      }
+    } catch (error) {
+      // Обработка ошибки аутентификации.
     }
   }
 
@@ -73,10 +82,13 @@ const RegistrationForm: React.FC = () => {
         {passwordError && <p className="error">{passwordError}</p>}
       </div>
       <div>
-        <button type="submit">Register</button>
+        <button type="submit">Войти</button>
+        <button type="button" onClick={handleRegistration}>
+          Зарегистрироваться
+        </button>
       </div>
     </form>
   )
 }
 
-export default RegistrationForm
+export default observer(RegistrationForm)
