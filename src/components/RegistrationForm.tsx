@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { authenticateUser, registerUser } from '../utils/authUtils'
 import { observer } from 'mobx-react-lite'
 import { useRootStore } from '../App'
+import { useNavigate } from 'react-router-dom';
+
 
 function RegistrationForm() {
   const rootStore = useRootStore()
@@ -9,6 +11,8 @@ function RegistrationForm() {
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const validateEmail = (emailValue: string) => {
     if (!emailValue) {
@@ -35,8 +39,13 @@ function RegistrationForm() {
       const isRegistered = await registerUser(email, password)
       if (isRegistered) {
         rootStore.userStore.setTokenAndProfile
+        const navigate = useNavigate();
+        navigate('/');
+        setIsRegistered(true);
       } else {
         console.log('error')
+        setEmailError('Email обязателен')
+        setPasswordError('Пароль обязателен')
       }
     } catch (error) {
       // Обработка ошибки регистрации.
@@ -60,13 +69,18 @@ function RegistrationForm() {
     try {
       const isAuthenticated = await authenticateUser(email, password)
       if (isAuthenticated) {
-        // Успешная аутентификация: выполнить действия.
+        const navigate = useNavigate();
+        navigate('/');
+        setIsAuthenticated(true);
       } else {
         console.log('error')
       }
     } catch (error) {
       // Обработка ошибки аутентификации.
     }
+  }
+  if (isRegistered || isAuthenticated) {
+    console.log(true);
   }
 
   return (

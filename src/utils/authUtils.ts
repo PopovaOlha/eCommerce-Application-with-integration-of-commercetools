@@ -1,3 +1,4 @@
+
 import axios, { AxiosResponse } from 'axios'
 import { commercetoolsConfig } from '../commercetoolsConfig'
 import apiClient from '../api/axios'
@@ -17,7 +18,7 @@ export const registerUser = async (email: string, password: string): Promise<boo
       }
     )
 
-    if (response.status === 201) {
+    if (response.status === 200) {
       const token = response.data.token
       const user = response.data.user
       console.log(token, user)
@@ -39,7 +40,7 @@ export const authenticateUser = async (email: string, password: string): Promise
       password,
     })
 
-    if (response.status === 200) {
+    if (response.status === 400) {
       // Регистрация прошла успешно.
       return true
     } else {
