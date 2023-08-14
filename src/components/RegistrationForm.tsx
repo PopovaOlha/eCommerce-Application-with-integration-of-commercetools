@@ -5,12 +5,13 @@ import { useRootStore } from '../App'
 import { Link, useNavigate } from 'react-router-dom'
 
 function RegistrationForm() {
-  const navigate = useNavigate()
   const rootStore = useRootStore()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
+  const [error, setError] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   const validateEmail = (emailValue: string) => {
@@ -50,14 +51,15 @@ function RegistrationForm() {
     try {
       const isAuthenticated = await authenticateUser(email, password)
       if (isAuthenticated) {
-        setIsAuthenticated(true)
         rootStore.userStore.userProfile
+        const navigate = useNavigate()
         navigate('/')
+        setIsAuthenticated(true)
       } else {
-        console.log('error')
+        setError('Произошла ошибка при авторизации')
       }
     } catch (error) {
-      // Обработка ошибки аутентификации.
+      setError('Произошла ошибка при авторизации')
     }
   }
   if (isAuthenticated) {
@@ -65,24 +67,27 @@ function RegistrationForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="email">Email:</label>
-        <input type="email" id="email" value={email} onChange={handleEmailChange} required />
-        {emailError && <p className="error">{emailError}</p>}
-      </div>
-      <div>
-        <label htmlFor="password">Password:</label>
-        <input type="password" id="password" value={password} onChange={handlePasswordChange} required />
-        {passwordError && <p className="error">{passwordError}</p>}
-      </div>
-      <div>
-        <button type="submit">Войти</button>
-        <button type="button">
-          <Link to="/registrations">Зарегистрироваться</Link>
-        </button>
-      </div>
-    </form>
+    <div>
+      {error && <p className="error">{error}</p>}
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="email">Email:</label>
+          <input type="email" id="email" value={email} onChange={handleEmailChange} required />
+          {emailError && <p className="error">{emailError}</p>}
+        </div>
+        <div>
+          <label htmlFor="password">Password:</label>
+          <input type="password" id="password" value={password} onChange={handlePasswordChange} required />
+          {passwordError && <p className="error">{passwordError}</p>}
+        </div>
+        <div>
+          <button type="submit">Авторизация</button>
+          <button type="button">
+            <Link to="/registrations">Зарегистрироваться</Link>
+          </button>
+        </div>
+      </form>
+    </div>
   )
 }
 

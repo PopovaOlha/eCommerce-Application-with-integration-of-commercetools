@@ -14,8 +14,8 @@ function App() {
       <RootStoreContext.Provider value={rootStore}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/registrations" element={<RegistrationForm />} />
           <Route path="/login" element={<Registration />} />
+          <Route path="/registrations" element={<RegistrationForm />} />
         </Routes>
       </RootStoreContext.Provider>
     </BrowserRouter>

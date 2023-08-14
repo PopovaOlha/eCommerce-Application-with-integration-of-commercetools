@@ -6,7 +6,7 @@ const Registration = () => {
   return (
     <div>
       <Link to="/">Вернуться на главную</Link>
-      <h2>Регистрация</h2>
+      <h2>Авторизация</h2>
       <LoginForm />
     </div>
   )

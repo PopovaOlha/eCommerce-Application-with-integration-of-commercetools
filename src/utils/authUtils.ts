@@ -2,26 +2,29 @@ import { AxiosResponse } from 'axios'
 import { commercetoolsConfig } from '../commercetoolsConfig'
 import apiClient from '../api/axios'
 import { useNavigate } from 'react-router-dom'
+import { AuthResponseData, CustomerData, CustomerResponseData, LoginData } from '../types/interfaces'
 
-interface AuthResponseData {
-  token: string
-  user: string
-}
+export const authenticateUser = async (
+  email: string,
+  password: string
+  ): Promise<boolean> => {
 
-export const authenticateUser = async (email: string, password: string): Promise<boolean> => {
-  try {
-    const response: AxiosResponse<AuthResponseData> = await apiClient.post(`/${commercetoolsConfig.projectKey}/login`, {
+    const loginData: LoginData = {
       email,
       password,
-    })
+    }
+
+  const apiUrl = `/${commercetoolsConfig.projectKey}/login`;
+
+  try {
+    const response: AxiosResponse<AuthResponseData> = await apiClient.post(apiUrl, loginData);
 
     if (response.status === 200) {
-      const navigate = useNavigate()
+    const navigate = useNavigate();
       navigate('/')
       const token = response.data.token
       const user = response.data.user
-      console.log('результат', token, user)
-      // Сохранение токена и данных пользователя в состоянии/хранилище.
+      console.log('результат', token, user);
 
       return true
     } else {
@@ -30,27 +33,15 @@ export const authenticateUser = async (email: string, password: string): Promise
   } catch (error) {
     throw error
   }
-}
-
-interface CustomerData {
-  firstName: string
-  lastName: string
-  email: string
-  password: string
-}
-
-interface CustomerResponseData {
-  id: string
-  email: string
-}
+};
 
 export const registerUser = async (
   firstName: string,
   lastName: string,
   email: string,
   password: string
-): Promise<CustomerResponseData> => {
-  const apiUrl = `/${commercetoolsConfig.projectKey}/customers`
+): Promise<boolean> => {
+  const apiUrl = `/${commercetoolsConfig.projectKey}/customers`;
 
   const requestData: CustomerData = {
     firstName,
@@ -60,10 +51,19 @@ export const registerUser = async (
   }
 
   try {
-    const response: AxiosResponse<CustomerResponseData> = await apiClient.post(apiUrl, requestData)
-    return response.data
+    const response: AxiosResponse<CustomerResponseData> = await apiClient.post(apiUrl, requestData);
+
+    if (response.status === 200) {
+      const email = response.data.email;
+      const id = response.data.id;
+      console.log(email, id);
+      const navigate = useNavigate();
+      navigate('/');
+      return true;
+    } else {
+      return false;
+    }
   } catch (error) {
-    console.error('Ошибка при регистрации:', error)
-    throw error
+    throw error;
   }
-}
+};
