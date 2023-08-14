@@ -1,18 +1,17 @@
 import React, { useState } from 'react'
-import { authenticateUser, registerUser } from '../utils/authUtils'
+import { authenticateUser } from '../utils/authUtils'
 import { observer } from 'mobx-react-lite'
 import { useRootStore } from '../App'
-import { useNavigate } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom'
 
 function RegistrationForm() {
+  const navigate = useNavigate()
   const rootStore = useRootStore()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
-  const [isRegistered, setIsRegistered] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   const validateEmail = (emailValue: string) => {
     if (!emailValue) {
@@ -34,24 +33,6 @@ function RegistrationForm() {
     }
   }
 
-  const handleRegistration = async () => {
-    try {
-      const isRegistered = await registerUser(email, password)
-      if (isRegistered) {
-        rootStore.userStore.setTokenAndProfile
-        const navigate = useNavigate();
-        navigate('/');
-        setIsRegistered(true);
-      } else {
-        console.log('error')
-        setEmailError('Email обязателен')
-        setPasswordError('Пароль обязателен')
-      }
-    } catch (error) {
-      // Обработка ошибки регистрации.
-    }
-  }
-
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = event.target.value
     setEmail(newEmail)
@@ -69,9 +50,9 @@ function RegistrationForm() {
     try {
       const isAuthenticated = await authenticateUser(email, password)
       if (isAuthenticated) {
-        const navigate = useNavigate();
-        navigate('/');
-        setIsAuthenticated(true);
+        setIsAuthenticated(true)
+        rootStore.userStore.userProfile
+        navigate('/')
       } else {
         console.log('error')
       }
@@ -79,8 +60,8 @@ function RegistrationForm() {
       // Обработка ошибки аутентификации.
     }
   }
-  if (isRegistered || isAuthenticated) {
-    console.log(true);
+  if (isAuthenticated) {
+    console.log(true)
   }
 
   return (
@@ -97,8 +78,8 @@ function RegistrationForm() {
       </div>
       <div>
         <button type="submit">Войти</button>
-        <button type="button" onClick={handleRegistration}>
-          Зарегистрироваться
+        <button type="button">
+          <Link to="/registrations">Зарегистрироваться</Link>
         </button>
       </div>
     </form>
