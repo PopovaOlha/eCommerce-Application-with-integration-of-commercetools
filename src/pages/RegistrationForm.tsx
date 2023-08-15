@@ -13,7 +13,7 @@ const RegistrationPage: React.FC = () => {
 
   const handleRegistration = async () => {
     try {
-      const isRegistered = await registerUser(firstName, lastName, login, password)
+      const isRegistered = await registerUser(firstName, lastName, login, password, navigate)
       if (isRegistered) {
         navigate('/')
       } else {

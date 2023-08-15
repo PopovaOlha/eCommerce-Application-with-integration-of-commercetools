@@ -1,6 +1,7 @@
 // Registration.tsx
 import LoginForm from '../components/RegistrationForm'
 import { Link } from 'react-router-dom'
+import { observer } from 'mobx-react-lite'
 
 const Registration = () => {
   return (
@@ -12,4 +13,4 @@ const Registration = () => {
   )
 }
 
-export default Registration
+export default observer(Registration)

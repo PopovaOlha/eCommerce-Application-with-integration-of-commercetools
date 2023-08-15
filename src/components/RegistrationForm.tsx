@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 function RegistrationForm() {
   const rootStore = useRootStore()
-
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState('')
@@ -49,11 +49,9 @@ function RegistrationForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
-      const isAuthenticated = await authenticateUser(email, password)
+      const isAuthenticated = await authenticateUser(email, password, navigate)
       if (isAuthenticated) {
         rootStore.userStore.userProfile
-        const navigate = useNavigate()
-        navigate('/')
         setIsAuthenticated(true)
       } else {
         setError('Произошла ошибка при авторизации')

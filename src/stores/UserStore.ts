@@ -3,7 +3,7 @@ import { makeObservable, observable, action } from 'mobx';
 
  class UserStore {
   token: string | null = null;
-  userProfile: string | undefined; // Замените на ваш тип данных пользователя
+  userProfile: string | undefined; 
 
   constructor() {
     makeObservable(this, {

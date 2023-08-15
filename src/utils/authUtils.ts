@@ -1,12 +1,12 @@
 import { AxiosResponse } from 'axios'
 import { commercetoolsConfig } from '../commercetoolsConfig'
 import apiClient from '../api/axios'
-import { useNavigate } from 'react-router-dom'
 import { AuthResponseData, CustomerData, CustomerResponseData, LoginData } from '../types/interfaces'
 
 export const authenticateUser = async (
   email: string,
-  password: string
+  password: string,
+  navigate: (path: string) => void 
   ): Promise<boolean> => {
 
     const loginData: LoginData = {
@@ -20,7 +20,6 @@ export const authenticateUser = async (
     const response: AxiosResponse<AuthResponseData> = await apiClient.post(apiUrl, loginData);
 
     if (response.status === 200) {
-    const navigate = useNavigate();
       navigate('/')
       const token = response.data.token
       const user = response.data.user
@@ -39,8 +38,10 @@ export const registerUser = async (
   firstName: string,
   lastName: string,
   email: string,
-  password: string
+  password: string,
+  navigate: (path: string) => void 
 ): Promise<boolean> => {
+
   const apiUrl = `/${commercetoolsConfig.projectKey}/customers`;
 
   const requestData: CustomerData = {
@@ -53,12 +54,11 @@ export const registerUser = async (
   try {
     const response: AxiosResponse<CustomerResponseData> = await apiClient.post(apiUrl, requestData);
 
-    if (response.status === 200) {
+    if (response.status === 201) {
+      navigate('/');
       const email = response.data.email;
       const id = response.data.id;
       console.log(email, id);
-      const navigate = useNavigate();
-      navigate('/');
       return true;
     } else {
       return false;
