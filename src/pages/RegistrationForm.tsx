@@ -9,11 +9,21 @@ const RegistrationPage: React.FC = () => {
   const [lastName, setLastName] = useState('')
   const [login, setLogin] = useState('')
   const [password, setPassword] = useState('')
+  const [billingAddress, setBillingAddress] = useState('')
+  const [shippingAddress, setShippingAddress] = useState('')
   const [error, setError] = useState('')
 
   const handleRegistration = async () => {
     try {
-      const isRegistered = await registerUser(firstName, lastName, login, password, navigate)
+      const isRegistered = await registerUser(
+        firstName,
+        lastName,
+        login,
+        password,
+        billingAddress,
+        shippingAddress,
+        navigate
+      )
       if (isRegistered) {
         navigate('/')
       } else {
@@ -28,6 +38,26 @@ const RegistrationPage: React.FC = () => {
     <div>
       <h2>Регистрация нового пользователя</h2>
       {error && <p className="error">{error}</p>}
+      <div>
+        <label htmlFor="billingAddress">Адрес для выставления счетов:</label>
+        <input
+          type="text"
+          id="billingAddress"
+          value={billingAddress}
+          onChange={(e) => setBillingAddress(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="shippingAddress">Адрес для доставки:</label>
+        <input
+          type="text"
+          id="shippingAddress"
+          value={shippingAddress}
+          onChange={(e) => setShippingAddress(e.target.value)}
+          required
+        />
+      </div>
       <div>
         <label htmlFor="firstName">Имя:</label>
         <input type="text" id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />

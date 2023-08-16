@@ -5,10 +5,16 @@ export interface AuthResponseData {
   }
 
 export interface CustomerData {
-    firstName: string
-    lastName: string
-    email: string
-    password: string
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    addresses: AddressData[];
+  }
+
+export interface AddressData {
+    type: 'billing' | 'shipping';
+    address: string;
   }
   
 export interface LoginData {

@@ -39,6 +39,8 @@ export const registerUser = async (
   lastName: string,
   email: string,
   password: string,
+  billingAddress: string,
+  shippingAddress: string,
   navigate: (path: string) => void 
 ): Promise<boolean> => {
 
@@ -49,6 +51,10 @@ export const registerUser = async (
     lastName,
     email,
     password,
+    addresses: [
+      { type: 'billing', address: billingAddress },
+      { type: 'shipping', address: shippingAddress },
+    ],
   }
 
   try {
