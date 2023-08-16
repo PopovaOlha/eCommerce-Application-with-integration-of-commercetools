@@ -7,7 +7,7 @@ const api = axios.create({
 })
 api.interceptors.request.use(
   async (config) => {
-    const authData = JSON.parse(localStorage.getItem('authDate')!)
+    const authData = JSON.parse(localStorage.getItem('authData')!)
     //  const authData = JSON.parse(authDataRaw!)
     if (authData === null || authData.expDate < new Date()) {
       try {

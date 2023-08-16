@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios'
 import { commercetoolsConfig } from '../commercetoolsConfig'
 import apiClient from '../api/axios'
-import { AuthResponseData, CustomerData, CustomerResponseData, LoginData } from '../types/interfaces'
+import { AuthResponseData, LoginData } from '../types/interfaces'
 
 export const authenticateUser = async (
   email: string,
@@ -34,42 +34,57 @@ export const authenticateUser = async (
   }
 };
 
-export const registerUser = async (
+export interface Address {
+  streetName: string;
+  city: string;
+  postalCode: string;
+  country: string;
+}
+
+export interface CustomerData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  addresses: {
+    billing: Address;
+    shipping: Address;
+  };
+}
+
+ export const registerUser = async (
   firstName: string,
   lastName: string,
   email: string,
   password: string,
-  billingAddress: string,
-  shippingAddress: string,
-  navigate: (path: string) => void 
+  billingAddress: Address,
+  shippingAddress: Address,
+  navigate: (path: string) => void, 
 ): Promise<boolean> => {
-
-  const apiUrl = `/${commercetoolsConfig.projectKey}/customers`;
-
   const requestData: CustomerData = {
     firstName,
     lastName,
     email,
     password,
-    addresses: [
-      { type: 'billing', address: billingAddress },
-      { type: 'shipping', address: shippingAddress },
-    ],
-  }
+    addresses: {
+      billing: billingAddress,
+      shipping: shippingAddress,
+    },
+  };
+ 
+  const apiUrl = `/${commercetoolsConfig.projectKey}/customers`;
 
   try {
-    const response: AxiosResponse<CustomerResponseData> = await apiClient.post(apiUrl, requestData);
-
-    if (response.status === 201) {
-      navigate('/');
-      const email = response.data.email;
-      const id = response.data.id;
-      console.log(email, id);
-      return true;
+    const response = await apiClient.post(apiUrl, requestData);
+   
+    if (response.status === 200) {
+      navigate('/')
+      console.log('User registered:', response);
+      return true
     } else {
-      return false;
+      return false
     }
-  } catch (error) {
-    throw error;
+   } catch (error) {
+    throw error
   }
 };
