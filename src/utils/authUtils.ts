@@ -46,10 +46,14 @@ export interface CustomerData {
   lastName: string;
   email: string;
   password: string;
-  addresses: {
-    billing: Address;
-    shipping: Address;
-  };
+  addresses: [
+    {
+      billing: Address
+    },
+    {
+      shipping: Address
+    },
+  ];
 }
 
  export const registerUser = async (
@@ -66,10 +70,14 @@ export interface CustomerData {
     lastName,
     email,
     password,
-    addresses: {
-      billing: billingAddress,
-      shipping: shippingAddress,
+    addresses: [
+     {
+      billing:billingAddress
     },
+     {
+      shipping:shippingAddress
+    },
+    ],
   };
  
   const apiUrl = `/${commercetoolsConfig.projectKey}/customers`;
