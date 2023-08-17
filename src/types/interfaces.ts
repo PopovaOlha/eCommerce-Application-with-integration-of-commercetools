@@ -4,25 +4,26 @@ export interface AuthResponseData {
     user: string
   }
 
-export interface CustomerData {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-    addresses: AddressData[];
-  }
-
-export interface AddressData {
-    type: 'billing' | 'shipping';
-    address: string;
-  }
-  
 export interface LoginData {
     email: string
     password: string
   }
   
 export interface CustomerResponseData {
-    id: string
+    id: number
+     version: number
+  }
+export interface Address {
+    streetName: string
+    city: string
+    postalCode: string
+    country: string
+    state: string
+  }
+export interface CustomerData {
+    firstName: string
+    lastName: string
     email: string
+    password: string
+    addresses: Address[]
   }

@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
-import { Address, registerUser } from '../utils/authUtils'
+import { registerUser } from '../utils/authUtils'
+import { Address } from '../types/interfaces'
 
 const RegistrationPage: React.FC = () => {
   const navigate = useNavigate()
@@ -9,32 +10,19 @@ const RegistrationPage: React.FC = () => {
   const [lastName, setLastName] = useState('')
   const [login, setLogin] = useState('')
   const [password, setPassword] = useState('')
-  const [billingAddress, setBillingAddress] = useState<Address>({
-    streetName: '',
-    city: '',
-    postalCode: '',
-    country: '',
-  })
-  const [shippingAddress, setShippingAddress] = useState<Address>({
-    streetName: '',
-    city: '',
-    postalCode: '',
-    country: '',
-  })
   const [error, setError] = useState('')
+  const [addressInfo, setAddressInfo] = useState<Address>({
+    streetName: '',
+    city: '',
+    postalCode: '',
+    country: '',
+    state: '',
+  })
 
   const handleRegistration = async () => {
     try {
-      const isRegistered = await registerUser(
-        firstName,
-        lastName,
-        login,
-        password,
-        billingAddress,
-        shippingAddress,
-        navigate
-      )
-      if (isRegistered !== null) {
+      const isRegistered = await registerUser(firstName, lastName, login, password, addressInfo, navigate)
+      if (isRegistered) {
         navigate('/')
       } else {
         setError('Произошла ошибка при регистрации.')
@@ -48,116 +36,106 @@ const RegistrationPage: React.FC = () => {
     <div>
       <h2>Регистрация нового пользователя</h2>
       {error && <p className="error">{error}</p>}
-      <form onSubmit={handleRegistration}>
-        <div>
-          <label htmlFor="billingStreet">Адрес для биллинга:</label>
-          <input
-            type="text"
-            id="billingStreet"
-            value={billingAddress.streetName}
-            onChange={(e) => setBillingAddress({ ...billingAddress, streetName: e.target.value })}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="billingCity">Город для биллинга:</label>
-          <input
-            type="text"
-            id="billingCity"
-            value={billingAddress.city}
-            onChange={(e) => setBillingAddress({ ...billingAddress, city: e.target.value })}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="billingPostalCode">Почтовый индекс для биллинга:</label>
-          <input
-            type="text"
-            id="billingPostalCode"
-            value={billingAddress.postalCode}
-            onChange={(e) => setBillingAddress({ ...billingAddress, postalCode: e.target.value })}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="billingCountry">Страна для биллинга:</label>
-          <input
-            type="text"
-            id="billingCountry"
-            value={billingAddress.country}
-            onChange={(e) => setBillingAddress({ ...billingAddress, country: e.target.value })}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="shippingStreet">Адрес для шиппинга:</label>
-          <input
-            type="text"
-            id="shippingStreet"
-            value={shippingAddress.streetName}
-            onChange={(e) => setShippingAddress({ ...shippingAddress, streetName: e.target.value })}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="shippingCity">Город для шиппинга:</label>
-          <input
-            type="text"
-            id="shippingCity"
-            value={shippingAddress.city}
-            onChange={(e) => setShippingAddress({ ...shippingAddress, city: e.target.value })}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="shippingPostalCode">Почтовый индекс для шиппинга:</label>
-          <input
-            type="text"
-            id="shippingPostalCode"
-            value={shippingAddress.postalCode}
-            onChange={(e) => setShippingAddress({ ...shippingAddress, postalCode: e.target.value })}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="shippingCountry">Страна для шиппинга:</label>
-          <input
-            type="text"
-            id="shippingCountry"
-            value={shippingAddress.country}
-            onChange={(e) => setShippingAddress({ ...shippingAddress, country: e.target.value })}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="firstName">Имя:</label>
-          <input type="text" id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
-        </div>
-        <div>
-          <label htmlFor="lastName">Фамилия:</label>
-          <input type="text" id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
-        </div>
-        <div>
-          <label htmlFor="login">Логин:</label>
-          <input type="text" id="login" value={login} onChange={(e) => setLogin(e.target.value)} required />
-        </div>
-        <div>
-          <label htmlFor="password">Пароль:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <button type="submit">Зарегистрироваться</button>
-        </div>
-        <div>
-          Уже есть аккаунт? <Link to="/login">Войти</Link>
-        </div>
-      </form>
+      <div>
+        <label htmlFor="firstName">Имя:</label>
+        <input type="text" id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+      </div>
+      <div>
+        <label htmlFor="lastName">Фамилия:</label>
+        <input type="text" id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
+      </div>
+      <div>
+        <label htmlFor="login">Логин:</label>
+        <input type="text" id="login" value={login} onChange={(e) => setLogin(e.target.value)} required />
+      </div>
+      <div>
+        <label htmlFor="password">Пароль:</label>
+        <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+      </div>
+      <div>
+        <label htmlFor="streetName">Улица:</label>
+        <input
+          type="text"
+          id="streetName"
+          value={addressInfo.streetName}
+          onChange={(e) =>
+            setAddressInfo({
+              ...addressInfo,
+              streetName: e.target.value,
+            })
+          }
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="city">Город:</label>
+        <input
+          type="text"
+          id="city"
+          value={addressInfo.city}
+          onChange={(e) =>
+            setAddressInfo({
+              ...addressInfo,
+              city: e.target.value,
+            })
+          }
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="postalCode">Почтовый индекс:</label>
+        <input
+          type="text"
+          id="postalCode"
+          value={addressInfo.postalCode}
+          onChange={(e) =>
+            setAddressInfo({
+              ...addressInfo,
+              postalCode: e.target.value,
+            })
+          }
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="country">Страна:</label>
+        <input
+          type="text"
+          id="country"
+          value={addressInfo.country}
+          onChange={(e) =>
+            setAddressInfo({
+              ...addressInfo,
+              country: e.target.value,
+            })
+          }
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="state">Область/штат:</label>
+        <input
+          type="text"
+          id="state"
+          value={addressInfo.state}
+          onChange={(e) =>
+            setAddressInfo({
+              ...addressInfo,
+              state: e.target.value,
+            })
+          }
+          required
+        />
+      </div>
+
+      <div>
+        <button type="button" onClick={handleRegistration}>
+          Зарегистрироваться
+        </button>
+      </div>
+      <div>
+        Уже есть аккаунт? <Link to="/login">Войти</Link>
+      </div>
     </div>
   )
 }
