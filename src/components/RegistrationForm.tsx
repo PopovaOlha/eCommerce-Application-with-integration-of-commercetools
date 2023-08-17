@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { authenticateUser } from '../utils/authUtils'
 import { Link, useNavigate } from 'react-router-dom'
+import { TextField, Button, Box, Typography } from '@mui/material'
 
 function RegistrationForm() {
   const navigate = useNavigate()
@@ -57,31 +58,39 @@ function RegistrationForm() {
       setError('Произошла ошибка при авторизации')
     }
   }
+
   if (isAuthenticated) {
     console.log(true)
   }
 
   return (
-    <div>
-      {error && <p className="error">{error}</p>}
+    <Box p={2}>
+      {error && <Typography color="error">{error}</Typography>}
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input type="email" id="email" value={email} onChange={handleEmailChange} required />
-          {emailError && <p className="error">{emailError}</p>}
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input type="password" id="password" value={password} onChange={handlePasswordChange} required />
-          {passwordError && <p className="error">{passwordError}</p>}
-        </div>
-        <div>
-          <button type="submit">Авторизация</button>
+        <Box my={2}>
+          <TextField type="email" id="email" label="Email" value={email} onChange={handleEmailChange} required />
+          {emailError && <Typography color="error">{emailError}</Typography>}
+        </Box>
+        <Box my={2}>
+          <TextField
+            type="password"
+            id="password"
+            label="Password"
+            value={password}
+            onChange={handlePasswordChange}
+            required
+          />
+          {passwordError && <Typography color="error">{passwordError}</Typography>}
+        </Box>
+        <Box my={2}>
+          <Button type="submit" variant="contained" color="primary">
+            Авторизация
+          </Button>
+          <span style={{ marginRight: '8px' }} />
           <Link to="/registrations">Зарегистрироваться</Link>
-        </div>
+        </Box>
       </form>
-    </div>
+    </Box>
   )
 }
-
 export default observer(RegistrationForm)
