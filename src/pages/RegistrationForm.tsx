@@ -1,153 +1,116 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { TextField, Button, Grid, Container, Typography } from '@mui/material'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import * as Yup from 'yup'
 import { registerUser } from '../utils/authUtils'
-import { Address } from '../types/interfaces'
+import { FormValues } from '../types/interfaces'
+
+const validationSchema = Yup.object({
+  firstName: Yup.string().required('Имя обязательно'),
+  lastName: Yup.string().required('Фамилия обязательна'),
+  login: Yup.string().required('Логин обязателен'),
+  password: Yup.string().min(6, 'Пароль должен содержать не менее 6 символов').required('Пароль обязателен'),
+  streetName: Yup.string().required('Улица обязательна'),
+  city: Yup.string().required('Город обязателен'),
+  postalCode: Yup.string().required('Почтовый индекс обязателен'),
+  country: Yup.string().required('Страна обязательна'),
+  state: Yup.string().required('Область/штат обязательна'),
+})
 
 const RegistrationPage: React.FC = () => {
   const navigate = useNavigate()
-  const [firstName, setFirstName] = useState<string>('')
-  const [lastName, setLastName] = useState<string>('')
-  const [login, setLogin] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
-  const [error, setError] = useState<string>('')
-  const [addressInfo, setAddressInfo] = useState<Address>({
+
+  const initialValues: FormValues = {
+    firstName: '',
+    lastName: '',
+    login: '',
+    password: '',
     streetName: '',
     city: '',
     postalCode: '',
     country: '',
     state: '',
-  })
+  }
 
-  const handleRegistration = async () => {
+  const handleSubmit = async (values: FormValues) => {
     try {
-      const isRegistered = await registerUser(firstName, lastName, login, password, addressInfo, navigate)
+      const isRegistered = await registerUser(
+        values.firstName,
+        values.lastName,
+        values.login,
+        values.password,
+        {
+          streetName: values.streetName,
+          city: values.city,
+          postalCode: values.postalCode,
+          country: values.country,
+          state: values.state,
+        },
+        navigate
+      )
       if (isRegistered) {
         navigate('/')
       } else {
-        setError('Произошла ошибка при регистрации.')
+        console.error('Произошла ошибка при регистрации.')
       }
     } catch (error) {
-      setError('Произошла ошибка при регистрации.')
+      console.log(error)
     }
   }
 
   return (
     <Container maxWidth="sm">
       <Typography variant="h4">Регистрация нового пользователя</Typography>
-      {error && <p className="error">{error}</p>}
-      <form>
-        <Grid container spacing={2}>
-          <Grid item xs={6}>
-            <TextField
-              label="Имя"
-              fullWidth
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              required
-            />
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+        <Form>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <Field as={TextField} label="Имя" fullWidth name="firstName" required />
+              <ErrorMessage name="firstName" component="div" className="error" />
+            </Grid>
+            <Grid item xs={6}>
+              <Field as={TextField} label="Фамилия" fullWidth name="lastName" required />
+              <ErrorMessage name="lastName" component="div" className="error" />
+            </Grid>
+            <Grid item xs={12}>
+              <Field as={TextField} label="Логин" fullWidth name="login" required />
+              <ErrorMessage name="login" component="div" className="error" />
+            </Grid>
+            <Grid item xs={12}>
+              <Field as={TextField} label="Пароль" fullWidth name="password" type="password" required />
+              <ErrorMessage name="password" component="div" className="error" />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Field as={TextField} label="Улица" fullWidth name="streetName" required />
+              <ErrorMessage name="streetName" component="div" className="error" />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Field as={TextField} label="Город" fullWidth name="city" required />
+              <ErrorMessage name="city" component="div" className="error" />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Field as={TextField} label="Почтовый индекс" fullWidth name="postalCode" required />
+              <ErrorMessage name="postalCode" component="div" className="error" />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Field as={TextField} label="Страна" fullWidth name="country" required />
+              <ErrorMessage name="country" component="div" className="error" />
+            </Grid>
+            <Grid item xs={12}>
+              <Field as={TextField} label="Область/штат" fullWidth name="state" required />
+              <ErrorMessage name="state" component="div" className="error" />
+            </Grid>
           </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="Фамилия"
-              fullWidth
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              required
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField label="Логин" fullWidth value={login} onChange={(e) => setLogin(e.target.value)} required />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="Пароль"
-              fullWidth
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="Улица"
-              fullWidth
-              value={addressInfo.streetName}
-              onChange={(e) =>
-                setAddressInfo({
-                  ...addressInfo,
-                  streetName: e.target.value,
-                })
-              }
-              required
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="Город"
-              fullWidth
-              value={addressInfo.city}
-              onChange={(e) =>
-                setAddressInfo({
-                  ...addressInfo,
-                  city: e.target.value,
-                })
-              }
-              required
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="Почтовый индекс"
-              fullWidth
-              value={addressInfo.postalCode}
-              onChange={(e) =>
-                setAddressInfo({
-                  ...addressInfo,
-                  postalCode: e.target.value,
-                })
-              }
-              required
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="Страна"
-              fullWidth
-              value={addressInfo.country}
-              onChange={(e) =>
-                setAddressInfo({
-                  ...addressInfo,
-                  country: e.target.value,
-                })
-              }
-              required
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="Область/штат"
-              fullWidth
-              value={addressInfo.state}
-              onChange={(e) =>
-                setAddressInfo({
-                  ...addressInfo,
-                  state: e.target.value,
-                })
-              }
-              required
-            />
-          </Grid>
-        </Grid>
-        <Button variant="contained" onClick={handleRegistration}>
-          Зарегистрироваться
-        </Button>
-        <div>
-          Уже есть аккаунт? <Link to="/login">Войти</Link>
-        </div>
-      </form>
+          <Button type="submit" variant="contained">
+            Зарегистрироваться
+          </Button>
+          <div>
+            Уже есть аккаунт? <Link to="/login">Войти</Link>
+          </div>
+        </Form>
+      </Formik>
     </Container>
   )
 }

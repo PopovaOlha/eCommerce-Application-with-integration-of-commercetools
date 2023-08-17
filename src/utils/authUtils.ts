@@ -48,7 +48,6 @@ export const registerUser = async (
     email,
     password,
     addresses: [address],
-
   }
 
   const apiUrl = `/${commercetoolsConfig.projectKey}/customers`;

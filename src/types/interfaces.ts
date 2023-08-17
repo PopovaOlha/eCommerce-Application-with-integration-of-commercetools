@@ -27,3 +27,11 @@ export interface CustomerData {
     password: string
     addresses: Address[]
   }
+
+  export interface FormValues extends Address {
+    firstName: string;
+    lastName: string;
+    login: string;
+    password: string;
+  }
+  
