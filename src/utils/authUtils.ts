@@ -38,7 +38,9 @@ export const registerUser = async (
   lastName: string,
   email: string,
   password: string,
-  address: Address,
+  addresses: Address[],
+  shippingDefault: boolean,
+  billingDefault: boolean,
   navigate: (path: string) => void
 ): Promise<boolean> => {
 
@@ -47,7 +49,15 @@ export const registerUser = async (
     lastName,
     email,
     password,
-    addresses: [address],
+    addresses,
+    shippingAddresses: [0],
+    billingAddresses: [1]
+  }
+  if (shippingDefault) {
+    requestData.defaultShippingAddress = 0;
+  }
+  if (billingDefault) {
+    requestData.defaultBillingAddress = 1;
   }
 
   const apiUrl = `/${commercetoolsConfig.projectKey}/customers`;
@@ -58,7 +68,7 @@ export const registerUser = async (
     if (response.status === 201) {
       navigate('/')
       const customerId = response.data.id
-      const customerVersion = response.data.version
+      const customerVersion = response.data.email
       console.log('результат', customerId, customerVersion);
       return true
     } else {

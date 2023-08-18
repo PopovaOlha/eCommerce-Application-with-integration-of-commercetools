@@ -11,7 +11,7 @@ export interface LoginData {
   
 export interface CustomerResponseData {
     id: number
-     version: number
+    email: number
   }
 export interface Address {
     streetName: string
@@ -20,18 +20,40 @@ export interface Address {
     country: string
     state: string
   }
-export interface CustomerData {
-    firstName: string
-    lastName: string
-    email: string
-    password: string
-    addresses: Address[]
-  }
 
   export interface FormValues extends Address {
     firstName: string;
     lastName: string;
     login: string;
     password: string;
+  }
+
+  export interface CustomerData {
+    firstName: string
+    lastName: string
+    email: string
+    password: string
+    addresses: Address[]
+    defaultShippingAddress?: number
+    defaultBillingAddress?: number
+    shippingAddresses: number[] 
+    billingAddresses: number[]
+  }
+
+ export interface RegistrationValues {
+    firstName: string;
+    lastName: string;
+    login: string;
+    password: string;
+    shippingAddress: Addresses;
+    billingAddress: Addresses;
+  }
+  export interface Addresses {
+    streetName: string;
+    city: string;
+    postalCode: string;
+    country: string;
+    state: string;
+    isDefault: boolean;
   }
   
