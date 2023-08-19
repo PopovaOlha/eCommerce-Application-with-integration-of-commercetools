@@ -1,11 +1,10 @@
-import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react'
+import Header from '../components/Header'
 
 function Home() {
   return (
     <div>
-      <Link to="/registrations">Перейти к регистрации</Link>
-      <h1>Добро пожаловать на главную страницу!</h1>
+      <Header />
     </div>
   )
 }
