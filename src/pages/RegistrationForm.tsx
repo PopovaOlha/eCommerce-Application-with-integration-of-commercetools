@@ -7,7 +7,7 @@ import * as Yup from 'yup'
 import { registerUser } from '../utils/authUtils'
 import { RegistrationValues } from '../types/interfaces'
 
-const RegistrationPage = () => {
+const RegistrationPage: React.FC = () => {
   const [isDefaultShippingAddress, setIsDefaultShippingAddress] = useState(false)
   const [isDefaultBillingAddress, setIsDefaultBillingAddress] = useState(false)
   const navigate = useNavigate()
