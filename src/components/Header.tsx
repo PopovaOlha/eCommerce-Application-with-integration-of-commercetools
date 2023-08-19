@@ -3,13 +3,24 @@ import PetsIcon from '@mui/icons-material/Pets'
 import React, { useState } from 'react'
 import { AppBar, Toolbar, Typography, Button } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
+import { useRootStore } from '../App'
 
 const Header: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const navigate = useNavigate()
+  const rootStore = useRootStore()
+  const { authStore } = rootStore
 
+  const handleLogin = () => {
+    setIsLoggedIn(true)
+    const authData = JSON.parse(localStorage.getItem('authData')!)
+    authStore.login(authData.accessToken)
+    navigate('/')
+  }
   const handleLogout = () => {
     setIsLoggedIn(false)
+    authStore.token = null
+    authStore.logout()
     navigate('/')
   }
 
@@ -25,7 +36,7 @@ const Header: React.FC = () => {
         </Button>
         {isLoggedIn ? (
           <>
-            <Button color="inherit" onClick={handleLogout}>
+            <Button color="inherit" onClick={handleLogout} component={Link} to="/">
               Выход
             </Button>
             <Button color="inherit" startIcon={<ShoppingCartIcon />}>
@@ -33,7 +44,7 @@ const Header: React.FC = () => {
             </Button>
           </>
         ) : (
-          <Button color="inherit" component={Link} to="/login">
+          <Button color="inherit" onClick={handleLogin}>
             Вход
           </Button>
         )}

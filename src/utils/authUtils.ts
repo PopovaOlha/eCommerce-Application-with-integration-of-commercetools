@@ -3,6 +3,7 @@ import { commercetoolsConfig } from '../commercetoolsConfig'
 import apiClient from '../api/axios'
 import { Address, AuthResponseData, CustomerData, CustomerResponseData, LoginData } from '../types/interfaces'
 
+
 export const authenticateUser = async (
   email: string,
   password: string,
@@ -21,9 +22,10 @@ const loginData: LoginData = {
 
     if (response.status === 200) {
       navigate('/')
-      const token = response.data.token
-      const user = response.data.user
-      console.log('результат', token, user)
+      const authData = JSON.parse(localStorage.getItem('authData')!);
+      authData.accessToken = response.data.token;
+      localStorage.setItem('authData', JSON.stringify(authData));
+      console.log('результат', authData)
       return true
     } else {
       return false

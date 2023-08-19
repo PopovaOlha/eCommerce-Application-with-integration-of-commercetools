@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Formik, Form, Field, ErrorMessage, FieldProps } from 'formik'
 import * as Yup from 'yup'
 import { TextField, Button, Box, Typography } from '@mui/material'
+import { useRootStore } from '../App'
 
 const validationSchema = Yup.object({
   email: Yup.string().email('Неверный формат email').required('Email обязателен'),
@@ -20,6 +21,8 @@ function RegistrationForm() {
   const navigate = useNavigate()
   const [error, setError] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const rootStore = useRootStore()
+  const { authStore } = rootStore
 
   const initialValues: FormValues = {
     email: '',
@@ -32,6 +35,7 @@ function RegistrationForm() {
       const isAuthenticated = await authenticateUser(values.email, values.password, navigate)
       if (isAuthenticated) {
         setIsAuthenticated(true)
+        authStore.login(authStore.token!)
       } else {
         setError('Произошла ошибка при авторизации')
       }
