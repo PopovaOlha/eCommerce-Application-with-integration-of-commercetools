@@ -30,12 +30,18 @@ function RegistrationForm() {
   }
   console.log(isAuthenticated)
 
+  const handleLogin = () => {
+    const authData = JSON.parse(localStorage.getItem('authData')!)
+    authStore.isAuthenticated
+    authStore.login(authData.accessToken)
+    navigate('/')
+  }
+
   const handleSubmit = async (values: FormValues) => {
     try {
       const isAuthenticated = await authenticateUser(values.email, values.password, navigate)
       if (isAuthenticated) {
         setIsAuthenticated(true)
-        authStore.login(authStore.token!)
       } else {
         setError('Произошла ошибка при авторизации')
       }
@@ -63,7 +69,7 @@ function RegistrationForm() {
           <ErrorMessage name="password" component="div" className="error" />
         </Box>
         <Box my={2}>
-          <Button type="submit" variant="contained" color="primary">
+          <Button type="submit" variant="contained" color="primary" onClick={handleLogin}>
             Авторизация
           </Button>
           <span style={{ marginRight: '8px' }} />

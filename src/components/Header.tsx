@@ -6,21 +6,20 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useRootStore } from '../App'
 
 const Header: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const navigate = useNavigate()
   const rootStore = useRootStore()
   const { authStore } = rootStore
+  const [isLoggedIn, setIsLoggedIn] = useState(authStore.isAuthenticated)
+  const navigate = useNavigate()
 
   const handleLogin = () => {
+    authStore.isAuthenticated = true
     setIsLoggedIn(true)
-    const authData = JSON.parse(localStorage.getItem('authData')!)
-    authStore.login(authData.accessToken)
-    navigate('/')
+    navigate('/login')
   }
+
   const handleLogout = () => {
-    setIsLoggedIn(false)
-    authStore.token = null
     authStore.logout()
+    setIsLoggedIn(false)
     navigate('/')
   }
 
@@ -36,7 +35,7 @@ const Header: React.FC = () => {
         </Button>
         {isLoggedIn ? (
           <>
-            <Button color="inherit" onClick={handleLogout} component={Link} to="/">
+            <Button color="inherit" onClick={handleLogout}>
               Выход
             </Button>
             <Button color="inherit" startIcon={<ShoppingCartIcon />}>
