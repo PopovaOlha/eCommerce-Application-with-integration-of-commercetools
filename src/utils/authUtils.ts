@@ -7,14 +7,13 @@ export const authenticateUser = async (
   email: string,
   password: string,
   navigate: (path: string) => void
-): Promise<boolean> => {
+) => {
   const loginData: LoginData = {
     email,
     password,
   }
 
   const apiUrl = `/${commercetoolsConfig.projectKey}/login`
-
   try {
     const response: AxiosResponse<AuthResponseData> = await apiClient.post(apiUrl, loginData)
 
@@ -28,8 +27,8 @@ export const authenticateUser = async (
     } else {
       return false
     }
-  } catch (error) {
-    throw error
+  } catch (err) {
+    console.log('Error: ', err)
   }
 }
 
@@ -43,7 +42,7 @@ export const registerUser = async (
   isDefaultBillingAddress: boolean,
   isSameAsBillingAndShippingAddress: boolean,
   navigate: (path: string) => void
-): Promise<boolean> => {
+) => {
   const requestData: CustomerData = {
     firstName,
     lastName,
@@ -70,7 +69,6 @@ export const registerUser = async (
 
   try {
     const response: AxiosResponse<CustomerResponseData> = await apiClient.post(apiUrl, requestData)
-
     if (response.status === 201) {
       navigate('/')
       localStorage.setItem('user', JSON.stringify(response.data))
@@ -79,6 +77,6 @@ export const registerUser = async (
       return false
     }
   } catch (error) {
-    throw error
+    console.log('ERROR: ', error)
   }
 }

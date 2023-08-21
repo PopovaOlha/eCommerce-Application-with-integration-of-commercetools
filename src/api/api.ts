@@ -39,7 +39,7 @@ fetchAccessToken().then((accessToken) => {
     console.error('Error fetching access token:', error);
 });
 
-async function fetchProducts(): Promise<any> {
+export const fetchProducts = async (): Promise<any> => {
     const productsEndpoint = `${apiHost}/${projectKey}/products`;
   
     // Проверим наличие токена
@@ -57,5 +57,3 @@ async function fetchProducts(): Promise<any> {
     const productsData = await response.json();
     return productsData;
   }
-
-
