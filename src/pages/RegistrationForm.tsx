@@ -1,5 +1,9 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import InputAdornment from '@mui/material/InputAdornment'
+import IconButton from '@mui/material/IconButton'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { observer } from 'mobx-react-lite'
 import {
   Typography,
@@ -13,6 +17,7 @@ import {
   Select,
   MenuItem,
 } from '@mui/material'
+
 import { Formik, Form, Field, ErrorMessage, FieldProps } from 'formik'
 import * as Yup from 'yup'
 import { registerUser } from '../utils/authUtils'
@@ -22,6 +27,7 @@ import { useRootStore } from '../App'
 const RegistrationPage: React.FC = () => {
   const rootStore = useRootStore()
   const { authStore } = rootStore
+  const [showPassword, setShowPassword] = useState(false)
   const [isDefaultShippingAddress, setIsDefaultShippingAddress] = useState(false)
   const [isDefaultBillingAddress, setIsDefaultBillingAddress] = useState(false)
   const [isSameAsBillingAndShippingAddress, setIsSameAsShippingAddress] = useState(false)
@@ -105,10 +111,39 @@ const RegistrationPage: React.FC = () => {
     }
   }
   const validationSchema = Yup.object().shape({
-    firstName: Yup.string().required('Имя обязательно'),
-    lastName: Yup.string().required('Фамилия обязательна'),
-    login: Yup.string().required('Логин обязателен'),
-    password: Yup.string().min(6, 'Пароль должен содержать не менее 6 символов').required('Пароль обязателен'),
+    firstName: Yup.string()
+      .required('Имя обязательно')
+      .matches(/^\S+$/, 'Имя не может содержать пробелы')
+      .test('no-spaces-around', 'Имя не может начинаться или заканчиваться на пробел', (value) => {
+        if (value) {
+          return !/^\s|\s$/.test(value)
+        }
+        return true
+      }),
+    lastName: Yup.string()
+      .required('Фамилия обязательна')
+      .matches(/^\S+$/, 'Фамилия не может содержать пробелы')
+      .test('no-spaces-around', 'Фамилия не может начинаться или заканчиваться на пробел', (value) => {
+        if (value) {
+          return !/^\s|\s$/.test(value)
+        }
+        return true
+      }),
+    login: Yup.string()
+      .required('Email обязателен')
+      .email('Некорректный формат email')
+      .matches(/^\S+$/, 'Email не может содержать пробелы')
+      .test('no-spaces-around', 'Email не может начинаться или заканчиваться на пробел', (value) => {
+        if (value) {
+          return !/^\s|\s$/.test(value)
+        }
+        return true
+      }),
+    password: Yup.string()
+      .min(8, 'Пароль должен содержать не менее 8 символов')
+      .matches(/^(?=.*[0-9])/, 'Пароль должен содержать хотя бы одну цифру')
+      .matches(/^\S*$/, 'Пароль не может содержать пробелы')
+      .required('Пароль обязателен'),
     shippingAddress: Yup.object().shape({
       streetName: Yup.string().required('Улица для доставки обязательна'),
       city: Yup.string().required('Город для доставки обязателен'),
@@ -184,11 +219,27 @@ const RegistrationPage: React.FC = () => {
           <ErrorMessage name="lastName" component="div" className="error" />
         </Box>
         <Box my={2}>
-          <Field name="login" as={TextField} label="Логин" fullWidth required />
+          <Field name="login" as={TextField} label="Почта" fullWidth required />
           <ErrorMessage name="login" component="div" className="error" />
         </Box>
         <Box my={2}>
-          <Field name="password" as={TextField} label="Пароль" type="password" fullWidth required />
+          <Field
+            name="password"
+            as={TextField}
+            label="Пароль"
+            type={showPassword ? 'text' : 'password'}
+            fullWidth
+            required
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowPassword(!showPassword)} onMouseDown={(e) => e.preventDefault()}>
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
           <ErrorMessage name="password" component="div" className="error" />
         </Box>
         <Box my={2}>
