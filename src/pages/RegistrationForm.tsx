@@ -1,8 +1,19 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
-import { Typography, Box, Button, Checkbox, FormControlLabel, TextField } from '@mui/material'
-import { Formik, Form, Field, ErrorMessage } from 'formik'
+import {
+  Typography,
+  Box,
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  InputLabel,
+  TextField,
+  Select,
+  MenuItem,
+} from '@mui/material'
+import { Formik, Form, Field, ErrorMessage, FieldProps } from 'formik'
 import * as Yup from 'yup'
 import { registerUser } from '../utils/authUtils'
 import { RegistrationValues } from '../types/interfaces'
@@ -201,8 +212,17 @@ const RegistrationPage: React.FC = () => {
             <ErrorMessage name="shippingAddress.postalCode" component="div" className="error" />
           </Box>
           <Box my={1}>
-            <Field name="shippingAddress.country" as={TextField} label="Страна для доставки" fullWidth required />
-            <ErrorMessage name="shippingAddress.country" component="div" className="error" />
+            <FormControl fullWidth required>
+              <InputLabel>Страна для доставки</InputLabel>
+              <Field name="shippingAddress.country">
+                {({ field }: FieldProps) => (
+                  <Select {...field}>
+                    <MenuItem value="UA">Украина</MenuItem>
+                    <MenuItem value="PL">Польша</MenuItem>
+                  </Select>
+                )}
+              </Field>
+            </FormControl>
           </Box>
           <Box my={1}>
             <Field name="shippingAddress.state" as={TextField} label="Область/штат для доставки" fullWidth required />
@@ -253,8 +273,17 @@ const RegistrationPage: React.FC = () => {
               <ErrorMessage name="billingAddress.postalCode" component="div" className="error" />
             </Box>
             <Box my={1}>
-              <Field name="billingAddress.country" as={TextField} label="Страна для платежа" fullWidth required />
-              <ErrorMessage name="billingAddress.country" component="div" className="error" />
+              <FormControl fullWidth required>
+                <InputLabel>Страна для платежа</InputLabel>
+                <Field name="billingAddress.country">
+                  {({ field }: FieldProps) => (
+                    <Select {...field}>
+                      <MenuItem value="UA">Украина</MenuItem>
+                      <MenuItem value="PL">Польша</MenuItem>
+                    </Select>
+                  )}
+                </Field>
+              </FormControl>
             </Box>
             <Box my={1}>
               <Field name="billingAddress.state" as={TextField} label="Область/штат для платежа" fullWidth required />
