@@ -3,28 +3,26 @@ import { commercetoolsConfig } from '../commercetoolsConfig'
 import apiClient from '../api/axios'
 import { Address, AuthResponseData, CustomerData, CustomerResponseData, LoginData } from '../types/interfaces'
 
-
 export const authenticateUser = async (
   email: string,
   password: string,
   navigate: (path: string) => void
-   ): Promise<boolean> => {
+): Promise<boolean> => {
+  const loginData: LoginData = {
+    email,
+    password,
+  }
 
-const loginData: LoginData = {
-      email,
-      password,
-    }
+  const apiUrl = `/${commercetoolsConfig.projectKey}/login`
 
-   const apiUrl = `/${commercetoolsConfig.projectKey}/login`;
-    
   try {
     const response: AxiosResponse<AuthResponseData> = await apiClient.post(apiUrl, loginData)
 
     if (response.status === 200) {
       navigate('/')
-      const authData = JSON.parse(localStorage.getItem('authData')!);
-      authData.accessToken = response.data.token;
-      localStorage.setItem('authData', JSON.stringify(authData));
+      const authData = JSON.parse(localStorage.getItem('authData')!)
+      // authData.accessToken = response.data.token;
+      localStorage.setItem('user', JSON.stringify(response.data))
       console.log('результат', authData)
       return true
     } else {
@@ -45,7 +43,6 @@ export const registerUser = async (
   billingDefault: boolean,
   navigate: (path: string) => void
 ): Promise<boolean> => {
-
   const requestData: CustomerData = {
     firstName,
     lastName,
@@ -53,25 +50,25 @@ export const registerUser = async (
     password,
     addresses,
     shippingAddresses: [0],
-    billingAddresses: [1]
+    billingAddresses: [1],
   }
   if (shippingDefault) {
-    requestData.defaultShippingAddress = 0;
+    requestData.defaultShippingAddress = 0
   }
   if (billingDefault) {
-    requestData.defaultBillingAddress = 1;
+    requestData.defaultBillingAddress = 1
   }
 
-  const apiUrl = `/${commercetoolsConfig.projectKey}/customers`;
+  const apiUrl = `/${commercetoolsConfig.projectKey}/customers`
 
   try {
     const response: AxiosResponse<CustomerResponseData> = await apiClient.post(apiUrl, requestData)
-  
+
     if (response.status === 201) {
       navigate('/')
       const customerId = response.data.id
       const customerVersion = response.data.email
-      console.log('результат', customerId, customerVersion);
+      console.log('результат', customerId, customerVersion)
       return true
     } else {
       return false
@@ -80,4 +77,3 @@ export const registerUser = async (
     throw error
   }
 }
-  

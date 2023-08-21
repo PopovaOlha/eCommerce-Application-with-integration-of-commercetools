@@ -12,14 +12,22 @@ const Header: React.FC = () => {
   const navigate = useNavigate()
 
   const handleLogin = () => {
-    authStore.isAuthenticated = true
-    setIsLoggedIn(true)
-    navigate('/login')
+    console.log(!authStore.isAuthenticated, 'sadasda')
+    if (!authStore.isAuthenticated && !localStorage.getItem('authData')) {
+      // console.log(!localStorage.getItem('authData'))
+      authStore.login()
+      setIsLoggedIn(true)
+      navigate('/login')
+    } else {
+      navigate('/')
+      console.log('Вы уже залогинились')
+    }
   }
 
   const handleLogout = () => {
     authStore.logout()
     setIsLoggedIn(false)
+    localStorage.clear()
     navigate('/')
   }
 
@@ -30,8 +38,9 @@ const Header: React.FC = () => {
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
           Animal Kingdom Market
         </Typography>
-        <Button color="inherit" component={Link} to="/registrations">
-          Регистрация
+
+        <Button color="inherit" onClick={handleLogin}>
+          Вход
         </Button>
         {isLoggedIn ? (
           <>
@@ -43,8 +52,8 @@ const Header: React.FC = () => {
             </Button>
           </>
         ) : (
-          <Button color="inherit" onClick={handleLogin}>
-            Вход
+          <Button color="inherit" component={Link} to="/registrations">
+            Регистрация
           </Button>
         )}
       </Toolbar>

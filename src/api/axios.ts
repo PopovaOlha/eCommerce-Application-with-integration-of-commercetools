@@ -26,7 +26,7 @@ api.interceptors.request.use(
         )
         const expDate = new Date(response.data.expires_in)
         localStorage.setItem(
-          'authDate',
+          'authData',
           JSON.stringify({
             accessToken: response.data.access_token,
             expDate: expDate,
