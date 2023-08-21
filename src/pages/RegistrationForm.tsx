@@ -10,6 +10,7 @@ import { RegistrationValues } from '../types/interfaces'
 const RegistrationPage: React.FC = () => {
   const [isDefaultShippingAddress, setIsDefaultShippingAddress] = useState(false)
   const [isDefaultBillingAddress, setIsDefaultBillingAddress] = useState(false)
+  const [isSameAsBillingAndShippingAddress, setIsSameAsShippingAddress] = useState(false)
   const navigate = useNavigate()
 
   const initialValues: RegistrationValues = {
@@ -33,8 +34,62 @@ const RegistrationPage: React.FC = () => {
       state: '',
       isDefault: false,
     },
+    defaultAddress: false,
   }
 
+  const handleShippingDefaultChange = () => {
+    setIsDefaultShippingAddress(!isDefaultShippingAddress)
+  }
+
+  const handleBillingDefaultChange = () => {
+    setIsDefaultBillingAddress(!isDefaultBillingAddress)
+  }
+  const handleSameAsShippingChange = () => {
+    setIsSameAsShippingAddress(!isSameAsBillingAndShippingAddress)
+    //  if (!isSameAsBillingAndShippingAddress) {
+    //    setIsDefaultBillingAddress(false) // Сбрасываем состояние "сделать адрес платежа дефолтным"
+    //  }
+  }
+
+  const handleSubmit = async (values: RegistrationValues) => {
+    try {
+      const shippingAddress = {
+        streetName: values.shippingAddress.streetName,
+        city: values.shippingAddress.city,
+        postalCode: values.shippingAddress.postalCode,
+        country: values.shippingAddress.country,
+        state: values.shippingAddress.state,
+      }
+      let billingAddress = { ...shippingAddress }
+      if (!isSameAsBillingAndShippingAddress) {
+        // Только если чекбокс не выбран, создаем отдельный адрес для платежа
+        billingAddress = {
+          streetName: values.billingAddress.streetName,
+          city: values.billingAddress.city,
+          postalCode: values.billingAddress.postalCode,
+          country: values.billingAddress.country,
+          state: values.billingAddress.state,
+        }
+      }
+      const isRegistered = await registerUser(
+        values.firstName,
+        values.lastName,
+        values.login,
+        values.password,
+        [shippingAddress, billingAddress],
+        isDefaultShippingAddress,
+        isDefaultBillingAddress,
+        isSameAsBillingAndShippingAddress,
+        navigate
+      )
+
+      if (isRegistered) {
+        navigate('/')
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
   const validationSchema = Yup.object().shape({
     firstName: Yup.string().required('Имя обязательно'),
     lastName: Yup.string().required('Фамилия обязательна'),
@@ -49,59 +104,59 @@ const RegistrationPage: React.FC = () => {
       isDefault: Yup.boolean(),
     }),
     billingAddress: Yup.object().shape({
-      streetName: Yup.string().required('Улица для платежа обязательна'),
-      city: Yup.string().required('Город для платежа обязателен'),
-      postalCode: Yup.string().required('Почтовый индекс для платежа обязателен'),
-      country: Yup.string().required('Страна для платежа обязательна'),
-      state: Yup.string().required('Область/штат для платежа обязателен'),
+      streetName: Yup.string().test('streetName', 'Улица для платежа обязательна', function () {
+        const { isSameAsBillingAndShippingAddress, shippingAddress } = this.parent
+        if (isSameAsBillingAndShippingAddress && shippingAddress) {
+          return this.createError({
+            path: 'billingAddress.streetName',
+            message: 'Улица для платежа обязательна',
+          })
+        }
+        return true
+      }),
+      city: Yup.string().test('city', 'Город для платежа обязателен', function () {
+        const { isSameAsBillingAndShippingAddress, shippingAddress } = this.parent
+        if (isSameAsBillingAndShippingAddress && shippingAddress) {
+          return this.createError({
+            path: 'billingAddress.city',
+            message: 'Город для платежа обязателен',
+          })
+        }
+        return true
+      }),
+      postalCode: Yup.string().test('postalCode', 'Почтовый индекс для платежа обязателен', function () {
+        const { isSameAsBillingAndShippingAddress, shippingAddress } = this.parent
+        if (isSameAsBillingAndShippingAddress && shippingAddress) {
+          return this.createError({
+            path: 'billingAddress.postalCode',
+            message: 'Почтовый индекс для платежа обязателен',
+          })
+        }
+        return true
+      }),
+      country: Yup.string().test('country', 'Страна для платежа обязательна', function () {
+        const { isSameAsBillingAndShippingAddress, shippingAddress } = this.parent
+        if (isSameAsBillingAndShippingAddress && shippingAddress) {
+          return this.createError({
+            path: 'billingAddress.country',
+            message: 'Страна для платежа обязательна',
+          })
+        }
+        return true
+      }),
+      state: Yup.string().test('state', 'Область/штат для платежа обязателен', function () {
+        const { isSameAsBillingAndShippingAddress, shippingAddress } = this.parent
+        if (isSameAsBillingAndShippingAddress && shippingAddress) {
+          return this.createError({
+            path: 'billingAddress.state',
+            message: 'Область/штат для платежа обязателен',
+          })
+        }
+        return true
+      }),
       isDefault: Yup.boolean(),
     }),
   })
-
-  const handleShippingDefaultChange = () => {
-    setIsDefaultShippingAddress(!isDefaultShippingAddress)
-  }
-
-  const handleBillingDefaultChange = () => {
-    setIsDefaultBillingAddress(!isDefaultBillingAddress)
-  }
-
-  const handleSubmit = async (values: RegistrationValues) => {
-    try {
-      const isRegistered = await registerUser(
-        values.firstName,
-        values.lastName,
-        values.login,
-        values.password,
-        [
-          {
-            streetName: values.shippingAddress.streetName,
-            city: values.shippingAddress.city,
-            postalCode: values.shippingAddress.postalCode,
-            country: values.shippingAddress.country,
-            state: values.shippingAddress.state,
-          },
-          {
-            streetName: values.billingAddress.streetName,
-            city: values.billingAddress.city,
-            postalCode: values.billingAddress.postalCode,
-            country: values.billingAddress.country,
-            state: values.billingAddress.state,
-          },
-        ],
-        values.shippingAddress.isDefault,
-        values.billingAddress.isDefault,
-        navigate
-      )
-
-      if (isRegistered) {
-        navigate('/')
-      }
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
   return (
     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
       <Form>
@@ -159,51 +214,63 @@ const RegistrationPage: React.FC = () => {
                   name="isDefaultShippingAddress"
                 />
               }
-              label="Сделать адрес платежа дефолтным"
+              label="Сделать адрес доставки дефолтным"
             />
-          </Box>
-        </Box>
-        <Box my={2}>
-          <Typography variant="h5">Адрес платежа</Typography>
-          <Box my={1}>
-            <Field name="billingAddress.streetName" as={TextField} label="Улица для платежа" fullWidth required />
-            <ErrorMessage name="billingAddress.streetName" component="div" className="error" />
-          </Box>
-          <Box my={1}>
-            <Field name="billingAddress.city" as={TextField} label="Город для платежа" fullWidth required />
-            <ErrorMessage name="billingAddress.city" component="div" className="error" />
-          </Box>
-          <Box my={1}>
-            <Field
-              name="billingAddress.postalCode"
-              as={TextField}
-              label="Почтовый индекс для платежа"
-              fullWidth
-              required
-            />
-            <ErrorMessage name="billingAddress.postalCode" component="div" className="error" />
-          </Box>
-          <Box my={1}>
-            <Field name="billingAddress.country" as={TextField} label="Страна для платежа" fullWidth required />
-            <ErrorMessage name="billingAddress.country" component="div" className="error" />
-          </Box>
-          <Box my={1}>
-            <Field name="billingAddress.state" as={TextField} label="Область/штат для платежа" fullWidth required />
-            <ErrorMessage name="billingAddress.state" component="div" className="error" />
-          </Box>
-          <Box my={1}>
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={isDefaultBillingAddress}
-                  onChange={handleBillingDefaultChange}
-                  name="isDefaultBillingAddress"
+                  checked={isSameAsBillingAndShippingAddress}
+                  onChange={handleSameAsShippingChange}
+                  name="isSameAsBillingAndShippingAddress"
                 />
               }
-              label="Сделать адрес платежа дефолтным"
+              label="Сделать адрес доставки и адресом платежа"
             />
           </Box>
         </Box>
+        {!isSameAsBillingAndShippingAddress && (
+          <Box my={2}>
+            <Typography variant="h5">Адрес платежа</Typography>
+            <Box my={1}>
+              <Field name="billingAddress.streetName" as={TextField} label="Улица для платежа" fullWidth required />
+              <ErrorMessage name="billingAddress.streetName" component="div" className="error" />
+            </Box>
+            <Box my={1}>
+              <Field name="billingAddress.city" as={TextField} label="Город для платежа" fullWidth required />
+              <ErrorMessage name="billingAddress.city" component="div" className="error" />
+            </Box>
+            <Box my={1}>
+              <Field
+                name="billingAddress.postalCode"
+                as={TextField}
+                label="Почтовый индекс для платежа"
+                fullWidth
+                required
+              />
+              <ErrorMessage name="billingAddress.postalCode" component="div" className="error" />
+            </Box>
+            <Box my={1}>
+              <Field name="billingAddress.country" as={TextField} label="Страна для платежа" fullWidth required />
+              <ErrorMessage name="billingAddress.country" component="div" className="error" />
+            </Box>
+            <Box my={1}>
+              <Field name="billingAddress.state" as={TextField} label="Область/штат для платежа" fullWidth required />
+              <ErrorMessage name="billingAddress.state" component="div" className="error" />
+            </Box>
+            <Box my={1}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={isDefaultBillingAddress}
+                    onChange={handleBillingDefaultChange}
+                    name="isDefaultBillingAddress"
+                  />
+                }
+                label="Сделать адрес платежа дефолтным"
+              />
+            </Box>
+          </Box>
+        )}
         <Button type="submit" variant="contained" color="primary">
           Зарегистрироваться
         </Button>

@@ -39,8 +39,9 @@ export const registerUser = async (
   email: string,
   password: string,
   addresses: Address[],
-  shippingDefault: boolean,
-  billingDefault: boolean,
+  isDefaultShippingAddress: boolean,
+  isDefaultBillingAddress: boolean,
+  isSameAsBillingAndShippingAddress: boolean,
   navigate: (path: string) => void
 ): Promise<boolean> => {
   const requestData: CustomerData = {
@@ -52,10 +53,16 @@ export const registerUser = async (
     shippingAddresses: [0],
     billingAddresses: [1],
   }
-  if (shippingDefault) {
+  if (isDefaultShippingAddress && isSameAsBillingAndShippingAddress) {
+    requestData.defaultShippingAddress = 0
+    requestData.defaultBillingAddress = 0
+    requestData.addresses = [addresses[0]]
+    requestData.billingAddresses = [0]
+  }
+  if (isDefaultShippingAddress) {
     requestData.defaultShippingAddress = 0
   }
-  if (billingDefault) {
+  if (isDefaultBillingAddress) {
     requestData.defaultBillingAddress = 1
   }
 
@@ -66,9 +73,7 @@ export const registerUser = async (
 
     if (response.status === 201) {
       navigate('/')
-      const customerId = response.data.id
-      const customerVersion = response.data.email
-      console.log('результат', customerId, customerVersion)
+      localStorage.setItem('user', JSON.stringify(response.data))
       return true
     } else {
       return false
