@@ -1,0 +1,84 @@
+import { AxiosResponse } from 'axios'
+import { commercetoolsConfig } from '../commercetoolsConfig'
+import apiClient from '../api/axios'
+import { Address, AuthResponseData, CustomerData, CustomerResponseData, LoginData } from '../types/interfaces'
+
+export const authenticateUser = async (
+  email: string,
+  password: string,
+  navigate: (path: string) => void
+): Promise<boolean> => {
+  const loginData: LoginData = {
+    email,
+    password,
+  }
+
+  const apiUrl = `/${commercetoolsConfig.projectKey}/login`
+
+  try {
+    const response: AxiosResponse<AuthResponseData> = await apiClient.post(apiUrl, loginData)
+
+    if (response.status === 200) {
+      navigate('/')
+      const authData = JSON.parse(localStorage.getItem('authData')!)
+      // authData.accessToken = response.data.token;
+      localStorage.setItem('user', JSON.stringify(response.data))
+      console.log('результат', authData)
+      return true
+    } else {
+      return false
+    }
+  } catch (error) {
+    throw error
+  }
+}
+
+export const registerUser = async (
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string,
+  addresses: Address[],
+  isDefaultShippingAddress: boolean,
+  isDefaultBillingAddress: boolean,
+  isSameAsBillingAndShippingAddress: boolean,
+  navigate: (path: string) => void
+): Promise<boolean> => {
+  const requestData: CustomerData = {
+    firstName,
+    lastName,
+    email,
+    password,
+    addresses,
+    shippingAddresses: [0],
+    billingAddresses: [1],
+  }
+  if (isDefaultShippingAddress && isSameAsBillingAndShippingAddress) {
+    requestData.defaultShippingAddress = 0
+    requestData.defaultBillingAddress = 0
+    requestData.addresses = [addresses[0]]
+    requestData.billingAddresses = [0]
+  }
+  if (isDefaultShippingAddress) {
+    requestData.defaultShippingAddress = 0
+  }
+  if (isDefaultBillingAddress) {
+    requestData.defaultBillingAddress = 1
+  }
+
+  const apiUrl = `/${commercetoolsConfig.projectKey}/customers`
+
+  try {
+    const response: AxiosResponse<CustomerResponseData> = await apiClient.post(apiUrl, requestData)
+
+    if (response.status === 201) {
+      navigate('/')
+      localStorage.setItem('user', JSON.stringify(response.data))
+      return true
+    } else {
+      return false
+    }
+  } catch (error) {
+    throw error
+  }
+}
