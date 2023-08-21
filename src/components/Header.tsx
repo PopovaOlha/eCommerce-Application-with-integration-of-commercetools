@@ -1,4 +1,5 @@
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import { observer } from 'mobx-react-lite'
 import PetsIcon from '@mui/icons-material/Pets'
 import React, { useState } from 'react'
 import { AppBar, Toolbar, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
@@ -45,7 +46,7 @@ const Header: React.FC = () => {
           <Button color="inherit" onClick={handleLogin}>
             Вход
           </Button>
-          {isLoggedIn && (
+          {isLoggedIn ? (
             <>
               <Button color="inherit" onClick={handleLogout}>
                 Выход
@@ -54,10 +55,11 @@ const Header: React.FC = () => {
                 Корзина
               </Button>
             </>
+          ) : (
+            <Button color="inherit" component={Link} to="/registrations">
+              Регистрация
+            </Button>
           )}
-          <Button color="inherit" component={Link} to="/registrations">
-            Регистрация
-          </Button>
         </Toolbar>
       </AppBar>
 
@@ -76,4 +78,4 @@ const Header: React.FC = () => {
   )
 }
 
-export default Header
+export default observer(Header)
