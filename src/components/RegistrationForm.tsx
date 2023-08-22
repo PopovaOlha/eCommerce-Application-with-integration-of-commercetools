@@ -4,7 +4,7 @@ import { authenticateUser } from '../utils/authUtils'
 import { Link, useNavigate } from 'react-router-dom'
 import { Formik, Form, Field, ErrorMessage, FieldProps } from 'formik'
 import * as Yup from 'yup'
-import { TextField, Button, Box, Typography } from '@mui/material'
+import { TextField, Button, Box, Typography, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
 import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
 import { useRootStore } from '../App'
@@ -36,6 +36,7 @@ interface FormValues {
 
 function RegistrationForm() {
   const navigate = useNavigate()
+  const [showErrorModal, setShowErrorModal] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -54,6 +55,7 @@ function RegistrationForm() {
         setIsAuthenticated(true)
         authStore.login()
       } else {
+        setShowErrorModal(true)
         setError('An error occurred during authentication')
       }
     } catch (error) {
@@ -115,6 +117,15 @@ function RegistrationForm() {
             </Link>
           </Box>
         </Box>
+        <Dialog open={showErrorModal} onClose={() => setShowErrorModal(false)}>
+          <DialogTitle>Error</DialogTitle>
+          <DialogContent>Account with the given credentials not found.</DialogContent>
+          <DialogActions>
+            <Button onClick={() => setShowErrorModal(false)} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Form>
     </Formik>
   )

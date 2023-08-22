@@ -24,6 +24,8 @@ export const authenticateUser = async (
       localStorage.setItem('user', JSON.stringify(response.data))
       console.log('результат', authData)
       return true
+    } else if (response.status === 400){
+alert('Account with the given credentials not found.');
     } else {
       return false
     }
