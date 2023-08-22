@@ -158,8 +158,7 @@ const RegistrationPage: React.FC = () => {
     }),
     billingAddress: Yup.object().shape({
       streetName: Yup.string().test('streetName', 'Street address is required for billing', function () {
-        const { isSameAsBillingAndShippingAddress, shippingAddress } = this.parent
-        if (isSameAsBillingAndShippingAddress && shippingAddress) {
+        if (!isSameAsBillingAndShippingAddress) {
           return this.createError({
             path: 'billingAddress.streetName',
             message: 'Street address is required for billing',
@@ -168,8 +167,7 @@ const RegistrationPage: React.FC = () => {
         return true
       }),
       city: Yup.string().test('city', 'City is required for billing', function () {
-        const { isSameAsBillingAndShippingAddress, shippingAddress } = this.parent
-        if (isSameAsBillingAndShippingAddress && shippingAddress) {
+        if (!isSameAsBillingAndShippingAddress) {
           return this.createError({
             path: 'billingAddress.city',
             message: 'City is required for billing',
@@ -178,8 +176,7 @@ const RegistrationPage: React.FC = () => {
         return true
       }),
       postalCode: Yup.string().test('postalCode', 'Postal code is required for billing', function () {
-        const { isSameAsBillingAndShippingAddress, shippingAddress } = this.parent
-        if (isSameAsBillingAndShippingAddress && shippingAddress) {
+        if (!isSameAsBillingAndShippingAddress) {
           return this.createError({
             path: 'billingAddress.postalCode',
             message: 'Postal code is required for billing',
@@ -188,8 +185,7 @@ const RegistrationPage: React.FC = () => {
         return true
       }),
       country: Yup.string().test('country', 'Country is required for billing', function () {
-        const { isSameAsBillingAndShippingAddress, shippingAddress } = this.parent
-        if (isSameAsBillingAndShippingAddress && shippingAddress) {
+        if (!isSameAsBillingAndShippingAddress) {
           return this.createError({
             path: 'billingAddress.country',
             message: 'Country is required for billing',
@@ -198,8 +194,7 @@ const RegistrationPage: React.FC = () => {
         return true
       }),
       state: Yup.string().test('state', 'State is required for billing', function () {
-        const { isSameAsBillingAndShippingAddress, shippingAddress } = this.parent
-        if (isSameAsBillingAndShippingAddress && shippingAddress) {
+        if (!isSameAsBillingAndShippingAddress) {
           return this.createError({
             path: 'billingAddress.state',
             message: 'State is required for billing',
