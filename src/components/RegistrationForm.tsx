@@ -13,20 +13,20 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
 const validationSchema = Yup.object({
   email: Yup.string()
-    .required('Email обязателен')
-    .email('Некорректный формат email')
-    .matches(/^\S+$/, 'Email не может содержать пробелы')
-    .test('no-spaces-around', 'Email не может начинаться или заканчиваться на пробел', (value) => {
+    .required('Email is required')
+    .email('Invalid email format')
+    .matches(/^\S+$/, 'Email should not contain spaces')
+    .test('no-spaces-around', 'Email should not start or end with space', (value) => {
       if (value) {
         return !/^\s|\s$/.test(value)
       }
       return true
     }),
   password: Yup.string()
-    .min(8, 'Пароль должен содержать не менее 8 символов')
-    .matches(/^(?=.*[0-9])/, 'Пароль должен содержать хотя бы одну цифру')
-    .matches(/^\S*$/, 'Пароль не может содержать пробелы')
-    .required('Пароль обязателен'),
+    .min(8, 'Password must be at least 8 characters')
+    .matches(/^(?=.*[0-9])/, 'Password must contain at least one digit')
+    .matches(/^\S*$/, 'Password should not contain spaces')
+    .required('Password is required'),
 })
 
 interface FormValues {
@@ -46,14 +46,6 @@ function RegistrationForm() {
     email: '',
     password: '',
   }
-  console.log(isAuthenticated)
-
-  // const handleLogin = () => {
-  //   const authData = JSON.parse(localStorage.getItem('authData')!)
-  //   authStore.isAuthenticated
-  //   authStore.login()
-  //   navigate('/')
-  // }
 
   const handleSubmit = async (values: FormValues) => {
     try {
@@ -62,12 +54,13 @@ function RegistrationForm() {
         setIsAuthenticated(true)
         authStore.login()
       } else {
-        setError('Произошла ошибка при авторизации')
+        setError('An error occurred during authentication')
       }
     } catch (error) {
-      setError('Произошла ошибка при авторизации')
+      setError('An error occurred during authentication')
     }
   }
+  console.log(isAuthenticated)
 
   return (
     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
@@ -75,7 +68,18 @@ function RegistrationForm() {
         {error && <Typography color="error">{error}</Typography>}
         <Box my={2}>
           <Field name="email">
-            {({ field }: FieldProps<string>) => <TextField {...field} type="email" id="email" label="Email" required />}
+            {({ field }: FieldProps<string>) => (
+              <TextField
+                {...field}
+                type="email"
+                id="email"
+                label="Email"
+                variant="outlined"
+                fullWidth
+                required
+                size="small"
+              />
+            )}
           </Field>
           <ErrorMessage name="email" component="div" className="error" />
         </Box>
@@ -83,10 +87,12 @@ function RegistrationForm() {
           <Field
             name="password"
             as={TextField}
-            label="Пароль"
+            label="Password"
             type={showPassword ? 'text' : 'password'}
+            variant="outlined"
             fullWidth
             required
+            size="small"
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -100,11 +106,14 @@ function RegistrationForm() {
           <ErrorMessage name="password" component="div" className="error" />
         </Box>
         <Box my={2}>
-          <Button type="submit" variant="contained" color="primary">
-            Авторизация
+          <Button type="submit" variant="contained" color="primary" fullWidth>
+            Log In
           </Button>
-          <span style={{ marginRight: '8px' }} />
-          <Link to="/registrations">Зарегистрироваться</Link>
+          <Box my={1} display="flex" justifyContent="center">
+            <Link to="/registrations" style={{ color: '#1976D2', textDecoration: 'none', fontSize: '14px' }}>
+              Register
+            </Link>
+          </Box>
         </Box>
       </Form>
     </Formik>

@@ -16,6 +16,8 @@ import {
   TextField,
   Select,
   MenuItem,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material'
 
 import { Formik, Form, Field, ErrorMessage, FieldProps } from 'formik'
@@ -28,6 +30,8 @@ const RegistrationPage: React.FC = () => {
   const rootStore = useRootStore()
   const { authStore } = rootStore
   const [showPassword, setShowPassword] = useState(false)
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [isDefaultShippingAddress, setIsDefaultShippingAddress] = useState(false)
   const [isDefaultBillingAddress, setIsDefaultBillingAddress] = useState(false)
   const [isSameAsBillingAndShippingAddress, setIsSameAsShippingAddress] = useState(false)
@@ -112,93 +116,93 @@ const RegistrationPage: React.FC = () => {
   }
   const validationSchema = Yup.object().shape({
     firstName: Yup.string()
-      .required('Имя обязательно')
-      .matches(/^\S+$/, 'Имя не может содержать пробелы')
-      .test('no-spaces-around', 'Имя не может начинаться или заканчиваться на пробел', (value) => {
+      .required('First name is required')
+      .matches(/^\S+$/, 'First name cannot contain spaces')
+      .test('no-spaces-around', 'First name cannot start or end with a space', (value) => {
         if (value) {
           return !/^\s|\s$/.test(value)
         }
         return true
       }),
     lastName: Yup.string()
-      .required('Фамилия обязательна')
-      .matches(/^\S+$/, 'Фамилия не может содержать пробелы')
-      .test('no-spaces-around', 'Фамилия не может начинаться или заканчиваться на пробел', (value) => {
+      .required('Last name is required')
+      .matches(/^\S+$/, 'Last name cannot contain spaces')
+      .test('no-spaces-around', 'Last name cannot start or end with a space', (value) => {
         if (value) {
           return !/^\s|\s$/.test(value)
         }
         return true
       }),
     login: Yup.string()
-      .required('Email обязателен')
-      .email('Некорректный формат email')
-      .matches(/^\S+$/, 'Email не может содержать пробелы')
-      .test('no-spaces-around', 'Email не может начинаться или заканчиваться на пробел', (value) => {
+      .required('Email is required')
+      .email('Invalid email format')
+      .matches(/^\S+$/, 'Email cannot contain spaces')
+      .test('no-spaces-around', 'Email cannot start or end with a space', (value) => {
         if (value) {
           return !/^\s|\s$/.test(value)
         }
         return true
       }),
     password: Yup.string()
-      .min(8, 'Пароль должен содержать не менее 8 символов')
-      .matches(/^(?=.*[0-9])/, 'Пароль должен содержать хотя бы одну цифру')
-      .matches(/^\S*$/, 'Пароль не может содержать пробелы')
-      .required('Пароль обязателен'),
+      .min(8, 'Password must be at least 8 characters long')
+      .matches(/^(?=.*[0-9])/, 'Password must contain at least one digit')
+      .matches(/^\S*$/, 'Password cannot contain spaces')
+      .required('Password is required'),
     shippingAddress: Yup.object().shape({
-      streetName: Yup.string().required('Улица для доставки обязательна'),
-      city: Yup.string().required('Город для доставки обязателен'),
-      postalCode: Yup.string().required('Почтовый индекс для доставки обязателен'),
-      country: Yup.string().required('Страна для доставки обязательна'),
-      state: Yup.string().required('Область/штат для доставки обязателен'),
+      streetName: Yup.string().required('Street address is required'),
+      city: Yup.string().required('City is required'),
+      postalCode: Yup.string().required('Postal code is required'),
+      country: Yup.string().required('Country is required'),
+      state: Yup.string().required('State is required'),
       isDefault: Yup.boolean(),
     }),
     billingAddress: Yup.object().shape({
-      streetName: Yup.string().test('streetName', 'Улица для платежа обязательна', function () {
+      streetName: Yup.string().test('streetName', 'Street address is required for billing', function () {
         const { isSameAsBillingAndShippingAddress, shippingAddress } = this.parent
         if (isSameAsBillingAndShippingAddress && shippingAddress) {
           return this.createError({
             path: 'billingAddress.streetName',
-            message: 'Улица для платежа обязательна',
+            message: 'Street address is required for billing',
           })
         }
         return true
       }),
-      city: Yup.string().test('city', 'Город для платежа обязателен', function () {
+      city: Yup.string().test('city', 'City is required for billing', function () {
         const { isSameAsBillingAndShippingAddress, shippingAddress } = this.parent
         if (isSameAsBillingAndShippingAddress && shippingAddress) {
           return this.createError({
             path: 'billingAddress.city',
-            message: 'Город для платежа обязателен',
+            message: 'City is required for billing',
           })
         }
         return true
       }),
-      postalCode: Yup.string().test('postalCode', 'Почтовый индекс для платежа обязателен', function () {
+      postalCode: Yup.string().test('postalCode', 'Postal code is required for billing', function () {
         const { isSameAsBillingAndShippingAddress, shippingAddress } = this.parent
         if (isSameAsBillingAndShippingAddress && shippingAddress) {
           return this.createError({
             path: 'billingAddress.postalCode',
-            message: 'Почтовый индекс для платежа обязателен',
+            message: 'Postal code is required for billing',
           })
         }
         return true
       }),
-      country: Yup.string().test('country', 'Страна для платежа обязательна', function () {
+      country: Yup.string().test('country', 'Country is required for billing', function () {
         const { isSameAsBillingAndShippingAddress, shippingAddress } = this.parent
         if (isSameAsBillingAndShippingAddress && shippingAddress) {
           return this.createError({
             path: 'billingAddress.country',
-            message: 'Страна для платежа обязательна',
+            message: 'Country is required for billing',
           })
         }
         return true
       }),
-      state: Yup.string().test('state', 'Область/штат для платежа обязателен', function () {
+      state: Yup.string().test('state', 'State is required for billing', function () {
         const { isSameAsBillingAndShippingAddress, shippingAddress } = this.parent
         if (isSameAsBillingAndShippingAddress && shippingAddress) {
           return this.createError({
             path: 'billingAddress.state',
-            message: 'Область/штат для платежа обязателен',
+            message: 'State is required for billing',
           })
         }
         return true
@@ -207,162 +211,158 @@ const RegistrationPage: React.FC = () => {
     }),
   })
   return (
-    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-      <Form>
-        <Typography variant="h4">Регистрация нового пользователя</Typography>
-        <Box my={2}>
-          <Field name="firstName" as={TextField} label="Имя" fullWidth required />
-          <ErrorMessage name="firstName" component="div" className="error" />
-        </Box>
-        <Box my={2}>
-          <Field name="lastName" as={TextField} label="Фамилия" fullWidth required />
-          <ErrorMessage name="lastName" component="div" className="error" />
-        </Box>
-        <Box my={2}>
-          <Field name="login" as={TextField} label="Почта" fullWidth required />
-          <ErrorMessage name="login" component="div" className="error" />
-        </Box>
-        <Box my={2}>
-          <Field
-            name="password"
-            as={TextField}
-            label="Пароль"
-            type={showPassword ? 'text' : 'password'}
-            fullWidth
-            required
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={() => setShowPassword(!showPassword)} onMouseDown={(e) => e.preventDefault()}>
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <ErrorMessage name="password" component="div" className="error" />
-        </Box>
-        <Box my={2}>
-          <Typography variant="h5">Адрес доставки</Typography>
-          <Box my={1}>
-            <Field name="shippingAddress.streetName" as={TextField} label="Улица для доставки" fullWidth required />
-            <ErrorMessage name="shippingAddress.streetName" component="div" className="error" />
+    <Box
+      maxWidth={isMobile ? '100%' : '600px'}
+      margin="0 auto"
+      padding={isMobile ? '16px' : '32px'}
+      boxShadow={isMobile ? 'none' : '0px 4px 6px rgba(0, 0, 0, 0.1)'}
+      borderRadius="8px"
+      bgcolor="white"
+    >
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+        <Form>
+          <Typography variant="h4">Register New User</Typography>
+          <Box my={2}>
+            <Field name="firstName" as={TextField} label="First Name" fullWidth required />
+            <ErrorMessage name="firstName" component="div" className="error" />
           </Box>
-          <Box my={1}>
-            <Field name="shippingAddress.city" as={TextField} label="Город для доставки" fullWidth required />
-            <ErrorMessage name="shippingAddress.city" component="div" className="error" />
+          <Box my={2}>
+            <Field name="lastName" as={TextField} label="Last Name" fullWidth required />
+            <ErrorMessage name="lastName" component="div" className="error" />
           </Box>
-          <Box my={1}>
+          <Box my={2}>
+            <Field name="login" as={TextField} label="Email" fullWidth required />
+            <ErrorMessage name="login" component="div" className="error" />
+          </Box>
+          <Box my={2}>
             <Field
-              name="shippingAddress.postalCode"
+              name="password"
               as={TextField}
-              label="Почтовый индекс для доставки"
+              label="Password"
+              type={showPassword ? 'text' : 'password'}
               fullWidth
               required
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowPassword(!showPassword)} onMouseDown={(e) => e.preventDefault()}>
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
-            <ErrorMessage name="shippingAddress.postalCode" component="div" className="error" />
+            <ErrorMessage name="password" component="div" className="error" />
           </Box>
-          <Box my={1}>
-            <FormControl fullWidth required>
-              <InputLabel>Страна для доставки</InputLabel>
-              <Field name="shippingAddress.country">
-                {({ field }: FieldProps) => (
-                  <Select {...field}>
-                    <MenuItem value="UA">Украина</MenuItem>
-                    <MenuItem value="PL">Польша</MenuItem>
-                  </Select>
-                )}
-              </Field>
-            </FormControl>
-          </Box>
-          <Box my={1}>
-            <Field name="shippingAddress.state" as={TextField} label="Область/штат для доставки" fullWidth required />
-            <ErrorMessage name="shippingAddress.state" component="div" className="error" />
-          </Box>
-          <Box my={1}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={isDefaultShippingAddress}
-                  onChange={handleShippingDefaultChange}
-                  name="isDefaultShippingAddress"
-                />
-              }
-              label="Сделать адрес доставки дефолтным"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={isSameAsBillingAndShippingAddress}
-                  onChange={handleSameAsShippingChange}
-                  name="isSameAsBillingAndShippingAddress"
-                />
-              }
-              label="Сделать адрес доставки и адресом платежа"
-            />
-          </Box>
-        </Box>
-        {!isSameAsBillingAndShippingAddress && (
           <Box my={2}>
-            <Typography variant="h5">Адрес платежа</Typography>
+            <Typography variant="h5">Shipping Address</Typography>
             <Box my={1}>
-              <Field name="billingAddress.streetName" as={TextField} label="Улица для платежа" fullWidth required />
-              <ErrorMessage name="billingAddress.streetName" component="div" className="error" />
+              <Field name="shippingAddress.streetName" as={TextField} label="Street Address" fullWidth required />
+              <ErrorMessage name="shippingAddress.streetName" component="div" className="error" />
             </Box>
             <Box my={1}>
-              <Field name="billingAddress.city" as={TextField} label="Город для платежа" fullWidth required />
-              <ErrorMessage name="billingAddress.city" component="div" className="error" />
+              <Field name="shippingAddress.city" as={TextField} label="City" fullWidth required />
+              <ErrorMessage name="shippingAddress.city" component="div" className="error" />
             </Box>
             <Box my={1}>
-              <Field
-                name="billingAddress.postalCode"
-                as={TextField}
-                label="Почтовый индекс для платежа"
-                fullWidth
-                required
-              />
-              <ErrorMessage name="billingAddress.postalCode" component="div" className="error" />
+              <Field name="shippingAddress.postalCode" as={TextField} label="Postal Code" fullWidth required />
+              <ErrorMessage name="shippingAddress.postalCode" component="div" className="error" />
             </Box>
             <Box my={1}>
               <FormControl fullWidth required>
-                <InputLabel>Страна для платежа</InputLabel>
-                <Field name="billingAddress.country">
+                <InputLabel>Country</InputLabel>
+                <Field name="shippingAddress.country">
                   {({ field }: FieldProps) => (
                     <Select {...field}>
-                      <MenuItem value="UA">Украина</MenuItem>
-                      <MenuItem value="PL">Польша</MenuItem>
+                      <MenuItem value="UA">Ukraine</MenuItem>
+                      <MenuItem value="PL">Poland</MenuItem>
                     </Select>
                   )}
                 </Field>
               </FormControl>
             </Box>
             <Box my={1}>
-              <Field name="billingAddress.state" as={TextField} label="Область/штат для платежа" fullWidth required />
-              <ErrorMessage name="billingAddress.state" component="div" className="error" />
+              <Field name="shippingAddress.state" as={TextField} label="State" fullWidth required />
+              <ErrorMessage name="shippingAddress.state" component="div" className="error" />
             </Box>
             <Box my={1}>
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={isDefaultBillingAddress}
-                    onChange={handleBillingDefaultChange}
-                    name="isDefaultBillingAddress"
+                    checked={isDefaultShippingAddress}
+                    onChange={handleShippingDefaultChange}
+                    name="isDefaultShippingAddress"
                   />
                 }
-                label="Сделать адрес платежа дефолтным"
+                label="Set as Default Shipping Address"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={isSameAsBillingAndShippingAddress}
+                    onChange={handleSameAsShippingChange}
+                    name="isSameAsBillingAndShippingAddress"
+                  />
+                }
+                label="Use this address for billing"
               />
             </Box>
           </Box>
-        )}
-        <Button type="submit" variant="contained" color="primary">
-          Зарегистрироваться
-        </Button>
-        <div>
-          Уже есть аккаунт? <Link to="/login">Войти</Link>
-        </div>
-      </Form>
-    </Formik>
+          {!isSameAsBillingAndShippingAddress && (
+            <Box my={2}>
+              <Typography variant="h5">Billing Address</Typography>
+              <Box my={1}>
+                <Field name="billingAddress.streetName" as={TextField} label="Street Address" fullWidth required />
+                <ErrorMessage name="billingAddress.streetName" component="div" className="error" />
+              </Box>
+              <Box my={1}>
+                <Field name="billingAddress.city" as={TextField} label="City" fullWidth required />
+                <ErrorMessage name="billingAddress.city" component="div" className="error" />
+              </Box>
+              <Box my={1}>
+                <Field name="billingAddress.postalCode" as={TextField} label="Postal Code" fullWidth required />
+                <ErrorMessage name="billingAddress.postalCode" component="div" className="error" />
+              </Box>
+              <Box my={1}>
+                <FormControl fullWidth required>
+                  <InputLabel>Country</InputLabel>
+                  <Field name="billingAddress.country">
+                    {({ field }: FieldProps) => (
+                      <Select {...field}>
+                        <MenuItem value="UA">Ukraine</MenuItem>
+                        <MenuItem value="PL">Poland</MenuItem>
+                      </Select>
+                    )}
+                  </Field>
+                </FormControl>
+              </Box>
+              <Box my={1}>
+                <Field name="billingAddress.state" as={TextField} label="State" fullWidth required />
+                <ErrorMessage name="billingAddress.state" component="div" className="error" />
+              </Box>
+              <Box my={1}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={isDefaultBillingAddress}
+                      onChange={handleBillingDefaultChange}
+                      name="isDefaultBillingAddress"
+                    />
+                  }
+                  label="Set as Default Billing Address"
+                />
+              </Box>
+            </Box>
+          )}
+          <Button type="submit" variant="contained" color="primary">
+            Register
+          </Button>
+          <div>
+            Already have an account? <Link to="/login">Log In</Link>
+          </div>
+        </Form>
+      </Formik>
+    </Box>
   )
 }
-
 export default observer(RegistrationPage)
