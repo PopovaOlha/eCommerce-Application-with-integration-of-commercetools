@@ -82,9 +82,6 @@ const Header: React.FC = () => {
                       <ListItem button onClick={handleLogout}>
                         <ListItemText primary="Logout" />
                       </ListItem>
-                      <ListItem button>
-                        <ListItemText primary="Cart" />
-                      </ListItem>
                     </>
                   ) : (
                     <ListItem button onClick={handleLogin}>
@@ -96,11 +93,14 @@ const Header: React.FC = () => {
                       <ListItemText primary="Register" />
                     </ListItem>
                   )}
+                  <ListItem button>
+                    <ListItemText primary="Cart" />
+                  </ListItem>
                 </List>
               </Drawer>
-              <Button color="inherit" startIcon={<ShoppingCartIcon sx={{ color: '#333' }} />} sx={{ color: '#333' }}>
-                Cart
-              </Button>
+              <IconButton color="inherit">
+                <ShoppingCartIcon sx={{ color: '#333' }} />
+              </IconButton>
             </>
           ) : (
             <>
@@ -112,19 +112,16 @@ const Header: React.FC = () => {
                   <Button color="inherit" onClick={handleLogout} sx={{ color: '#333' }}>
                     Logout
                   </Button>
-                  <Button
-                    color="inherit"
-                    startIcon={<ShoppingCartIcon sx={{ color: '#333' }} />}
-                    sx={{ color: '#333' }}
-                  >
-                    {isMobile ? null : 'Cart'}
-                  </Button>
                 </>
               ) : (
                 <Button color="inherit" component={Link} to="/registrations" sx={{ color: '#333' }}>
                   Register
                 </Button>
               )}
+              <IconButton color="inherit">
+                <ShoppingCartIcon sx={{ color: '#333' }} />
+                Cart
+              </IconButton>
             </>
           )}
         </Toolbar>
