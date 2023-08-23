@@ -36,8 +36,6 @@ const Header: React.FC = () => {
 
   const handleLogin = () => {
     if (!authStore.isAuthenticated && !localStorage.getItem('authData')) {
-      authStore.login()
-      setIsLoggedIn(true)
       navigate('/login')
     } else {
       setShowAlreadyLoggedInModal(true)

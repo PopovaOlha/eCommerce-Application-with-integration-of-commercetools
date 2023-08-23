@@ -199,9 +199,7 @@ const RegistrationPage: React.FC = () => {
       .required('Password is required'),
     shippingAddress: Yup.object().shape({
       streetName: Yup.string().required('Street address is required'),
-      city: Yup.string()
-        .required('City is required')
-        .matches(/^[A-Za-z]+$/, 'City must contain only alphabetic characters'),
+      city: Yup.string().required('City is required'),
       postalCode: Yup.string().required('Postal code is required'),
       country: Yup.string().required('Country is required'),
       state: Yup.string().required('State is required'),
