@@ -120,7 +120,7 @@ const RegistrationPage: React.FC = () => {
   const validationSchema = Yup.object().shape({
     firstName: Yup.string()
       .required('First name is required')
-      .matches(/^\S+$/, 'First name cannot contain spaces')
+      .matches(/^[A-Za-z]+$/, 'First name must contain only alphabetic characters')
       .test('no-spaces-around', 'First name cannot start or end with a space', (value) => {
         if (value) {
           return !/^\s|\s$/.test(value)
@@ -128,9 +128,9 @@ const RegistrationPage: React.FC = () => {
         return true
       }),
     lastName: Yup.string()
-      .required('Last name is required')
-      .matches(/^\S+$/, 'Last name cannot contain spaces')
-      .test('no-spaces-around', 'Last name cannot start or end with a space', (value) => {
+      .required('First name is required')
+      .matches(/^[A-Za-z]+$/, 'First name must contain only alphabetic characters')
+      .test('no-spaces-around', 'First name cannot start or end with a space', (value) => {
         if (value) {
           return !/^\s|\s$/.test(value)
         }
@@ -168,6 +168,29 @@ const RegistrationPage: React.FC = () => {
           return !/^\s|\s$/.test(value)
         }
         return true
+      })
+      .test('valid-domain', 'Invalid domain format', (value) => {
+        if (value) {
+          const emailParts = value.split('@')
+          if (emailParts.length !== 2) {
+            return false
+          }
+          const [localPart, domain] = emailParts
+          if (!localPart || !domain) {
+            return false
+          }
+          const domainParts = domain.split('.')
+          if (domainParts.length < 2) {
+            return false
+          }
+
+          if (domain.startsWith('.') || domain.endsWith('.')) {
+            return false
+          }
+
+          return true
+        }
+        return true
       }),
     password: Yup.string()
       .min(8, 'Password must be at least 8 characters long')
@@ -176,7 +199,9 @@ const RegistrationPage: React.FC = () => {
       .required('Password is required'),
     shippingAddress: Yup.object().shape({
       streetName: Yup.string().required('Street address is required'),
-      city: Yup.string().required('City is required'),
+      city: Yup.string()
+        .required('City is required')
+        .matches(/^[A-Za-z]+$/, 'City must contain only alphabetic characters'),
       postalCode: Yup.string().required('Postal code is required'),
       country: Yup.string().required('Country is required'),
       state: Yup.string().required('State is required'),
