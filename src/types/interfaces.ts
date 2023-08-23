@@ -30,6 +30,7 @@ export interface FormValues extends Address {
 export interface CustomerData {
   firstName: string
   lastName: string
+  birthday: string
   email: string
   password: string
   addresses: Address[]
@@ -43,6 +44,7 @@ export interface RegistrationValues {
   defaultAddress: boolean
   firstName: string
   lastName: string
+  birthday: string
   login: string
   password: string
   shippingAddress: Addresses

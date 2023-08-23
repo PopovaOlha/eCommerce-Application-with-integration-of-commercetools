@@ -94,7 +94,7 @@ const Header: React.FC = () => {
                     </ListItem>
                   )}
                   <ListItem button>
-                    <Link to="*">Back to the main page</Link>
+                    <Link to="*">Cart</Link>
                   </ListItem>
                 </List>
               </Drawer>

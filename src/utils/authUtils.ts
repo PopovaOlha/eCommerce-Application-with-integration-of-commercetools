@@ -37,6 +37,7 @@ alert('Account with the given credentials not found.');
 export const registerUser = async (
   firstName: string,
   lastName: string,
+  birthday: string,
   email: string,
   password: string,
   addresses: Address[],
@@ -48,6 +49,7 @@ export const registerUser = async (
   const requestData: CustomerData = {
     firstName,
     lastName,
+    birthday,
     email,
     password,
     addresses,

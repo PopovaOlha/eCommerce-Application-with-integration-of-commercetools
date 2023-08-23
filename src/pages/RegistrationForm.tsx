@@ -5,6 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { observer } from 'mobx-react-lite'
+
 import {
   Typography,
   Box,
@@ -40,6 +41,7 @@ const RegistrationPage: React.FC = () => {
   const initialValues: RegistrationValues = {
     firstName: '',
     lastName: '',
+    birthday: '',
     login: '',
     password: '',
     shippingAddress: {
@@ -98,6 +100,7 @@ const RegistrationPage: React.FC = () => {
       const isRegistered = await registerUser(
         values.firstName,
         values.lastName,
+        values.birthday,
         values.login,
         values.password,
         [shippingAddress, billingAddress],
@@ -132,6 +135,21 @@ const RegistrationPage: React.FC = () => {
           return !/^\s|\s$/.test(value)
         }
         return true
+      }),
+    birthday: Yup.string()
+      .required('Birthday is required')
+      .test('is-valid-age', 'You must be at least 18 years old', (value) => {
+        if (value) {
+          const birthDate = new Date(value)
+          const today = new Date()
+          let age = today.getFullYear() - birthDate.getFullYear()
+          const monthDiff = today.getMonth() - birthDate.getMonth()
+          if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--
+          }
+          return age >= 18 && age <= 100
+        }
+        return false
       }),
     login: Yup.string()
       .required('Email is required')
@@ -224,6 +242,10 @@ const RegistrationPage: React.FC = () => {
           <Box my={2}>
             <Field name="lastName" as={TextField} label="Last Name" fullWidth required />
             <ErrorMessage name="lastName" component="div" className="error" />
+          </Box>
+          <Box my={2}>
+            <Field name="birthday" as={TextField} label="Birthday" fullWidth required />
+            <ErrorMessage name="birthday" component="div" className="error" />
           </Box>
           <Box my={2}>
             <Field name="login" as={TextField} label="Email" fullWidth required />
