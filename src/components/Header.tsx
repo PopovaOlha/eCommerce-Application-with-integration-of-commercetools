@@ -94,7 +94,7 @@ const Header: React.FC = () => {
                     </ListItem>
                   )}
                   <ListItem button>
-                    <ListItemText primary="Cart" />
+                    <Link to="*">Back to the main page</Link>
                   </ListItem>
                 </List>
               </Drawer>
@@ -120,7 +120,7 @@ const Header: React.FC = () => {
               )}
               <IconButton color="inherit">
                 <ShoppingCartIcon sx={{ color: '#333' }} />
-                Cart
+                <Link to="*">Cart</Link>
               </IconButton>
             </>
           )}
