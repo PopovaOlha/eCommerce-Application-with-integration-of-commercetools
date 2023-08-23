@@ -59,14 +59,14 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <AppBar position="fixed" sx={{ top: 0, left: 0, width: '100%', backgroundColor: '#fff' }}>
+      <AppBar sx={{ width: '100%', backgroundColor: '#fff' }}>
         <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
             <PetsIcon sx={{ fontSize: isMobile ? 24 : 32, color: '#333' }} />
             <Typography variant={isMobile ? 'h6' : 'h4'} sx={{ color: '#333', ml: 1 }}>
               PetWorld Store
             </Typography>
-          </div>
+          </Link>
 
           {isMobile ? (
             <>
@@ -75,6 +75,9 @@ const Header: React.FC = () => {
               </IconButton>
               <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerToggle}>
                 <List>
+                  <ListItem button onClick={() => navigate('/')}>
+                    <ListItemText primary="Home"></ListItemText>
+                  </ListItem>
                   {isLoggedIn ? (
                     <>
                       <ListItem button onClick={handleLogout}>
@@ -102,6 +105,9 @@ const Header: React.FC = () => {
             </>
           ) : (
             <>
+              <Button color="inherit" onClick={() => navigate('/')} sx={{ color: '#333' }}>
+                Home
+              </Button>
               <Button color="inherit" onClick={handleLogin} sx={{ color: '#333' }}>
                 Login
               </Button>

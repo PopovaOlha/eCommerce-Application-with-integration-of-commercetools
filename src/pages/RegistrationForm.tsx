@@ -264,7 +264,7 @@ const RegistrationPage: React.FC = () => {
   return (
     <Box
       maxWidth={isMobile ? '100%' : '600px'}
-      margin="0 auto"
+      margin="80px auto"
       padding={isMobile ? '16px' : '32px'}
       boxShadow={isMobile ? 'none' : '0px 4px 6px rgba(0, 0, 0, 0.1)'}
       borderRadius="8px"

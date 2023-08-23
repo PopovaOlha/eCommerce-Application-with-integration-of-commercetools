@@ -5,6 +5,7 @@ import Registration from './pages/LoginForm'
 import Home from './pages/Home'
 import RegistrationForm from './pages/RegistrationForm'
 import NotFound from './pages/NotFound'
+import Header from './components/Header'
 
 const RootStoreContext = createContext<RootStore | null>(null)
 
@@ -13,6 +14,7 @@ function App() {
   return (
     <BrowserRouter>
       <RootStoreContext.Provider value={rootStore}>
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Registration />} />
