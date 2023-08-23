@@ -19,6 +19,10 @@ import {
   MenuItem,
   useMediaQuery,
   useTheme,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@mui/material'
 
 import { Formik, Form, Field, ErrorMessage, FieldProps } from 'formik'
@@ -33,6 +37,7 @@ const RegistrationPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false)
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const [showErrorModal, setShowErrorModal] = useState(false)
   const [isDefaultShippingAddress, setIsDefaultShippingAddress] = useState(false)
   const [isDefaultBillingAddress, setIsDefaultBillingAddress] = useState(false)
   const [isSameAsBillingAndShippingAddress, setIsSameAsShippingAddress] = useState(false)
@@ -112,6 +117,8 @@ const RegistrationPage: React.FC = () => {
 
       if (isRegistered) {
         authStore.login()
+      } else {
+        setShowErrorModal(true)
       }
     } catch (error) {
       console.error(error)
@@ -408,6 +415,15 @@ const RegistrationPage: React.FC = () => {
           <div>
             Already have an account? <Link to="/login">Log In</Link>
           </div>
+          <Dialog open={showErrorModal} onClose={() => setShowErrorModal(false)}>
+            <DialogTitle>Error</DialogTitle>
+            <DialogContent>There is already an existing customer with the provided email</DialogContent>
+            <DialogActions>
+              <Button onClick={() => setShowErrorModal(false)} color="primary">
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Form>
       </Formik>
     </Box>
