@@ -28,7 +28,11 @@ html, body, #root {
   width: 100px;
   margin-bottom: 10px;
 }
-
+.MuiInputBase-root {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+}
 .logo {
   height: 6em;
   padding: 1.5em;

@@ -8,3 +8,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <App />
   </React.StrictMode>
 )
+window.addEventListener('beforeunload', function () {
+  localStorage.clear()
+})
