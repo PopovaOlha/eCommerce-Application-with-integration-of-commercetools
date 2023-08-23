@@ -138,16 +138,24 @@ const RegistrationPage: React.FC = () => {
       }),
     birthday: Yup.string()
       .required('Birthday is required')
+      .matches(/^\d{2}-\d{2}-\d{4}$/, 'Invalid date format (DD-MM-YYYY)')
       .test('is-valid-age', 'You must be at least 18 years old', (value) => {
         if (value) {
-          const birthDate = new Date(value)
+          const [day, month, year] = value.split('-').map(Number)
+          const birthDate = new Date(year, month - 1, day)
           const today = new Date()
-          let age = today.getFullYear() - birthDate.getFullYear()
+          const age = today.getFullYear() - birthDate.getFullYear()
           const monthDiff = today.getMonth() - birthDate.getMonth()
-          if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-            age--
+          const dayDiff = today.getDate() - birthDate.getDate()
+          if (age < 18 || age > 100) {
+            return false
           }
-          return age >= 18 && age <= 100
+          if (age === 18) {
+            if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+              return false
+            }
+          }
+          return true
         }
         return false
       }),
