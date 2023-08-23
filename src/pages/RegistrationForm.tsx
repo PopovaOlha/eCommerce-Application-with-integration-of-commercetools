@@ -19,6 +19,10 @@ import {
   MenuItem,
   useMediaQuery,
   useTheme,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@mui/material'
 
 import { Formik, Form, Field, ErrorMessage, FieldProps } from 'formik'
@@ -33,6 +37,7 @@ const RegistrationPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false)
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const [showErrorModal, setShowErrorModal] = useState(false)
   const [isDefaultShippingAddress, setIsDefaultShippingAddress] = useState(false)
   const [isDefaultBillingAddress, setIsDefaultBillingAddress] = useState(false)
   const [isSameAsBillingAndShippingAddress, setIsSameAsShippingAddress] = useState(false)
@@ -112,6 +117,8 @@ const RegistrationPage: React.FC = () => {
 
       if (isRegistered) {
         authStore.login()
+      } else {
+        setShowErrorModal(true)
       }
     } catch (error) {
       console.error(error)
@@ -193,9 +200,12 @@ const RegistrationPage: React.FC = () => {
         return true
       }),
     password: Yup.string()
-      .min(8, 'Password must be at least 8 characters long')
-      .matches(/^(?=.*[0-9])/, 'Password must contain at least one digit')
-      .matches(/^\S*$/, 'Password cannot contain spaces')
+      .min(8, 'Password must be at least 8 characters')
+      .matches(/^(?=.*[0-9])/, 'Password must contain at least one digit (0-9)')
+      .matches(/^(?=.*[!@#$%^&*])/, 'Password must contain at least one special character (!@#$%^&*)')
+      .matches(/[a-z]/, 'Password must contain at least one lowercase Latin letter')
+      .matches(/[A-Z]/, 'Password must contain at least one uppercase Latin letter')
+      .matches(/^\S*$/, 'Password should not contain spaces')
       .required('Password is required'),
     shippingAddress: Yup.object().shape({
       streetName: Yup.string().required('Street address is required'),
@@ -257,7 +267,7 @@ const RegistrationPage: React.FC = () => {
   return (
     <Box
       maxWidth={isMobile ? '100%' : '600px'}
-      margin="0 auto"
+      margin="80px auto"
       padding={isMobile ? '16px' : '32px'}
       boxShadow={isMobile ? 'none' : '0px 4px 6px rgba(0, 0, 0, 0.1)'}
       borderRadius="8px"
@@ -408,6 +418,15 @@ const RegistrationPage: React.FC = () => {
           <div>
             Already have an account? <Link to="/login">Log In</Link>
           </div>
+          <Dialog open={showErrorModal} onClose={() => setShowErrorModal(false)}>
+            <DialogTitle>Error</DialogTitle>
+            <DialogContent>There is already an existing customer with the provided email</DialogContent>
+            <DialogActions>
+              <Button onClick={() => setShowErrorModal(false)} color="primary">
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Form>
       </Formik>
     </Box>
