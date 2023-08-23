@@ -119,16 +119,18 @@ const RegistrationPage: React.FC = () => {
   }
   const validationSchema = Yup.object().shape({
     firstName: Yup.string()
-      .required('First name is required')
-      .test('no-spaces-around', 'First name cannot start or end with a space', (value) => {
+      .required('Last name is required')
+      .matches(/^[A-Za-zА-Яа-я\s]+$/, 'Last name must contain only alphabetic characters')
+      .test('no-spaces-around', 'Last name cannot start or end with a space', (value) => {
         if (value) {
           return !/^\s|\s$/.test(value)
         }
         return true
       }),
     lastName: Yup.string()
-      .required('First name is required')
-      .test('no-spaces-around', 'First name cannot start or end with a space', (value) => {
+      .required('Last name is required')
+      .matches(/^[A-Za-zА-Яа-я\s]+$/, 'Last name must contain only alphabetic characters')
+      .test('no-spaces-around', 'Last name cannot start or end with a space', (value) => {
         if (value) {
           return !/^\s|\s$/.test(value)
         }
