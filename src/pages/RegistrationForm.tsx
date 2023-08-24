@@ -356,6 +356,7 @@ const RegistrationPage: React.FC = () => {
                   />
                 }
                 label="Set as Default Shipping Address"
+                style={{ color: 'red' }}
               />
               <FormControlLabel
                 control={
@@ -366,6 +367,7 @@ const RegistrationPage: React.FC = () => {
                   />
                 }
                 label="Use this address for billing"
+                style={{ color: 'red' }}
               />
             </Box>
           </Box>
@@ -411,6 +413,7 @@ const RegistrationPage: React.FC = () => {
                     />
                   }
                   label="Set as Default Billing Address"
+                  style={{ color: 'red' }}
                 />
               </Box>
             </Box>
