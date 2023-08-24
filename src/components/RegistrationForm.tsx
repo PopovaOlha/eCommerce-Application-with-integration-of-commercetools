@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton'
 import { useRootStore } from '../App'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
-
+import Header from '../components/Header'
 const validationSchema = Yup.object({
   email: Yup.string()
     .required('Email is required')
@@ -68,69 +68,74 @@ function RegistrationForm() {
   console.log(isAuthenticated)
 
   return (
-    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-      <Form>
-        {error && <Typography color="error">{error}</Typography>}
-        <Box my={2}>
-          <Field name="email">
-            {({ field }: FieldProps<string>) => (
-              <TextField
-                {...field}
-                type="email"
-                id="email"
-                label="Email"
-                variant="outlined"
-                fullWidth
-                required
-                size="small"
-              />
-            )}
-          </Field>
-          <ErrorMessage name="email" component="div" className="error" />
-        </Box>
-        <Box my={2}>
-          <Field
-            name="password"
-            as={TextField}
-            label="Password"
-            type={showPassword ? 'text' : 'password'}
-            variant="outlined"
-            fullWidth
-            required
-            size="small"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={() => setShowPassword(!showPassword)} onMouseDown={(e) => e.preventDefault()}>
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <ErrorMessage name="password" component="div" className="error" />
-        </Box>
-        <Box my={2}>
-          <Button type="submit" variant="contained" color="primary" fullWidth>
-            Log In
-          </Button>
-          <Box my={1} display="flex" justifyContent="center">
-            <Link to="/registrations" style={{ color: '#1976D2', textDecoration: 'none', fontSize: '14px' }}>
-              Register
-            </Link>
+    <Box>
+      <div>
+        <Header />
+      </div>
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+        <Form>
+          {error && <Typography color="error">{error}</Typography>}
+          <Box my={2}>
+            <Field name="email">
+              {({ field }: FieldProps<string>) => (
+                <TextField
+                  {...field}
+                  type="email"
+                  id="email"
+                  label="Email"
+                  variant="outlined"
+                  fullWidth
+                  required
+                  size="small"
+                />
+              )}
+            </Field>
+            <ErrorMessage name="email" component="div" className="error" />
           </Box>
-        </Box>
-        <Dialog open={showErrorModal} onClose={() => setShowErrorModal(false)}>
-          <DialogTitle>Error</DialogTitle>
-          <DialogContent>Account with the given credentials not found.</DialogContent>
-          <DialogActions>
-            <Button onClick={() => setShowErrorModal(false)} color="primary">
-              Close
+          <Box my={2}>
+            <Field
+              name="password"
+              as={TextField}
+              label="Password"
+              type={showPassword ? 'text' : 'password'}
+              variant="outlined"
+              fullWidth
+              required
+              size="small"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowPassword(!showPassword)} onMouseDown={(e) => e.preventDefault()}>
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <ErrorMessage name="password" component="div" className="error" />
+          </Box>
+          <Box my={2}>
+            <Button type="submit" variant="contained" color="primary" fullWidth>
+              Log In
             </Button>
-          </DialogActions>
-        </Dialog>
-      </Form>
-    </Formik>
+            <Box my={1} display="flex" justifyContent="center">
+              <Link to="/registrations" style={{ color: '#1976D2', textDecoration: 'none', fontSize: '14px' }}>
+                Register
+              </Link>
+            </Box>
+          </Box>
+          <Dialog open={showErrorModal} onClose={() => setShowErrorModal(false)}>
+            <DialogTitle>Error</DialogTitle>
+            <DialogContent>Account with the given credentials not found.</DialogContent>
+            <DialogActions>
+              <Button onClick={() => setShowErrorModal(false)} color="primary">
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </Form>
+      </Formik>
+    </Box>
   )
 }
 

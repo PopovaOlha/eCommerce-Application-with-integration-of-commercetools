@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { observer } from 'mobx-react-lite'
-
+import Header from '../components/Header'
 import {
   Typography,
   Box,
@@ -273,6 +273,9 @@ const RegistrationPage: React.FC = () => {
       borderRadius="8px"
       bgcolor="white"
     >
+      <div>
+        <Header />
+      </div>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
         <Form>
           <Typography variant="h4">Register New User</Typography>
