@@ -278,7 +278,9 @@ const RegistrationPage: React.FC = () => {
       </div>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
         <Form>
-          <Typography variant="h4">Register New User</Typography>
+          <Typography variant="h4" color="#9ba6a5">
+            Register New User
+          </Typography>
           <Box my={2}>
             <Field name="firstName" as={TextField} label="First Name" fullWidth required />
             <ErrorMessage name="firstName" component="div" className="error" />
@@ -316,7 +318,9 @@ const RegistrationPage: React.FC = () => {
             <ErrorMessage name="password" component="div" className="error" />
           </Box>
           <Box my={2}>
-            <Typography variant="h5">Shipping Address</Typography>
+            <Typography variant="h5" color="#9ba6a5">
+              Shipping Address
+            </Typography>
             <Box my={1}>
               <Field name="shippingAddress.streetName" as={TextField} label="Street Address" fullWidth required />
               <ErrorMessage name="shippingAddress.streetName" component="div" className="error" />
@@ -373,7 +377,9 @@ const RegistrationPage: React.FC = () => {
           </Box>
           {!isSameAsBillingAndShippingAddress && (
             <Box my={2}>
-              <Typography variant="h5">Billing Address</Typography>
+              <Typography variant="h5" color="#9ba6a5">
+                Billing Address
+              </Typography>
               <Box my={1}>
                 <Field name="billingAddress.streetName" as={TextField} label="Street Address" fullWidth required />
                 <ErrorMessage name="billingAddress.streetName" component="div" className="error" />
