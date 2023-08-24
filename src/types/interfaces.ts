@@ -58,3 +58,20 @@ export interface Addresses {
   state: string
   isDefault: boolean
 }
+export interface Product {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl: string;
+}
+
+export interface RawProduct {
+  id: string;
+  name: string;
+  description?: string;
+  masterVariant: {
+    images: {
+      url: string;
+    }[];
+  };
+}
