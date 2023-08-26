@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { fetchProducts } from '../utils/producrServiceUtils'
+import '../index.css'
+import { fetchProducts } from '../utils/productServiceUtils'
 import ProductCard from '../components/ProductCard'
 import { Product } from '../types/interfaces'
 
@@ -16,7 +17,7 @@ const CatalogPage: React.FC = () => {
 
   return (
     <div className="catalog-page">
-      <h1>Catalog</h1>
+      <h1 className="catalog-title">Catalog</h1>
       <div className="product-list">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />

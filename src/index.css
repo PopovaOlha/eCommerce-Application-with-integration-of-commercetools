@@ -72,3 +72,6 @@ button:focus-visible {
   color: rgb(172, 44, 44);
   font-weight:700;
 }
+.catalog-title {
+  text-align: center;
+}
