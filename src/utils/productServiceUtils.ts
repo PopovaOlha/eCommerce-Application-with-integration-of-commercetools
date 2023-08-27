@@ -1,4 +1,3 @@
-// src/services/ProductService.ts
 import apiProduct from '../api/axios';
 import { commercetoolsConfig } from '../commercetoolsConfig';
 import { Product, RawProduct } from '../types/interfaces';

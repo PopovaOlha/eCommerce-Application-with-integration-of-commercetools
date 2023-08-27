@@ -1,35 +1,9 @@
-import React from 'react'
-import '../index.css'
+import React, { useEffect } from 'react'
 import { Product } from '../types/interfaces'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import CardMedia from '@mui/material/CardMedia'
-import Typography from '@mui/material/Typography'
+import { Card, CardContent, CardMedia, Typography, Button, Link as MuiLink } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { Button } from '@mui/material'
-
-const cardStyle: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  maxWidth: '300px',
-  margin: '1rem',
-  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-  borderRadius: '8px',
-  overflow: 'hidden',
-  transition: 'transform 0.2s',
-  transform: 'scale(1.05)',
-}
-
-const imageStyle: React.CSSProperties = {
-  width: '50%',
-  alignSelf: 'center',
-  objectFit: 'cover',
-}
-
-const detailsStyle: React.CSSProperties = {
-  padding: '1rem',
-  textAlign: 'center',
-}
+import { useRootStore } from '../App'
+import { observer } from 'mobx-react-lite'
 
 interface ProductCardProps {
   product: Product
@@ -38,25 +12,48 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const navigate = useNavigate()
   const currentLocale = 'en-US'
+  const { catalogStore } = useRootStore()
 
-  const handleViewDetails = () => {
+  useEffect(() => {
+    catalogStore.fetchProducts()
+  }, [catalogStore])
+
+  const handleViewDetails = async () => {
+    await catalogStore.getProductById(product.id)
     navigate(`/product/${product.id}`)
   }
 
   return (
-    <Card style={cardStyle}>
-      <CardMedia component="img" style={imageStyle} image={product.imageUrl} alt={product.name[currentLocale]} />
-      <CardContent style={detailsStyle}>
+    <Card
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        maxWidth: 300,
+        margin: '1rem',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        borderRadius: 8,
+        overflow: 'hidden',
+        transition: 'transform 0.2s',
+        transform: 'scale(1.05)',
+      }}
+    >
+      <CardMedia
+        component="img"
+        sx={{ width: '50%', alignSelf: 'center', paddingTop: '1rem', objectFit: 'cover' }}
+        image={product.imageUrl}
+        alt={product.name[currentLocale]}
+      />
+      <CardContent sx={{ padding: '1rem', textAlign: 'center' }}>
         <Typography variant="h6">{product.name[currentLocale]}</Typography>
         <Typography variant="body2">
           {product.description ? product.description[currentLocale] : 'No description available'}
         </Typography>
-        <Button variant="contained" color="primary" className="product_button" onClick={handleViewDetails}>
+        <MuiLink component={Button} color="primary" sx={{ marginTop: '1rem' }} onClick={handleViewDetails}>
           View Details
-        </Button>
+        </MuiLink>
       </CardContent>
     </Card>
   )
 }
 
-export default ProductCard
+export default observer(ProductCard)

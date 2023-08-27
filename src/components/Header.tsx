@@ -63,7 +63,18 @@ const Header: React.FC = () => {
         <Toolbar sx={{ justifyContent: 'space-between' }}>
           <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
             <PetsIcon sx={{ fontSize: isMobile ? 24 : 32, color: '#333' }} />
-            <Typography variant={isMobile ? 'h6' : 'h4'} sx={{ color: '#333', ml: 1 }}>
+            <Typography
+              variant={isMobile ? 'h6' : 'h4'}
+              sx={{
+                color: '#333',
+                ml: 1,
+                fontFamily: 'cursive',
+                fontWeight: 'bold',
+                textDecoration: 'none',
+                animation: 'bounce 2s infinite',
+              }}
+              className="animated-title"
+            >
               PetWorld Store
             </Typography>
           </Link>
