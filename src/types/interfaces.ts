@@ -60,16 +60,16 @@ export interface Addresses {
 }
 export interface Product {
   id: string;
-  name: {'en-US': 'Product Name in English'};
-  description: { 'en-US': 'Product description in English'};
-  imageUrl: string;
+  name: { 'en-US': string };
+  description: { 'en-US': string };
+  imageUrl: string[];
 }
 
 export interface RawProduct {
   id: string;
   masterData: {
     current: {
-      name: {'en-US': 'Product Name in English'};
+      name: { 'en-US': string };
       masterVariant: {
         images: {
           url: string;
@@ -77,7 +77,7 @@ export interface RawProduct {
       };
     };
     staged: {
-      description: { 'en-US': 'Product description in English'};
+      description: { 'en-US': string };
     };
   };
 }

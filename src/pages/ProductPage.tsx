@@ -1,10 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import '../index.css'
 import { useRootStore } from '../App'
 import ProductCard from '../components/ProductCard'
 import Header from '../components/Header'
-import { useEffect } from 'react'
+import { Box, Container, Grid, useMediaQuery, useTheme } from '@mui/material'
 
 const ProductPage: React.FC = () => {
   const { catalogStore } = useRootStore()
@@ -13,16 +12,23 @@ const ProductPage: React.FC = () => {
     catalogStore.fetchProducts()
   }, [catalogStore])
 
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+
   return (
     <div>
       <Header />
-      <div className="catalog-page">
-        <div className="product-list">
-          {catalogStore.products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </div>
+      <Container maxWidth="lg">
+        <Box mt={10}>
+          <Grid container spacing={isMobile ? 2 : 3}>
+            {catalogStore.products.map((product) => (
+              <Grid key={product.id} item xs={30} sm={10} md={8} lg={6}>
+                <ProductCard product={product} />
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      </Container>
     </div>
   )
 }

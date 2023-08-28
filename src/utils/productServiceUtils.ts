@@ -13,7 +13,7 @@ export async function fetchProducts(): Promise<Product[]> {
       id: rawProduct.id,
       name: rawProduct.masterData.current.name,
       description: rawProduct.masterData.staged.description || 'No description available',
-      imageUrl: rawProduct.masterData.current.masterVariant.images[0]?.url || '',
+      imageUrl: rawProduct.masterData.current.masterVariant.images.map(image => image.url),
     }));
 
   } catch (error) {

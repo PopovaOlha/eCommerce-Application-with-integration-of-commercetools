@@ -29,8 +29,8 @@ const ProductDetailPage: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   const productImageStyle: React.CSSProperties = {
-    width: '30%',
-    maxHeight: isMobile ? 'auto' : '400px',
+    width: '20%',
+    maxHeight: isMobile ? 'auto' : 'auto',
     objectFit: 'cover',
     borderRadius: '8px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
@@ -56,7 +56,7 @@ const ProductDetailPage: React.FC = () => {
         </Link>
         <Header />
         <Typography variant="h4">{selectedProduct.name[currentLocale]}</Typography>
-        <img src={selectedProduct.imageUrl} alt={selectedProduct.name[currentLocale]} style={productImageStyle} />
+        <img src={selectedProduct.imageUrl[0]} alt={selectedProduct.name[currentLocale]} style={productImageStyle} />
         <Typography variant="body1">
           {selectedProduct.description ? selectedProduct.description[currentLocale] : 'No description available'}
         </Typography>
