@@ -63,7 +63,18 @@ const Header: React.FC = () => {
         <Toolbar sx={{ justifyContent: 'space-between' }}>
           <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
             <PetsIcon sx={{ fontSize: isMobile ? 24 : 32, color: '#333' }} />
-            <Typography variant={isMobile ? 'h6' : 'h4'} sx={{ color: '#333', ml: 1 }}>
+            <Typography
+              variant={isMobile ? 'h6' : 'h4'}
+              sx={{
+                color: '#333',
+                ml: 1,
+                fontFamily: 'cursive',
+                fontWeight: 'bold',
+                textDecoration: 'none',
+                animation: 'bounce 2s infinite',
+              }}
+              className="animated-title"
+            >
               PetWorld Store
             </Typography>
           </Link>
@@ -97,6 +108,10 @@ const Header: React.FC = () => {
                   <ListItem button>
                     <Link to="*">Cart</Link>
                   </ListItem>
+                  <ListItem button onClick={() => navigate('/user-profile')}>
+                    <p>User</p>
+                    <ListItemText primary="User" />
+                  </ListItem>
                 </List>
               </Drawer>
               <IconButton color="inherit">
@@ -111,6 +126,7 @@ const Header: React.FC = () => {
               <Button color="inherit" onClick={handleLogin} sx={{ color: '#333' }}>
                 Login
               </Button>
+
               {isLoggedIn ? (
                 <>
                   <Button color="inherit" onClick={handleLogout} sx={{ color: '#333' }}>
@@ -126,6 +142,7 @@ const Header: React.FC = () => {
                 <ShoppingCartIcon sx={{ color: '#333' }} />
                 <Link to="*">Cart</Link>
               </IconButton>
+              {isLoggedIn && <Button onClick={() => navigate('/user-profile')}>USER</Button>}
             </>
           )}
         </Toolbar>

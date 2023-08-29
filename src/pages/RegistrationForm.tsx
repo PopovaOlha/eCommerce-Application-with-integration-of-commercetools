@@ -46,7 +46,7 @@ const RegistrationPage: React.FC = () => {
   const initialValues: RegistrationValues = {
     firstName: '',
     lastName: '',
-    birthday: '',
+    dateOfBirth: '',
     login: '',
     password: '',
     shippingAddress: {
@@ -105,7 +105,7 @@ const RegistrationPage: React.FC = () => {
       const isRegistered = await registerUser(
         values.firstName,
         values.lastName,
-        values.birthday,
+        values.dateOfBirth.split('-').reverse().join('-'),
         values.login,
         values.password,
         [shippingAddress, billingAddress],
@@ -290,7 +290,7 @@ const RegistrationPage: React.FC = () => {
             <ErrorMessage name="lastName" component="div" className="error" />
           </Box>
           <Box my={2}>
-            <Field name="birthday" as={TextField} label="Birthday" fullWidth required />
+            <Field name="birthday" as={TextField} label="Birthday" placeholder="DD-MM-YYYY" fullWidth required />
             <ErrorMessage name="birthday" component="div" className="error" />
           </Box>
           <Box my={2}>

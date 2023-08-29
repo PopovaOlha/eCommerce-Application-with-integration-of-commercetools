@@ -44,7 +44,7 @@ export interface RegistrationValues {
   defaultAddress: boolean
   firstName: string
   lastName: string
-  birthday: string
+  dateOfBirth: string
   login: string
   password: string
   shippingAddress: Addresses
@@ -60,18 +60,24 @@ export interface Addresses {
 }
 export interface Product {
   id: string;
-  name: string;
-  description: string;
+  name: {'en-US': 'Product Name in English'};
+  description: { 'en-US': 'Product description in English'};
   imageUrl: string;
 }
 
 export interface RawProduct {
   id: string;
-  name: string;
-  description?: string;
-  masterVariant: {
-    images: {
-      url: string;
-    }[];
+  masterData: {
+    current: {
+      name: {'en-US': 'Product Name in English'};
+      masterVariant: {
+        images: {
+          url: string;
+        }[];
+      };
+    };
+    staged: {
+      description: { 'en-US': 'Product description in English'};
+    };
   };
 }
