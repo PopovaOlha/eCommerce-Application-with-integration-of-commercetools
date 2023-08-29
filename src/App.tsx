@@ -8,6 +8,7 @@ import ProductPage from './pages/ProductPage'
 import ProductDetailPage from './pages/ProductDetailPage'
 import UserProfilePage from './pages/UserProfilePage'
 import NotFound from './pages/NotFound'
+// import Header from './components/Header'
 
 const RootStoreContext = createContext<RootStore | null>(null)
 
