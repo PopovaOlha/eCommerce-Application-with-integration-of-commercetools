@@ -44,7 +44,7 @@ export interface RegistrationValues {
   defaultAddress: boolean
   firstName: string
   lastName: string
-  birthday: string
+  dateOfBirth: string
   login: string
   password: string
   shippingAddress: Addresses

@@ -108,6 +108,10 @@ const Header: React.FC = () => {
                   <ListItem button>
                     <Link to="*">Cart</Link>
                   </ListItem>
+                  <ListItem button onClick={() => navigate('/user-profile')}>
+                    <p>User</p>
+                    <ListItemText primary="User" />
+                  </ListItem>
                 </List>
               </Drawer>
               <IconButton color="inherit">
@@ -122,6 +126,7 @@ const Header: React.FC = () => {
               <Button color="inherit" onClick={handleLogin} sx={{ color: '#333' }}>
                 Login
               </Button>
+
               {isLoggedIn ? (
                 <>
                   <Button color="inherit" onClick={handleLogout} sx={{ color: '#333' }}>
@@ -137,6 +142,7 @@ const Header: React.FC = () => {
                 <ShoppingCartIcon sx={{ color: '#333' }} />
                 <Link to="*">Cart</Link>
               </IconButton>
+              {isLoggedIn && <Button onClick={() => navigate('/user-profile')}>USER</Button>}
             </>
           )}
         </Toolbar>
