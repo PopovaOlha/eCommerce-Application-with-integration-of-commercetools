@@ -17,7 +17,7 @@ const ProductPage: React.FC = () => {
 
   return (
     <div>
-      <Header />
+      <Header subcategories={[]} />
       <Container maxWidth="lg">
         <Box mt={10}>
           <Grid container spacing={isMobile ? 2 : 3}>

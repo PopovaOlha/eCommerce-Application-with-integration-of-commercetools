@@ -23,7 +23,11 @@ import {
 import { Link, useNavigate } from 'react-router-dom'
 import { useRootStore } from '../App'
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  subcategories: string[]
+}
+
+const Header: React.FC<HeaderProps> = () => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
@@ -85,6 +89,9 @@ const Header: React.FC = () => {
                 <MenuIcon sx={{ color: '#333' }} />
               </IconButton>
               <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerToggle}>
+                <ListItem button onClick={() => navigate('/categories')}>
+                  <ListItemText primary="Categories"></ListItemText>
+                </ListItem>
                 <List>
                   <ListItem button onClick={() => navigate('/')}>
                     <ListItemText primary="Home"></ListItemText>
@@ -116,6 +123,9 @@ const Header: React.FC = () => {
             </>
           ) : (
             <>
+              <Button color="inherit" onClick={() => navigate('/categories')} sx={{ color: '#333' }}>
+                Categories
+              </Button>
               <Button color="inherit" onClick={() => navigate('/')} sx={{ color: '#333' }}>
                 Home
               </Button>
