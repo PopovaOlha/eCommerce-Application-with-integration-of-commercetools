@@ -22,7 +22,7 @@ const ProductPage: React.FC = () => {
         <Box mt={10}>
           <Grid container spacing={isMobile ? 2 : 3}>
             {catalogStore.products.map((product) => (
-              <Grid key={product.id} item xs={30} sm={10} md={8} lg={6}>
+              <Grid key={product.id} item xs={12} sm={6} md={4} lg={4}>
                 <ProductCard product={product} />
               </Grid>
             ))}
