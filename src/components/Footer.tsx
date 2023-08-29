@@ -8,19 +8,16 @@ const Footer: React.FC = () => {
   return (
     <Box
       sx={{
-        width: '100%',
-        position: 'absolute',
-        left: '0',
-        bottom: '0',
         backgroundColor: '#fff',
         color: '#333',
         textAlign: 'center',
-        padding: '10px 0',
+        padding: '20px 0',
         boxShadow: '0px -4px 6px rgba(0, 0, 0, 0.1)',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
+        height: '30px',
         '@media (max-width: 600px)': {
           flexDirection: 'column',
           padding: '10px',

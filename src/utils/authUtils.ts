@@ -22,6 +22,7 @@ export const authenticateUser = async (
       const authData = JSON.parse(localStorage.getItem('authData')!)
       // authData.accessToken = response.data.token;
       localStorage.setItem('user', JSON.stringify(response.data))
+      console.log("user: ", response.data)
       console.log('результат', authData)
       return true
     } else if (response.status === 400){
