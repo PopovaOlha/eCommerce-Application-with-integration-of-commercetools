@@ -63,21 +63,28 @@ export interface Product {
   name: { 'en-US': string };
   description: { 'en-US': string };
   imageUrl: string[];
+  price: number[];
 }
 
 export interface RawProduct {
   id: string;
   masterData: {
+    staged: any
     current: {
       name: { 'en-US': string };
+      staged: {
+        description: { 'en-US': string };
+      };
       masterVariant: {
         images: {
           url: string;
         }[];
+        prices: {
+          value: {
+            centAmount: number;
+          };
+        }[];
       };
-    };
-    staged: {
-      description: { 'en-US': string };
     };
   };
 }
