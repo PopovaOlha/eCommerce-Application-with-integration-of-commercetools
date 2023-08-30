@@ -18,6 +18,7 @@ interface User {
   lastName: string
   dateOfBirth: string
   addresses: Address[]
+  email: string
 }
 
 const UserProfilePage = () => {
@@ -54,16 +55,20 @@ const UserProfilePage = () => {
                 {/* Here we still don't have dateOfBirth in the customer object which we get from commercetools*/}
                 <p>{user && user?.dateOfBirth}</p>
               </div>
-              <button className="profile-button" type="button">
-                Edit profile
-              </button>
+              <div className="user-data__item">
+                <p className="title">E-mail:</p> <p>{user && user?.email}</p>
+              </div>
+              <div className="profile-buttons">
+                <button className="profile-button">Edit profile</button>
+                <button className="profile-button">Change password</button>
+              </div>
             </div>
           </div>
         </div>
         <div className="addresses">
           <div className="addresses__list">
             <div className="addresses__item">
-              <p className="title address-title">Billing adress:</p>
+              <p className="title address-title">Billing adress</p>
               <div className="adress_list">
                 <div className="address__item">
                   <p className="subtitle">City:</p> <p>{user && user?.addresses[0].city}</p>
