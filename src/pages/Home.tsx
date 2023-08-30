@@ -6,6 +6,8 @@ function Home() {
   return (
     <div>
       <Header subcategories={[]} />
+      <Header subcategories={[]} />
+      <div style={{ minHeight: 'calc(100vh - 70px - 64px)', marginTop: '64px' }} className="content"></div>
       <Footer />
     </div>
   )

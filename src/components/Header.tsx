@@ -115,6 +115,9 @@ const Header: React.FC<HeaderProps> = () => {
                   <ListItem button>
                     <Link to="*">Cart</Link>
                   </ListItem>
+                  <ListItem button onClick={() => navigate('/user-profile')}>
+                    <ListItemText primary="User" />
+                  </ListItem>
                 </List>
               </Drawer>
               <IconButton color="inherit">
@@ -132,6 +135,10 @@ const Header: React.FC<HeaderProps> = () => {
               <Button color="inherit" onClick={handleLogin} sx={{ color: '#333' }}>
                 Login
               </Button>
+              <Button color="inherit" onClick={() => navigate('/user-profile')} sx={{ color: '#333' }}>
+                User
+              </Button>
+
               {isLoggedIn ? (
                 <>
                   <Button color="inherit" onClick={handleLogout} sx={{ color: '#333' }}>
@@ -147,6 +154,7 @@ const Header: React.FC<HeaderProps> = () => {
                 <ShoppingCartIcon sx={{ color: '#333' }} />
                 <Link to="*">Cart</Link>
               </IconButton>
+              {isLoggedIn && <Button onClick={() => navigate('/user-profile')}>USER</Button>}
             </>
           )}
         </Toolbar>
