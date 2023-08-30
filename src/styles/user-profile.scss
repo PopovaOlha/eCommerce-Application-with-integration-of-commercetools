@@ -36,7 +36,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    column-gap: 20%;
+    column-gap: 22%;
 }
 
 .user__data {
@@ -45,8 +45,7 @@
 .user-data__list {
     display: flex;
     flex-direction: column;
-    row-gap: 20px;
-    
+    row-gap: 15px;
 }
 
 .user-data__item{
@@ -80,7 +79,7 @@
 .addresses__item {
     display: flex;
     flex-direction: column;
-    row-gap: 10px;
+    row-gap: 20px;
 }
 
 .addresses__item > div{
@@ -114,13 +113,27 @@
 }
 
 .address-title {
-    padding-bottom: 20px;
     text-align: center;
 }
 
 .profile-button {
-    width: 83%;
+    width: 40%;
     background-color: rgba(164, 209, 255, 0.474);
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px;
-    // margin: 0 auto;
+    padding:  7px 8px;
+    font-size: 15px;
+}
+
+.profile-buttons {
+    display: flex;
+    column-gap: 7%;
+    padding-top: 7px;
+}
+
+.save-button {
+    background-color: rgba(138, 209, 185, 0.313);
+}
+
+.cancel-button {
+    background-color: rgba(209, 138, 153, 0.314);
 }
