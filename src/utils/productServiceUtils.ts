@@ -6,8 +6,8 @@ export async function fetchProducts(): Promise<Product[]> {
   try {
     const apiUrl = 'https://api.europe-west1.gcp.commercetools.com';
     const response = await apiProduct.get<{ results: RawProduct[]}>(
-      `${apiUrl}/${commercetoolsConfig.projectKey}/products`
-    );
+      `${apiUrl}/${commercetoolsConfig.projectKey}/products`,
+      );
 console.log(response.data.results.map(rawProduct=>rawProduct.masterData.current.masterVariant.prices.map(v=>v.value.centAmount)))
     return response.data.results.map((rawProduct) => ({
       id: rawProduct.id,
@@ -22,3 +22,4 @@ console.log(response.data.results.map(rawProduct=>rawProduct.masterData.current.
     return [];
   }
 }
+

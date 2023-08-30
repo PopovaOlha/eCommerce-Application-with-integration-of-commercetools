@@ -18,7 +18,7 @@ class CatalogStore {
       try {
         const fetchedProducts = await fetchProducts();
         this.products = fetchedProducts;
-        localStorage.clear();
+        localStorage.clear()
       } catch (error) {
         console.error('Error fetching products:', error);
       } finally {
@@ -27,6 +27,7 @@ class CatalogStore {
     }
   }
 
+  
   setAuthToken(token: string) {
     this.authToken = token;
     this.saveStateToLocalStorage();
@@ -38,7 +39,7 @@ class CatalogStore {
       authToken: this.authToken,
     }));
   }
-
+ 
   loadStateFromLocalStorage() {
     const savedState = localStorage.getItem('catalogStore');
     if (savedState) {

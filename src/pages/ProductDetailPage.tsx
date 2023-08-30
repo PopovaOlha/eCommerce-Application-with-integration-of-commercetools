@@ -50,15 +50,18 @@ const ProductDetailPage: React.FC = () => {
 
   return (
     <Container maxWidth="md">
-      <Box mt={2}>
+      <Box mt={15}>
         <Link to="/catalog" style={backButtonStyle}>
           <ArrowBackIcon style={backButtonIconStyle} /> Back to catalog
         </Link>
-        <Header />
+        <Header subcategories={[]} />
         <Typography variant="h4">{selectedProduct.name[currentLocale]}</Typography>
         <img src={selectedProduct.imageUrl[0]} alt={selectedProduct.name[currentLocale]} style={productImageStyle} />
         <Typography variant="body1">
           {selectedProduct.description ? selectedProduct.description[currentLocale] : 'No description available'}
+        </Typography>
+        <Typography variant="body2" fontSize="15px" fontWeight={'bold'} sx={{ marginTop: '0.5rem' }}>
+          Price: {selectedProduct.price.map((price) => (price / 100).toFixed(2)).join(', ')} usd
         </Typography>
         <Button variant="contained" color="primary" style={{ marginTop: '1rem' }}>
           Add to Cart

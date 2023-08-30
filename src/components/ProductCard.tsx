@@ -65,10 +65,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <Typography variant="body2" fontSize={'10px'}>
           {product.description ? product.description[currentLocale] : 'No description available'}
         </Typography>
-        <Typography variant="body2" fontSize="12px" sx={{ marginTop: '0.5rem' }}>
-          Price: {product.price.join(', ')}
+        <Typography variant="body2" fontSize="12px" fontWeight={'bold'} sx={{ marginTop: '0.5rem' }}>
+          Price: {product.price.map((price) => (price / 100).toFixed(2)).join(', ')} usd
         </Typography>
-        <MuiLink component={Button} color="primary" sx={{ marginTop: '1rem' }} onClick={handleViewDetails}>
+        <MuiLink component={Button} color="primary" sx={{ marginTop: '0.1rem' }} onClick={handleViewDetails}>
           View Details
         </MuiLink>
       </CardContent>

@@ -8,7 +8,12 @@ import ProductPage from './pages/ProductPage'
 import ProductDetailPage from './pages/ProductDetailPage'
 import UserProfilePage from './pages/UserProfilePage'
 import NotFound from './pages/NotFound'
-// import Header from './components/Header'
+import CategoriesPage from './pages/CategoriesPage'
+
+const subcategories = [
+  { id: 1, name: 'Subcategory 1' },
+  { id: 2, name: 'Subcategory 2' },
+]
 
 const RootStoreContext = createContext<RootStore | null>(null)
 
@@ -24,6 +29,7 @@ function App() {
           <Route path="/registrations" element={<RegistrationForm />} />
           <Route path="/catalog" element={<ProductPage />} />
           <Route path="/product/:productId" element={<ProductDetailPage />} />
+          <Route path="/categories" element={<CategoriesPage subcategories={subcategories} />} />
           <Route path="/user-profile" element={<UserProfilePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

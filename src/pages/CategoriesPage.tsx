@@ -41,7 +41,7 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ subcategories }) => {
   return (
     <Container maxWidth="md">
       <Header subcategories={subcategories.map((subcategory) => subcategory.name)} />
-      <List sx={{ mt: 2 }}>
+      <List sx={{ mt: 10 }}>
         {subcategories.map((subcategory) => (
           <Link key={subcategory.id} to={`/categories/${subcategory.name}`} style={categoryLinkStyle}>
             <ListItem disableGutters button style={categoryItemStyle}>
