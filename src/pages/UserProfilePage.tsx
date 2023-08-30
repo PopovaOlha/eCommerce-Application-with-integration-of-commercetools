@@ -50,7 +50,9 @@ const UserProfilePage = () => {
               </div>
               <div className="user-data__item">
                 <p className="title">Date of birth:</p>{' '}
-                <p>{user && user?.dateOfBirth.split('-').reverse().join('-')}</p>
+                {/* <p>{user && user?.dateOfBirth.split('-').reverse().join('-')}</p> */}
+                {/* Here we still don't have dateOfBirth in the customer object which we get from commercetools*/}
+                <p>{user && user?.dateOfBirth}</p>
               </div>
               <button className="profile-button" type="button">
                 Edit profile
