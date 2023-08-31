@@ -1,4 +1,4 @@
-import apiProduct from '../api/axios';
+
 import axios from 'axios'
 import { commercetoolsConfig } from '../commercetoolsConfig';
 import { Product, RawProduct } from '../types/interfaces';
@@ -16,7 +16,7 @@ export async function fetchProducts(): Promise<Product[]> {
           Authorization: `Bearer ${token.accessToken}`,
         },
   });
-console.log(response.data.results.map(rawProduct=> rawProduct))
+
     return response.data.results.map((rawProduct) => ({
       id: rawProduct.id,
       key: rawProduct.key,
@@ -32,10 +32,20 @@ console.log(response.data.results.map(rawProduct=> rawProduct))
   }
 }
 
-export async function fetchProductWithImages(productKey: string) {
-  const response = await apiProduct.get(`${apiUrl}/${commercetoolsConfig.projectKey}/products/key=${productKey}`);
-  const productDetails = response.data.results.map((rawProduct: { key: string; })=> rawProduct); 
-  console.log(productDetails)
+export async function fetchProductWithImages(productId: string) {
+  try {
+    const authDataString = localStorage.getItem('authData');
+      const token = JSON.parse(authDataString!);
+      const response = await axios.get(`${apiUrl}/${commercetoolsConfig.projectKey}/products/key=${productId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token.accessToken}`,
+        },
+  });
+  const productDetails = response.data.results; 
   return productDetails
+} catch (error) {
+  console.error('Error fetching products:', error);
+  return [];
 }
-
+}
