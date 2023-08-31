@@ -32,8 +32,8 @@ console.log(response.data.results.map(rawProduct=> rawProduct))
   }
 }
 
-export async function fetchProductWithImages(productId: string) {
-  const response = await apiProduct.get(`${apiUrl}/${commercetoolsConfig.projectKey}/products/key=${productId}`);
+export async function fetchProductWithImages(productKey: string) {
+  const response = await apiProduct.get(`${apiUrl}/${commercetoolsConfig.projectKey}/products/key=${productKey}`);
   const productDetails = response.data.results.map((rawProduct: { key: string; })=> rawProduct); 
   console.log(productDetails)
   return productDetails
