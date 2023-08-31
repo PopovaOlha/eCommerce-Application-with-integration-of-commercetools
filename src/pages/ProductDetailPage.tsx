@@ -6,6 +6,8 @@ import Header from '../components/Header'
 import { Link } from 'react-router-dom'
 import { Box, Typography, Button, useMediaQuery, useTheme, Container } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { fetchProductWithImages } from '../utils/productServiceUtils'
+import { Carousel } from 'react-responsive-carousel'
 
 const ProductDetailPage: React.FC = () => {
   const { productId } = useParams<{ productId: string }>()
@@ -13,11 +15,19 @@ const ProductDetailPage: React.FC = () => {
   const selectedProduct = catalogStore.getProductById(productId!)
 
   useEffect(() => {
-    catalogStore.loadStateFromLocalStorage()
-    return () => {
-      catalogStore.saveStateToLocalStorage()
+    const fetchProductDetails = async () => {
+      if (selectedProduct) {
+        try {
+          const productDetails = await fetchProductWithImages(selectedProduct.key)
+          catalogStore.setSelectedProduct(productDetails)
+        } catch (error) {
+          console.error('Error fetching product details:', error)
+        }
+      }
     }
-  }, [catalogStore])
+
+    fetchProductDetails()
+  }, [selectedProduct])
 
   if (!selectedProduct) {
     return <div>Loading...</div>
@@ -56,7 +66,13 @@ const ProductDetailPage: React.FC = () => {
         </Link>
         <Header subcategories={[]} />
         <Typography variant="h4">{selectedProduct.name[currentLocale]}</Typography>
-        <img src={selectedProduct.imageUrl[0]} alt={selectedProduct.name[currentLocale]} style={productImageStyle} />
+        <Carousel showThumbs={false} dynamicHeight>
+          {selectedProduct.imageUrl.map((imageUrl, index) => (
+            <div key={index}>
+              <img src={imageUrl} alt={`Product Image ${index}`} style={productImageStyle} />
+            </div>
+          ))}
+        </Carousel>
         <Typography variant="body1">
           {selectedProduct.description ? selectedProduct.description[currentLocale] : 'No description available'}
         </Typography>

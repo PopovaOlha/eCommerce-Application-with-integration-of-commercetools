@@ -21,15 +21,8 @@ const ProductPage: React.FC = () => {
     if (containerRef.current) {
       const { scrollHeight, scrollTop, clientHeight } = containerRef.current
       if (scrollHeight - (scrollTop + clientHeight) < 1000) {
-        loadMoreProducts()
+        catalogStore.fetchProducts()
       }
-    }
-  }
-
-  const loadMoreProducts = () => {
-    if (!catalogStore.isLoading && catalogStore.products.length > 0) {
-      const lastProduct = catalogStore.products[catalogStore.products.length - 1]
-      catalogStore.fetchMoreProducts(lastProduct.id)
     }
   }
 

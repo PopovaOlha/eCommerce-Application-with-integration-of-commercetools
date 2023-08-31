@@ -60,6 +60,7 @@ export interface Addresses {
 }
 export interface Product {
   id: string;
+  key: string;
   name: { 'en-US': string };
   description: { 'en-US': string };
   imageUrl: string[];
@@ -68,6 +69,7 @@ export interface Product {
 
 export interface RawProduct {
   id: string;
+  key: string;
   masterData: {
     staged: any
     current: {
