@@ -1,11 +1,12 @@
 import { observer } from 'mobx-react'
-import Header from '../components/Header'
 import Footer from '../components/Footer'
+import Header from '../components/Header'
 
 function Home() {
   return (
     <div>
-      <Header />
+      <Header subcategories={[]} />
+      <div style={{ minHeight: 'calc(100vh - 70px - 64px)', marginTop: '64px' }} className="content"></div>
       <Footer />
     </div>
   )

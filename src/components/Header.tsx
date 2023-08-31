@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import PetsIcon from '@mui/icons-material/Pets'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import React, { useState } from 'react'
+import { Person } from '@mui/icons-material'
 import {
   AppBar,
   Toolbar,
@@ -22,8 +23,9 @@ import {
 } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { useRootStore } from '../App'
+import { HeaderProps } from '../types/interfaces'
 
-const Header: React.FC = () => {
+const Header: React.FC<HeaderProps> = () => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
@@ -59,14 +61,25 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <AppBar position="fixed" sx={{ top: 0, left: 0, width: '100%', backgroundColor: '#fff' }}>
+      <AppBar sx={{ width: '100%', backgroundColor: '#fff' }}>
         <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
             <PetsIcon sx={{ fontSize: isMobile ? 24 : 32, color: '#333' }} />
-            <Typography variant={isMobile ? 'h6' : 'h4'} sx={{ color: '#333', ml: 1 }}>
+            <Typography
+              variant={isMobile ? 'h6' : 'h4'}
+              sx={{
+                color: '#333',
+                ml: 1,
+                fontFamily: 'cursive',
+                fontWeight: 'bold',
+                textDecoration: 'none',
+                animation: 'bounce 2s infinite',
+              }}
+              className="animated-title"
+            >
               PetWorld Store
             </Typography>
-          </div>
+          </Link>
 
           {isMobile ? (
             <>
@@ -74,7 +87,13 @@ const Header: React.FC = () => {
                 <MenuIcon sx={{ color: '#333' }} />
               </IconButton>
               <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerToggle}>
+                <ListItem button onClick={() => navigate('/categories')}>
+                  <ListItemText primary="Categories"></ListItemText>
+                </ListItem>
                 <List>
+                  <ListItem button onClick={() => navigate('/')}>
+                    <ListItemText primary="Home"></ListItemText>
+                  </ListItem>
                   {isLoggedIn ? (
                     <>
                       <ListItem button onClick={handleLogout}>
@@ -94,6 +113,9 @@ const Header: React.FC = () => {
                   <ListItem button>
                     <Link to="*">Cart</Link>
                   </ListItem>
+                  <ListItem button onClick={() => navigate('/user-profile')}>
+                    <ListItemText primary="User" />
+                  </ListItem>
                 </List>
               </Drawer>
               <IconButton color="inherit">
@@ -102,6 +124,12 @@ const Header: React.FC = () => {
             </>
           ) : (
             <>
+              <Button color="inherit" onClick={() => navigate('/categories')} sx={{ color: '#333' }}>
+                Categories
+              </Button>
+              <Button color="inherit" onClick={() => navigate('/')} sx={{ color: '#333' }}>
+                Home
+              </Button>
               <Button color="inherit" onClick={handleLogin} sx={{ color: '#333' }}>
                 Login
               </Button>
@@ -109,6 +137,9 @@ const Header: React.FC = () => {
                 <>
                   <Button color="inherit" onClick={handleLogout} sx={{ color: '#333' }}>
                     Logout
+                  </Button>
+                  <Button color="inherit" onClick={() => navigate('/user-profile')} sx={{ color: '#333' }}>
+                    <Person sx={{ marginRight: '0.5rem' }} /> User
                   </Button>
                 </>
               ) : (

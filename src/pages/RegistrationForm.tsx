@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { observer } from 'mobx-react-lite'
-
+import Header from '../components/Header'
 import {
   Typography,
   Box,
@@ -19,6 +19,10 @@ import {
   MenuItem,
   useMediaQuery,
   useTheme,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@mui/material'
 
 import { Formik, Form, Field, ErrorMessage, FieldProps } from 'formik'
@@ -33,6 +37,7 @@ const RegistrationPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false)
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const [showErrorModal, setShowErrorModal] = useState(false)
   const [isDefaultShippingAddress, setIsDefaultShippingAddress] = useState(false)
   const [isDefaultBillingAddress, setIsDefaultBillingAddress] = useState(false)
   const [isSameAsBillingAndShippingAddress, setIsSameAsShippingAddress] = useState(false)
@@ -41,7 +46,7 @@ const RegistrationPage: React.FC = () => {
   const initialValues: RegistrationValues = {
     firstName: '',
     lastName: '',
-    birthday: '',
+    dateOfBirth: '',
     login: '',
     password: '',
     shippingAddress: {
@@ -100,7 +105,7 @@ const RegistrationPage: React.FC = () => {
       const isRegistered = await registerUser(
         values.firstName,
         values.lastName,
-        values.birthday,
+        values.dateOfBirth.split('-').reverse().join('-'),
         values.login,
         values.password,
         [shippingAddress, billingAddress],
@@ -112,6 +117,8 @@ const RegistrationPage: React.FC = () => {
 
       if (isRegistered) {
         authStore.login()
+      } else {
+        setShowErrorModal(true)
       }
     } catch (error) {
       console.error(error)
@@ -193,9 +200,12 @@ const RegistrationPage: React.FC = () => {
         return true
       }),
     password: Yup.string()
-      .min(8, 'Password must be at least 8 characters long')
-      .matches(/^(?=.*[0-9])/, 'Password must contain at least one digit')
-      .matches(/^\S*$/, 'Password cannot contain spaces')
+      .min(8, 'Password must be at least 8 characters')
+      .matches(/^(?=.*[0-9])/, 'Password must contain at least one digit (0-9)')
+      .matches(/^(?=.*[!@#$%^&*])/, 'Password must contain at least one special character (!@#$%^&*)')
+      .matches(/[a-z]/, 'Password must contain at least one lowercase Latin letter')
+      .matches(/[A-Z]/, 'Password must contain at least one uppercase Latin letter')
+      .matches(/^\S*$/, 'Password should not contain spaces')
       .required('Password is required'),
     shippingAddress: Yup.object().shape({
       streetName: Yup.string().required('Street address is required'),
@@ -257,15 +267,20 @@ const RegistrationPage: React.FC = () => {
   return (
     <Box
       maxWidth={isMobile ? '100%' : '600px'}
-      margin="0 auto"
+      margin="80px auto"
       padding={isMobile ? '16px' : '32px'}
       boxShadow={isMobile ? 'none' : '0px 4px 6px rgba(0, 0, 0, 0.1)'}
       borderRadius="8px"
       bgcolor="white"
     >
+      <div>
+        <Header subcategories={[]} />
+      </div>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
         <Form>
-          <Typography variant="h4">Register New User</Typography>
+          <Typography variant="h4" color="#9ba6a5">
+            Register New User
+          </Typography>
           <Box my={2}>
             <Field name="firstName" as={TextField} label="First Name" fullWidth required />
             <ErrorMessage name="firstName" component="div" className="error" />
@@ -275,7 +290,7 @@ const RegistrationPage: React.FC = () => {
             <ErrorMessage name="lastName" component="div" className="error" />
           </Box>
           <Box my={2}>
-            <Field name="birthday" as={TextField} label="Birthday" fullWidth required />
+            <Field name="birthday" as={TextField} label="Birthday" placeholder="DD-MM-YYYY" fullWidth required />
             <ErrorMessage name="birthday" component="div" className="error" />
           </Box>
           <Box my={2}>
@@ -303,7 +318,9 @@ const RegistrationPage: React.FC = () => {
             <ErrorMessage name="password" component="div" className="error" />
           </Box>
           <Box my={2}>
-            <Typography variant="h5">Shipping Address</Typography>
+            <Typography variant="h5" color="#9ba6a5">
+              Shipping Address
+            </Typography>
             <Box my={1}>
               <Field name="shippingAddress.streetName" as={TextField} label="Street Address" fullWidth required />
               <ErrorMessage name="shippingAddress.streetName" component="div" className="error" />
@@ -343,6 +360,7 @@ const RegistrationPage: React.FC = () => {
                   />
                 }
                 label="Set as Default Shipping Address"
+                style={{ color: 'red' }}
               />
               <FormControlLabel
                 control={
@@ -353,12 +371,15 @@ const RegistrationPage: React.FC = () => {
                   />
                 }
                 label="Use this address for billing"
+                style={{ color: 'red' }}
               />
             </Box>
           </Box>
           {!isSameAsBillingAndShippingAddress && (
             <Box my={2}>
-              <Typography variant="h5">Billing Address</Typography>
+              <Typography variant="h5" color="#9ba6a5">
+                Billing Address
+              </Typography>
               <Box my={1}>
                 <Field name="billingAddress.streetName" as={TextField} label="Street Address" fullWidth required />
                 <ErrorMessage name="billingAddress.streetName" component="div" className="error" />
@@ -398,6 +419,7 @@ const RegistrationPage: React.FC = () => {
                     />
                   }
                   label="Set as Default Billing Address"
+                  style={{ color: 'red' }}
                 />
               </Box>
             </Box>
@@ -408,6 +430,15 @@ const RegistrationPage: React.FC = () => {
           <div>
             Already have an account? <Link to="/login">Log In</Link>
           </div>
+          <Dialog open={showErrorModal} onClose={() => setShowErrorModal(false)}>
+            <DialogTitle>Error</DialogTitle>
+            <DialogContent>There is already an existing customer with the provided email</DialogContent>
+            <DialogActions>
+              <Button onClick={() => setShowErrorModal(false)} color="primary">
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Form>
       </Formik>
     </Box>

@@ -24,12 +24,12 @@ a:hover {
 }
 
 body {
-  margin: 0 auto;
+  /* margin: 0 auto;
   display: flex;
   justify-content: center;
   place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  max-width: 90%;
+  min-height: 100vh; */
 }
 
 h1 {
@@ -71,4 +71,28 @@ button:focus-visible {
 .error {
   color: rgb(172, 44, 44);
   font-weight:700;
+}
+.catalog-title {
+  text-align: center;
+}
+
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-7px);
+  }
+  60% {
+    transform: translateY(-3px);
+  }
+}
+
+.animated-title {
+  animation: bounce 2s infinite;
+}
+.product {
+ width: 200px;
+ height: 150px;
 }
