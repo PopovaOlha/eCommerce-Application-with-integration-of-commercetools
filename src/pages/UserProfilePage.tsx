@@ -84,7 +84,7 @@ const UserProfilePage = () => {
 
   return (
     <div>
-      <Header />
+      <Header subcategories={[]} />
       <div className="user-profile__wrapper">
         <div className="user-info">
           <div className="user__block">
