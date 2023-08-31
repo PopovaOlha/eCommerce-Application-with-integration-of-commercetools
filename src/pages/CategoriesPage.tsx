@@ -28,9 +28,6 @@ const CategoriesPage: React.FC<CategoriesPageProps> = ({ subcategories }) => {
   const categoryItemStyle: React.CSSProperties = {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
-    '&:hover': {
-      backgroundColor: theme.palette.primary.light,
-    },
   }
 
   const dividerStyle: React.CSSProperties = {

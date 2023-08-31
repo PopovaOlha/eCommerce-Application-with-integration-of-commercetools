@@ -90,3 +90,7 @@ export interface RawProduct {
     };
   };
 }
+
+export interface HeaderProps {
+  subcategories: string[];
+}

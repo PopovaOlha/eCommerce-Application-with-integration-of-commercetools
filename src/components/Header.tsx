@@ -23,10 +23,7 @@ import {
 } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { useRootStore } from '../App'
-
-interface HeaderProps {
-  subcategories: string[]
-}
+import { HeaderProps } from '../types/interfaces'
 
 const Header: React.FC<HeaderProps> = () => {
   const theme = useTheme()
