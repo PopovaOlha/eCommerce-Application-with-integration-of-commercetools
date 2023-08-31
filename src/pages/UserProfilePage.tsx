@@ -5,9 +5,10 @@ import Footer from '../components/Footer'
 import UserImg from '../assets/user.png'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
+import { projectKey } from '../commercetoolsConfig'
+import { get, set } from 'lodash'
 import axios from '../api/axios'
 import '../styles/user-profile.scss'
-import { projectKey } from '../commercetoolsConfig'
 
 interface Address {
   city: string
@@ -19,6 +20,7 @@ interface Address {
 
 interface User {
   id: string
+  version: number
   firstName: string
   lastName: string
   dateOfBirth: string
@@ -32,9 +34,10 @@ const UserProfilePage = () => {
 
   useEffect(() => {
     const { customer } = JSON.parse(localStorage.getItem('user')!)
-    console.log('hello:', customer)
-    setUser(customer)
-    console.log('userData', customer)
+    axios.get(`/${projectKey}/customers/${customer?.id}`).then((userData) => {
+      console.log('USER_RESPONSE: ', userData)
+      setUser(userData?.data)
+    })
   }, [])
 
   const validationSchema = Yup.object().shape({
@@ -62,23 +65,50 @@ const UserProfilePage = () => {
     setEditState(!editState)
   }
 
+  const fieldActionMap = {
+    email: 'changeEmail',
+    lastName: 'setLastName',
+    firstName: 'setFirstName',
+    dateOfBirth: 'setDateOfBirth',
+  }
+
+  const initialValues = {
+    firstName: user?.firstName,
+    lastName: user?.lastName,
+    dateOfBirth: user?.dateOfBirth,
+    email: user?.email,
+  }
+
   const handleUserProfileSubmit = (values: {
-    firstName: string
-    lastName: string
-    dateOfBirth: string
-    email: string
+    firstName: string | undefined
+    lastName: string | undefined
+    dateOfBirth: string | undefined
+    email: string | undefined
   }) => {
-    const payload = {
-      version: '3',
-      actions: [
-        {
-          action: 'updateCustomer',
-          ...values,
-        },
-      ],
+    const resultObject = {}
+    Object.entries(initialValues)?.map((entry) => {
+      const [key, oldVal] = entry
+      const newVal = get(values, key)
+      if (newVal !== oldVal) {
+        set(resultObject, key, newVal)
+      }
+    })
+
+    const actions = []
+    for (const [key, value] of Object.entries(resultObject)) {
+      actions.push({
+        action: get(fieldActionMap, key),
+        [key]: value,
+      })
     }
+
+    const payload = {
+      version: user?.version,
+      actions: actions,
+    }
+
     axios.post(`/${projectKey}/customers/${user?.id}`, payload).then((res) => {
-      console.log('Res: ', res)
+      setUser(res?.data)
     })
   }
 
@@ -96,12 +126,7 @@ const UserProfilePage = () => {
           <div className="user__data">
             {user && (
               <Formik
-                initialValues={{
-                  firstName: user?.firstName,
-                  lastName: user?.lastName,
-                  dateOfBirth: user?.dateOfBirth,
-                  email: user?.email,
-                }}
+                initialValues={initialValues}
                 validationSchema={validationSchema}
                 onSubmit={handleUserProfileSubmit}
               >
@@ -160,7 +185,12 @@ const UserProfilePage = () => {
                     </div>
                     <div className="profile-buttons">
                       {editState && (
-                        <button className="profile-button save-button" disabled={!formik.isValid}>
+                        <button
+                          type="submit"
+                          className="profile-button save-button"
+                          onClick={() => formik.handleSubmit()}
+                          disabled={!formik.isValid}
+                        >
                           Save Changes
                         </button>
                       )}
