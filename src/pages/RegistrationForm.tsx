@@ -274,7 +274,7 @@ const RegistrationPage: React.FC = () => {
       bgcolor="white"
     >
       <div>
-        <Header />
+        <Header subcategories={[]} />
       </div>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
         <Form>
