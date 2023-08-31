@@ -136,7 +136,7 @@ const RegistrationPage: React.FC = () => {
         }
         return true
       }),
-    birthday: Yup.string()
+    dateOfBirth: Yup.string()
       .required('Birthday is required')
       .matches(/^\d{2}-\d{2}-\d{4}$/, 'Invalid date format (DD-MM-YYYY)')
       .test('is-valid-age', 'You must be at least 18 years old', (value) => {
