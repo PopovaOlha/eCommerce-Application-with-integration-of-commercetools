@@ -96,3 +96,6 @@ button:focus-visible {
  width: 200px;
  height: 150px;
 }
+.text-decoration {
+  text-decoration: line-through;
+}
