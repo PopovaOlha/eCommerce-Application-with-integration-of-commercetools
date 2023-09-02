@@ -1,18 +1,23 @@
-import React, { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { useRootStore } from '../App'
+import React, { useEffect, useState } from 'react'
+import { useParams, Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
-import Header from '../components/Header'
-import { Link } from 'react-router-dom'
-import { Box, Typography, Button, useMediaQuery, useTheme, Container } from '@mui/material'
+import { Container, Box, Typography, Button, useTheme, useMediaQuery } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { fetchProductWithImages } from '../utils/productServiceUtils'
 import { Carousel } from 'react-responsive-carousel'
+import 'react-responsive-carousel/lib/styles/carousel.min.css'
+
+import { useRootStore } from '../App'
+import { fetchProductWithImages } from '../utils/productServiceUtils'
+import ImageModal from '../components/ImageModal'
+import Header from '../components/Header'
 
 const ProductDetailPage: React.FC = () => {
   const { productId } = useParams<{ productId: string }>()
   const { catalogStore } = useRootStore()
   const selectedProduct = catalogStore.getProductById(productId!)
+
+  const [isImageModalOpen, setImageModalOpen] = useState(false)
+  const [enlargedImageUrl, setEnlargedImageUrl] = useState('')
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -44,6 +49,7 @@ const ProductDetailPage: React.FC = () => {
     objectFit: 'cover',
     borderRadius: '8px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    cursor: 'pointer',
   }
 
   const backButtonStyle: React.CSSProperties = {
@@ -58,6 +64,16 @@ const ProductDetailPage: React.FC = () => {
     marginRight: '0.5rem',
   }
 
+  const openImageModal = (imageUrl: string) => {
+    setEnlargedImageUrl(imageUrl)
+    setImageModalOpen(true)
+  }
+
+  const closeImageModal = () => {
+    setImageModalOpen(false)
+    setEnlargedImageUrl('')
+  }
+
   return (
     <Container maxWidth="md">
       <Box mt={15}>
@@ -68,7 +84,7 @@ const ProductDetailPage: React.FC = () => {
         <Typography variant="h4">{selectedProduct.name[currentLocale]}</Typography>
         <Carousel showThumbs={false} dynamicHeight>
           {selectedProduct.imageUrl.map((imageUrl, index) => (
-            <div key={index}>
+            <div key={index} onClick={() => openImageModal(imageUrl)}>
               <img src={imageUrl} alt={`Product Image ${index}`} style={productImageStyle} />
             </div>
           ))}
@@ -83,6 +99,8 @@ const ProductDetailPage: React.FC = () => {
           Add to Cart
         </Button>
       </Box>
+
+      <ImageModal isOpen={isImageModalOpen} onClose={closeImageModal} imageUrl={enlargedImageUrl} />
     </Container>
   )
 }

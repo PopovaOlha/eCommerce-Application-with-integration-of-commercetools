@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import '../index.css'
 import { Product } from '../types/interfaces'
-import { Card, CardContent, CardMedia, Typography, Button, Link as MuiLink } from '@mui/material'
+import { Card, CardContent, CardMedia, Typography, Button, Link as MuiLink, Box } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useRootStore } from '../App'
 import { observer } from 'mobx-react-lite'
@@ -31,6 +31,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     setSelectedImageIndex(index)
   }
 
+  const mediaStyle: React.CSSProperties = {
+    width: '40%',
+    alignSelf: 'center',
+  }
+
   return (
     <Card
       sx={{
@@ -49,7 +54,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         },
       }}
     >
-      <CardMedia component="div" sx={{ width: '40%', alignSelf: 'center' }}>
+      <CardMedia component="div" sx={mediaStyle}>
         <Carousel selectedItem={selectedImageIndex} showThumbs={false} dynamicHeight onClickItem={handleImageClick}>
           {product.imageUrl.map((imageUrl, index) => (
             <div key={index}>
@@ -65,9 +70,25 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <Typography variant="body2" fontSize={'10px'}>
           {product.description ? product.description[currentLocale] : 'No description available'}
         </Typography>
-        <Typography variant="body2" fontSize="12px" fontWeight={'bold'} sx={{ marginTop: '0.5rem' }}>
-          Price: {product.price.map((price) => (price / 100).toFixed(2)).join(', ')} usd
-        </Typography>
+        <Box display="flex" alignItems="center" justifyContent="center" sx={{ marginTop: '0.5rem' }}>
+          <Typography variant="body2" fontSize="12px" fontWeight={'bold'}>
+            Price:{' '}
+          </Typography>
+          {product.discount === null ? (
+            <Typography variant="body2" fontSize="12px">
+              {product.price.map((price) => (price / 100).toFixed(2)).join(', ')} USD
+            </Typography>
+          ) : (
+            <>
+              <Typography variant="body2" fontSize="12px" className="text-decoration">
+                {product.price.map((price) => (price / 100).toFixed(2)).join(', ')} USD
+              </Typography>
+              <Typography variant="body2" fontSize="12px" color={'red'} marginLeft={'5px'}>
+                {product.discount !== null ? (product.discount! / 100).toFixed(2) : ''} USD
+              </Typography>
+            </>
+          )}
+        </Box>
         <MuiLink component={Button} color="primary" sx={{ marginTop: '0.1rem' }} onClick={handleViewDetails}>
           View Details
         </MuiLink>

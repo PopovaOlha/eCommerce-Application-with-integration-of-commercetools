@@ -65,13 +65,14 @@ export interface Product {
   description: { 'en-US': string };
   imageUrl: string[];
   price: number[];
+  discount?: number | null; // Добавляем discount в интерфейс Product
 }
 
 export interface RawProduct {
   id: string;
   key: string;
   masterData: {
-    staged: any
+    staged: any;
     current: {
       name: { 'en-US': string };
       staged: {
@@ -85,12 +86,17 @@ export interface RawProduct {
           value: {
             centAmount: number;
           };
+          discounted?: { // Добавляем discounted в интерфейс RawProduct
+            value: {
+              centAmount: number;
+            };
+          };
         }[];
       };
     };
   };
 }
-
 export interface HeaderProps {
   subcategories: string[];
 }
+

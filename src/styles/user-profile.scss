@@ -9,6 +9,7 @@
     padding: 25px 0 25px 0 ;
     max-width: 80%;
     margin: 64px auto 0 ;
+    position: relative;
 }
 
 .user-profile__wrapper {
@@ -30,6 +31,7 @@
     display: flex;
     flex-direction: column;
     min-height: calc(100vh - 70px - 64px - 50px);
+    row-gap: 60px;
 }
 
 .user-info {
@@ -37,6 +39,17 @@
     align-items: center;
     justify-content: center;
     column-gap: 22%;
+    position: relative; 
+}
+
+.user-info::after {
+    position: absolute;
+    content: '';
+    height: 1.5px;
+    background-color: rgba(162, 162, 162, 0.053);
+    width: 80%;
+    bottom: -30px;
+    align-self: center;
 }
 
 .user__data {
@@ -59,33 +72,36 @@
     min-width: 50%;
 }
 
+// .addresses {
+//     align-self: center;
+// }
+
 .addresses__list {
-    padding-top: 50px;
     display: flex;
+    column-gap: 20px;
+    row-gap: 20px;
+    flex-wrap: wrap;
+    align-items: center;
     justify-content: center;
-    column-gap: 6%;
 }
 
 .addresses__item {
-    justify-content: center;
+    // justify-content: center;
     column-gap: 20%;
-    width: 35%;
+    width: 430px;
     background-color: rgba(164, 209, 255, 0.107);
     padding: 15px;
     border-radius: 25px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 4px;
-}
-
-.addresses__item {
     display: flex;
     flex-direction: column;
-    row-gap: 20px;
+    row-gap: 17px;
 }
 
-.addresses__item > div{
+.address__details {
     display: flex;
     flex-direction: column;
-    row-gap: 12px;
+    row-gap: 8px;
 }
 
 .address__item {
@@ -136,4 +152,84 @@
 
 .cancel-button {
     background-color: rgba(209, 138, 153, 0.314);
+}
+
+.add-address__btn {
+    position: absolute;
+    left: 12%;
+    max-width: 15%;
+    display: flex;
+    column-gap: 7px;
+    border-radius: 7px;
+    font-size: 16px;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-btn {
+    max-width: 25px;
+    height: 25px;
+}
+
+.add-btn img{
+    width: 100%;
+    height: 100%;
+}
+
+.address__header {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+}
+
+.address__action {
+    display: flex;
+    column-gap: 10px;
+}
+
+.edit__btn {
+    max-width: 27px;
+    height: auto;
+    cursor: pointer;
+}
+
+.remove__btn {
+    max-width: 27px;
+    height: auto;
+    cursor: pointer;
+}
+
+.edit__btn img{
+    width: 100%;
+    height: 100%;
+}
+
+.remove__btn img{
+    width: 100%;
+    height: 100%;
+}
+
+.address__input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    row-gap: 15px;
+}
+
+.address__input input {
+    max-width: 500px;
+    height: 30px;
+}
+
+.checkbox-row {
+    display: flex;
+    font-size: 13px;
+    justify-content: center;
+    column-gap: 15px;
+    padding-top: 15px;
+}
+
+.checkbox {
+    margin-right: 6px;
 }
