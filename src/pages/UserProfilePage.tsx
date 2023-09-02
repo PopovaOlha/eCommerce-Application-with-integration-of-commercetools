@@ -1,16 +1,22 @@
 import { useState, useEffect } from 'react'
 import { observer } from 'mobx-react'
+import dayjs from 'dayjs'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import UserImg from '../assets/user.png'
+import AddBtn from '../assets/add.png'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { projectKey } from '../commercetoolsConfig'
 import { get, set } from 'lodash'
 import axios from '../api/axios'
+import AddressCard from '../components/AddressCard'
+import PasswordChangeModal from '../components/ChangePasswordModal'
 import '../styles/user-profile.scss'
+import AddAddressModal from '../components/AddAddressModal'
 
 interface Address {
+  id: string
   city: string
   country: string
   postalCode: string
@@ -31,6 +37,8 @@ interface User {
 const UserProfilePage = () => {
   const [user, setUser] = useState<User | null>(null)
   const [editState, setEditState] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [openPassword, setopenPassword] = useState(false)
 
   useEffect(() => {
     const { customer } = JSON.parse(localStorage.getItem('user')!)
@@ -57,7 +65,12 @@ const UserProfilePage = () => {
         }
         return true
       }),
-    dateOfBirth: Yup.date(),
+    dateOfBirth: Yup.string()
+      .test((value) => {
+        const date = dayjs(value, 'YYYY-MM-DD', true)
+        return date.isValid()
+      })
+      .length(10),
     email: Yup.string().email(),
   })
 
@@ -109,6 +122,7 @@ const UserProfilePage = () => {
 
     axios.post(`/${projectKey}/customers/${user?.id}`, payload).then((res) => {
       setUser(res?.data)
+      setEditState(false)
     })
   }
 
@@ -203,7 +217,11 @@ const UserProfilePage = () => {
                           Edit profile
                         </button>
                       )}
-                      {!editState && <button className="profile-button">Change password</button>}
+                      {!editState && (
+                        <button className="profile-button" onClick={() => setopenPassword(true)}>
+                          Change password
+                        </button>
+                      )}
                     </div>
                   </div>
                 )}
@@ -211,49 +229,67 @@ const UserProfilePage = () => {
             )}
           </div>
         </div>
+        <div
+          className="add-address"
+          onClick={() => {
+            setOpen(true)
+          }}
+        >
+          <div className="profile-button add-address__btn">
+            <p>Add Address</p>{' '}
+            <div className="add-btn">
+              <img src={AddBtn} alt="add button" />
+            </div>
+          </div>
+        </div>
+        <PasswordChangeModal
+          isOpen={openPassword}
+          onClose={() => {
+            setopenPassword(false)
+          }}
+          setUser={(user) => setUser(user as User)}
+          userId={user?.id as string}
+          userVersion={user?.version as number}
+        />
+        <AddAddressModal
+          isOpen={open}
+          onClose={() => {
+            setOpen(false)
+          }}
+          userId={user?.id as string}
+          userVersion={user?.version as number}
+          setUser={(user) => setUser(user as User)}
+        />
+
         <div className="addresses">
           <div className="addresses__list">
-            <div className="addresses__item">
-              <p className="title address-title">Billing adress</p>
-              <div className="adress_list">
-                <div className="address__item">
-                  <p className="subtitle">City:</p> <p>{user && user?.addresses[0].city}</p>
-                </div>
-                <div className="address__item">
-                  <p className="subtitle">Country:</p> <p>{user && user?.addresses[0].country}</p>
-                </div>
-                <div className="address__item">
-                  <p className="subtitle">Postal code:</p> <p>{user && user?.addresses[0].postalCode}</p>
-                </div>
-                <div className="address__item">
-                  <p className="subtitle">State:</p> <p>{user && user?.addresses[0].state}</p>
-                </div>
-                <div className="address__item">
-                  <p className="subtitle">Street:</p> <p>{user && user?.addresses[0].streetName}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="addresses__item">
-              <p className="title address-title">Shipping Address</p>
-              <div>
-                <div className="address__item">
-                  <p className="subtitle">City:</p> <p>{user && user?.addresses[0].city}</p>
-                </div>
-                <div className="address__item">
-                  <p className="subtitle">Country:</p> <p>{user && user?.addresses[0].country}</p>
-                </div>
-                <div className="address__item">
-                  <p className="subtitle">Postal code:</p> <p>{user && user?.addresses[0].postalCode}</p>
-                </div>
-                <div className="address__item">
-                  <p className="subtitle">State:</p> <p>{user && user?.addresses[0].state}</p>
-                </div>
-                <div className="address__item">
-                  <p className="subtitle">Street:</p> <p>{user && user?.addresses[0].streetName}</p>
-                </div>
-              </div>
-            </div>
+            {user?.addresses.map((address) => (
+              <AddressCard
+                key={address.id}
+                addressId={address.id}
+                title="Address"
+                city={address.city as string}
+                country={address.country as string}
+                postalCode={address.postalCode as string}
+                state={address.state as string}
+                streetName={address.streetName as string}
+                handleDelete={() => {
+                  const payload = {
+                    version: user.version,
+                    actions: [
+                      {
+                        action: 'removeAddress',
+                        addressId: address.id,
+                      },
+                    ],
+                  }
+                  axios.post(`${projectKey}/customers/${user.id}`, payload).then((res) => {
+                    console.log('Detetion Result: ', res)
+                    setUser(res.data)
+                  })
+                }}
+              />
+            ))}
           </div>
         </div>
       </div>
