@@ -8,6 +8,8 @@ import ProductPage from './pages/ProductPage'
 import ProductDetailPage from './pages/ProductDetailPage'
 import UserProfilePage from './pages/UserProfilePage'
 import NotFound from './pages/NotFound'
+import '../src/styles/user-profile.scss'
+import { ToastContainer } from 'react-toastify'
 // import Header from './components/Header'
 
 const RootStoreContext = createContext<RootStore | null>(null)
@@ -17,6 +19,18 @@ function App() {
   return (
     <BrowserRouter>
       <RootStoreContext.Provider value={rootStore}>
+        <ToastContainer
+          position="top-center"
+          autoClose={1000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
         {/* <Header /> */}
         <Routes>
           <Route path="/" element={<Home />} />

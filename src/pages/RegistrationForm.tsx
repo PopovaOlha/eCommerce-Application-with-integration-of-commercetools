@@ -290,8 +290,8 @@ const RegistrationPage: React.FC = () => {
             <ErrorMessage name="lastName" component="div" className="error" />
           </Box>
           <Box my={2}>
-            <Field name="birthday" as={TextField} label="Birthday" placeholder="DD-MM-YYYY" fullWidth required />
-            <ErrorMessage name="birthday" component="div" className="error" />
+            <Field name="dateOfBirth" as={TextField} label="Birthday" placeholder="DD-MM-YYYY" fullWidth required />
+            <ErrorMessage name="dateOfBirth" component="div" className="error" />
           </Box>
           <Box my={2}>
             <Field name="login" as={TextField} label="Email" fullWidth required />

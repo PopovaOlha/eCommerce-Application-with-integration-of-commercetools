@@ -10,6 +10,7 @@ import * as Yup from 'yup'
 import { projectKey } from '../commercetoolsConfig'
 import { get, set } from 'lodash'
 import axios from '../api/axios'
+import { toast } from 'react-toastify'
 import AddressCard from '../components/AddressCard'
 import PasswordChangeModal from '../components/ChangePasswordModal'
 import '../styles/user-profile.scss'
@@ -39,6 +40,19 @@ const UserProfilePage = () => {
   const [editState, setEditState] = useState(false)
   const [open, setOpen] = useState(false)
   const [openPassword, setopenPassword] = useState(false)
+
+  function notify() {
+    return toast.success('Success changes', {
+      position: 'top-center',
+      autoClose: 1000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'colored',
+    })
+  }
 
   useEffect(() => {
     const { customer } = JSON.parse(localStorage.getItem('user')!)
@@ -123,6 +137,7 @@ const UserProfilePage = () => {
     axios.post(`/${projectKey}/customers/${user?.id}`, payload).then((res) => {
       setUser(res?.data)
       setEditState(false)
+      notify()
     })
   }
 
@@ -148,54 +163,78 @@ const UserProfilePage = () => {
                   <div className="user-data__list">
                     <div className="user-data__item">
                       <p className="title">Name:</p>
-                      {formik.errors.firstName && <p color="red">Error: {formik.errors.firstName}</p>}
-                      {editState ? (
-                        <input
-                          type="text"
-                          name="firstName"
-                          value={formik.values.firstName}
-                          onChange={formik.handleChange}
-                        />
-                      ) : (
-                        <p>{user?.firstName}</p>
-                      )}
+                      <div className="user-input">
+                        {formik.errors.firstName && (
+                          <p className="error-input" color="red">
+                            Error: {formik.errors.firstName}
+                          </p>
+                        )}
+                        {editState ? (
+                          <input
+                            type="text"
+                            name="firstName"
+                            value={formik.values.firstName}
+                            onChange={formik.handleChange}
+                          />
+                        ) : (
+                          <p>{user?.firstName}</p>
+                        )}
+                      </div>
                     </div>
                     <div className="user-data__item">
                       <p className="title">Last Name:</p>
-                      {formik.errors.lastName && <p color="red">Error: {formik.errors.lastName}</p>}
-                      {editState ? (
-                        <input
-                          type="text"
-                          name="lastName"
-                          value={formik.values.lastName}
-                          onChange={formik.handleChange}
-                        />
-                      ) : (
-                        <p>{user?.lastName}</p>
-                      )}
+                      <div className="user-input">
+                        {formik.errors.lastName && (
+                          <p className="error-input" color="red">
+                            Error: {formik.errors.lastName}
+                          </p>
+                        )}
+                        {editState ? (
+                          <input
+                            type="text"
+                            name="lastName"
+                            value={formik.values.lastName}
+                            onChange={formik.handleChange}
+                          />
+                        ) : (
+                          <p>{user?.lastName}</p>
+                        )}
+                      </div>
                     </div>
                     <div className="user-data__item">
                       <p className="title">Date of birth: </p>
-                      {formik.errors.dateOfBirth && <p color="red">Error: {formik.errors.dateOfBirth}</p>}
-                      {editState ? (
-                        <input
-                          type="text"
-                          name="dateOfBirth"
-                          value={formik.values.dateOfBirth}
-                          onChange={formik.handleChange}
-                        />
-                      ) : (
-                        <p>{user?.dateOfBirth}</p>
-                      )}
+                      <div className="user-input">
+                        {formik.errors.dateOfBirth && (
+                          <p className="error-input" color="red">
+                            Error: {formik.errors.dateOfBirth}
+                          </p>
+                        )}
+                        {editState ? (
+                          <input
+                            type="text"
+                            name="dateOfBirth"
+                            value={formik.values.dateOfBirth}
+                            onChange={formik.handleChange}
+                          />
+                        ) : (
+                          <p>{user?.dateOfBirth}</p>
+                        )}
+                      </div>
                     </div>
                     <div className="user-data__item">
                       <p className="title">E-mail:</p>
-                      {formik.errors.email && <p color="red">Error: {formik.errors.email}</p>}
-                      {editState ? (
-                        <input type="text" name="email" value={formik.values.email} onChange={formik.handleChange} />
-                      ) : (
-                        <p>{user?.email}</p>
-                      )}
+                      <div className="user-input">
+                        {formik.errors.email && (
+                          <p className="error-input" color="red">
+                            Error: {formik.errors.email}
+                          </p>
+                        )}
+                        {editState ? (
+                          <input type="text" name="email" value={formik.values.email} onChange={formik.handleChange} />
+                        ) : (
+                          <p>{user?.email}</p>
+                        )}
+                      </div>
                     </div>
                     <div className="profile-buttons">
                       {editState && (
