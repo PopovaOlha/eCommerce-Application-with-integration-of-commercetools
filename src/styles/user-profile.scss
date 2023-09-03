@@ -40,6 +40,8 @@
     justify-content: center;
     column-gap: 22%;
     position: relative; 
+    flex-wrap: wrap;
+    row-gap: 30px;
 }
 
 .user-info::after {
@@ -61,10 +63,42 @@
     row-gap: 15px;
 }
 
-.user-data__item{
+.user-data__item {
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+
+.user-data__item input{
+    padding: 6px;
+    border: solid 2px rgba(27, 57, 134, 0.575);
+    border-radius: 5px;
+    // box-shadow: 0px 0px 13px -2px rgba(11, 68, 135, 1);
+    transition: border-color 0.3s ease;
+    animation: flicker 1s infinite;
+}
+
+@keyframes flicker {
+    0% {
+        border-color: #ccc;
+    }
+    50% {
+        border-color: rgb(74, 122, 234);
+    }
+    100% {
+        border-color: #ccc;
+    }
+}
+
+.user-input {
+    display: flex;
+    flex-direction: column-reverse;
+    row-gap: 3px;
+}
+
+.error-input {
+    font-size: 10px;
+    color: red;
 }
 
 .user-data__item p{
@@ -154,16 +188,27 @@
     background-color: rgba(209, 138, 153, 0.314);
 }
 
+.add-address {
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+}
+
 .add-address__btn {
     position: absolute;
-    left: 12%;
-    max-width: 15%;
+    max-width: 205px;
     display: flex;
     column-gap: 7px;
     border-radius: 7px;
     font-size: 16px;
     align-items: center;
     justify-content: center;
+    left: 10%;
+}
+
+.custom-toast-container {
+    background-color: green;
+    /* Add other styles as needed */
 }
 
 .add-btn {
@@ -232,4 +277,19 @@
 
 .checkbox {
     margin-right: 6px;
+}
+
+.password-field {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    column-gap: 10px;
+}
+
+.password-field input{
+    padding: 5px;
+    border: solid 2px rgba(27, 57, 134, 0.575);
+    border-radius: 5px;
+    // box-shadow: 0px 0px 13px -2px rgba(11, 68, 135, 1);
+    transition: border-color 0.3s ease;
 }

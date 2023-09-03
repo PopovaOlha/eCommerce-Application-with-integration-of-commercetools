@@ -3,6 +3,8 @@ import * as Yup from 'yup'
 import { Dialog, Button, DialogActions, DialogTitle, DialogContent, DialogContentText } from '@mui/material'
 import axios from '../api/axios'
 import { projectKey } from '../commercetoolsConfig'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 interface Props {
   isOpen: boolean
@@ -23,6 +25,19 @@ function PasswordChangeModal({ isOpen, onClose, setUser, userId, userVersion }: 
     currentPassword: '',
     newPassword: '',
     confirmNewPassword: '',
+  }
+
+  function notify() {
+    return toast.success('Success changes', {
+      position: 'top-center',
+      autoClose: 1000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'colored',
+    })
   }
 
   const validationSchema = Yup.object().shape({
@@ -48,18 +63,19 @@ function PasswordChangeModal({ isOpen, onClose, setUser, userId, userVersion }: 
       console.log('hi')
       setUser(res.data)
       onClose()
+      notify()
     })
   }
 
   return (
     <Dialog open={isOpen} onClose={onClose}>
-      <DialogTitle>New Address</DialogTitle>
+      <DialogTitle onClick={notify}>New Address</DialogTitle>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
         {(formik) => (
           <>
             <DialogContent>
               <DialogContentText style={{ paddingBottom: 25 }}>Enter your new password</DialogContentText>
-              <div>
+              <div className="password-field">
                 <label htmlFor="currentPassword">Current Password</label>
                 <input
                   type="password"
@@ -73,7 +89,7 @@ function PasswordChangeModal({ isOpen, onClose, setUser, userId, userVersion }: 
                   <div className="error">{formik.errors.currentPassword}</div>
                 ) : null}
               </div>
-              <div>
+              <div className="password-field">
                 <label htmlFor="newPassword">New Password</label>
                 <input
                   type="password"
@@ -87,7 +103,7 @@ function PasswordChangeModal({ isOpen, onClose, setUser, userId, userVersion }: 
                   <div className="error">{formik.errors.newPassword}</div>
                 ) : null}
               </div>
-              <div>
+              <div className="password-field">
                 <label htmlFor="confirmNewPassword">Confirm New Password</label>
                 <input
                   type="password"
