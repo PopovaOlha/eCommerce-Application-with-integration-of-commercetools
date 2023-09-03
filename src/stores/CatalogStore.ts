@@ -3,6 +3,7 @@ import { fetchProducts } from '../utils/productServiceUtils';
 import { Product } from '../types/interfaces';
 
 class CatalogStore {
+  selectedProduct: Product | null = null;
   products: Product[] = [];
   isLoading: boolean = false;
   authToken: string | null = null;
@@ -18,7 +19,6 @@ class CatalogStore {
       try {
         const fetchedProducts = await fetchProducts();
         this.products = fetchedProducts;
-        localStorage.clear();
       } catch (error) {
         console.error('Error fetching products:', error);
       } finally {
@@ -26,7 +26,10 @@ class CatalogStore {
       }
     }
   }
-
+  setSelectedProduct(product: Product) {
+    this.selectedProduct = product;
+  }
+  
   setAuthToken(token: string) {
     this.authToken = token;
     this.saveStateToLocalStorage();
@@ -38,7 +41,7 @@ class CatalogStore {
       authToken: this.authToken,
     }));
   }
-
+ 
   loadStateFromLocalStorage() {
     const savedState = localStorage.getItem('catalogStore');
     if (savedState) {

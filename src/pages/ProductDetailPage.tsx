@@ -1,23 +1,38 @@
-import React, { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { useRootStore } from '../App'
+import React, { useEffect, useState } from 'react'
+import { useParams, Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
-import Header from '../components/Header'
-import { Link } from 'react-router-dom'
-import { Box, Typography, Button, useMediaQuery, useTheme, Container } from '@mui/material'
+import { Container, Box, Typography, Button, useTheme, useMediaQuery } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { Carousel } from 'react-responsive-carousel'
+import 'react-responsive-carousel/lib/styles/carousel.min.css'
+
+import { useRootStore } from '../App'
+import { fetchProductWithImages } from '../utils/productServiceUtils'
+import ImageModal from '../components/ImageModal'
+import Header from '../components/Header'
 
 const ProductDetailPage: React.FC = () => {
   const { productId } = useParams<{ productId: string }>()
   const { catalogStore } = useRootStore()
   const selectedProduct = catalogStore.getProductById(productId!)
 
+  const [isImageModalOpen, setImageModalOpen] = useState(false)
+  const [enlargedImageUrl, setEnlargedImageUrl] = useState('')
+
   useEffect(() => {
-    catalogStore.loadStateFromLocalStorage()
-    return () => {
-      catalogStore.saveStateToLocalStorage()
+    const fetchProductDetails = async () => {
+      if (selectedProduct) {
+        try {
+          const productDetails = await fetchProductWithImages(selectedProduct.key)
+          catalogStore.setSelectedProduct(productDetails)
+        } catch (error) {
+          console.error('Error fetching product details:', error)
+        }
+      }
     }
-  }, [catalogStore])
+
+    fetchProductDetails()
+  }, [selectedProduct])
 
   if (!selectedProduct) {
     return <div>Loading...</div>
@@ -29,11 +44,12 @@ const ProductDetailPage: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   const productImageStyle: React.CSSProperties = {
-    width: '30%',
-    maxHeight: isMobile ? 'auto' : '400px',
+    width: '20%',
+    maxHeight: isMobile ? 'auto' : 'auto',
     objectFit: 'cover',
     borderRadius: '8px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    cursor: 'pointer',
   }
 
   const backButtonStyle: React.CSSProperties = {
@@ -48,22 +64,43 @@ const ProductDetailPage: React.FC = () => {
     marginRight: '0.5rem',
   }
 
+  const openImageModal = (imageUrl: string) => {
+    setEnlargedImageUrl(imageUrl)
+    setImageModalOpen(true)
+  }
+
+  const closeImageModal = () => {
+    setImageModalOpen(false)
+    setEnlargedImageUrl('')
+  }
+
   return (
     <Container maxWidth="md">
-      <Box mt={2}>
+      <Box mt={15}>
         <Link to="/catalog" style={backButtonStyle}>
           <ArrowBackIcon style={backButtonIconStyle} /> Back to catalog
         </Link>
-        <Header />
+        <Header subcategories={[]} />
         <Typography variant="h4">{selectedProduct.name[currentLocale]}</Typography>
-        <img src={selectedProduct.imageUrl} alt={selectedProduct.name[currentLocale]} style={productImageStyle} />
+        <Carousel showThumbs={false} dynamicHeight>
+          {selectedProduct.imageUrl.map((imageUrl, index) => (
+            <div key={index} onClick={() => openImageModal(imageUrl)}>
+              <img src={imageUrl} alt={`Product Image ${index}`} style={productImageStyle} />
+            </div>
+          ))}
+        </Carousel>
         <Typography variant="body1">
           {selectedProduct.description ? selectedProduct.description[currentLocale] : 'No description available'}
+        </Typography>
+        <Typography variant="body2" fontSize="15px" fontWeight={'bold'} sx={{ marginTop: '0.5rem' }}>
+          Price: {selectedProduct.price.map((price) => (price / 100).toFixed(2)).join(', ')} usd
         </Typography>
         <Button variant="contained" color="primary" style={{ marginTop: '1rem' }}>
           Add to Cart
         </Button>
       </Box>
+
+      <ImageModal isOpen={isImageModalOpen} onClose={closeImageModal} imageUrl={enlargedImageUrl} />
     </Container>
   )
 }
