@@ -305,6 +305,9 @@ const UserProfilePage = () => {
             {user?.addresses.map((address) => (
               <AddressCard
                 key={address.id}
+                userVersion={user?.version}
+                userId={user?.id}
+                setUser={(user) => setUser(user as User)}
                 addressId={address.id}
                 title="Address"
                 city={address.city as string}

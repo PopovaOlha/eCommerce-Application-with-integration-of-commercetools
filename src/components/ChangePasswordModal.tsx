@@ -69,7 +69,7 @@ function PasswordChangeModal({ isOpen, onClose, setUser, userId, userVersion }: 
 
   return (
     <Dialog open={isOpen} onClose={onClose}>
-      <DialogTitle onClick={notify}>New Address</DialogTitle>
+      <DialogTitle onClick={notify}>New password</DialogTitle>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
         {(formik) => (
           <>
