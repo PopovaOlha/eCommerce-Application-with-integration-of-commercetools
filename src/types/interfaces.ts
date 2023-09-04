@@ -60,24 +60,43 @@ export interface Addresses {
 }
 export interface Product {
   id: string;
-  name: {'en-US': 'Product Name in English'};
-  description: { 'en-US': 'Product description in English'};
-  imageUrl: string;
+  key: string;
+  name: { 'en-US': string };
+  description: { 'en-US': string };
+  imageUrl: string[];
+  price: number[];
+  discount?: number | null; // Добавляем discount в интерфейс Product
 }
 
 export interface RawProduct {
   id: string;
+  key: string;
   masterData: {
+    staged: any;
     current: {
-      name: {'en-US': 'Product Name in English'};
+      name: { 'en-US': string };
+      staged: {
+        description: { 'en-US': string };
+      };
       masterVariant: {
         images: {
           url: string;
         }[];
+        prices: {
+          value: {
+            centAmount: number;
+          };
+          discounted?: { // Добавляем discounted в интерфейс RawProduct
+            value: {
+              centAmount: number;
+            };
+          };
+        }[];
       };
-    };
-    staged: {
-      description: { 'en-US': 'Product description in English'};
     };
   };
 }
+export interface HeaderProps {
+  subcategories: string[];
+}
+

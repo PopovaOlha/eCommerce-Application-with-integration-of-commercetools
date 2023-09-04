@@ -70,7 +70,7 @@ function RegistrationForm() {
   return (
     <Box>
       <div>
-        <Header />
+        <Header subcategories={[]} />
       </div>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
         <Form>
