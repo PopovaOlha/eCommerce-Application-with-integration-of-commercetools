@@ -2,6 +2,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { observer } from 'mobx-react-lite'
 import PetsIcon from '@mui/icons-material/Pets'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+
 import React, { useState } from 'react'
 import { Person } from '@mui/icons-material'
 import {
@@ -24,6 +25,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom'
 import { useRootStore } from '../App'
 import { HeaderProps } from '../types/interfaces'
+import { fetchCategoriesWithHierarchy } from '../utils/commercetoolsApi'
 
 const Header: React.FC<HeaderProps> = () => {
   const theme = useTheme()
@@ -41,6 +43,16 @@ const Header: React.FC<HeaderProps> = () => {
       navigate('/login')
     } else {
       setShowAlreadyLoggedInModal(true)
+    }
+  }
+
+  const handleCategoriesLinkClick = async () => {
+    try {
+      const categories = (await fetchCategoriesWithHierarchy()).subCategories
+      console.log(categories)
+      navigate('/categories')
+    } catch (error) {
+      console.error('Error loading categories:', error)
     }
   }
 
@@ -87,7 +99,7 @@ const Header: React.FC<HeaderProps> = () => {
                 <MenuIcon sx={{ color: '#333' }} />
               </IconButton>
               <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerToggle}>
-                <ListItem button onClick={() => navigate('/categories')}>
+                <ListItem button onClick={handleCategoriesLinkClick}>
                   <ListItemText primary="Categories"></ListItemText>
                 </ListItem>
                 <List>
@@ -127,7 +139,7 @@ const Header: React.FC<HeaderProps> = () => {
               <Button color="inherit" onClick={() => navigate('/categories')} sx={{ color: '#333' }}>
                 Categories
               </Button>
-              <Button color="inherit" onClick={() => navigate('/')} sx={{ color: '#333' }}>
+              <Button color="inherit" onClick={() => navigate('/')} sx={{ color: '#333', marginLeft: '10px' }}>
                 Home
               </Button>
               <Button color="inherit" onClick={handleLogin} sx={{ color: '#333' }}>

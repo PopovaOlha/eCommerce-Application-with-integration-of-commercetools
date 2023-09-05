@@ -1,6 +1,6 @@
-import axios from 'axios'
 import { commercetoolsConfig } from '../commercetoolsConfig';
 import { Product, RawProduct } from '../types/interfaces';
+import axios from 'axios';
 
 const apiUrl = 'https://api.europe-west1.gcp.commercetools.com';
 

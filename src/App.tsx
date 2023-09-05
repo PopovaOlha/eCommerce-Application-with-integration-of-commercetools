@@ -7,21 +7,31 @@ import RegistrationForm from './pages/RegistrationForm'
 import ProductPage from './pages/ProductPage'
 import ProductDetailPage from './pages/ProductDetailPage'
 import UserProfilePage from './pages/UserProfilePage'
-import NotFound from './pages/NotFound'
+import '../src/styles/user-profile.scss'
+import { ToastContainer } from 'react-toastify'
+// import Header from './components/Header'
 import CategoriesPage from './pages/CategoriesPage'
-
-const subcategories = [
-  { id: 1, name: 'Subcategory 1' },
-  { id: 2, name: 'Subcategory 2' },
-]
 
 const RootStoreContext = createContext<RootStore | null>(null)
 
 function App() {
   const rootStore = new RootStore()
+
   return (
     <BrowserRouter>
       <RootStoreContext.Provider value={rootStore}>
+        <ToastContainer
+          position="top-center"
+          autoClose={1000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
         {/* <Header /> */}
         <Routes>
           <Route path="/" element={<Home />} />
@@ -29,9 +39,8 @@ function App() {
           <Route path="/registrations" element={<RegistrationForm />} />
           <Route path="/catalog" element={<ProductPage />} />
           <Route path="/product/:productId" element={<ProductDetailPage />} />
-          <Route path="/categories" element={<CategoriesPage subcategories={subcategories} />} />
+          <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/user-profile" element={<UserProfilePage />} />
-          <Route path="*" element={<NotFound />} />
         </Routes>
       </RootStoreContext.Provider>
     </BrowserRouter>

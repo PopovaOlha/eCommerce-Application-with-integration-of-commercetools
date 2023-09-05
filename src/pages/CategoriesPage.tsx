@@ -1,69 +1,60 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import '../index.css'
+import Footer from '../components/Footer'
 import Header from '../components/Header'
-import { Container, List, ListItem, ListItemText, Typography, Drawer, Divider, useTheme } from '@mui/material'
+import { observer } from 'mobx-react-lite'
+import CategoryList from '../components/CategoriesList'
+import { Category } from '../types/interfaces'
+import { useEffect, useState } from 'react'
+import { fetchCategoriesWithHierarchy } from '../utils/commercetoolsApi'
+import { Container, Grid, Paper } from '@mui/material'
 
-interface Subcategory {
-  id: number
-  name: string
-}
+function CategoriesPage() {
+  const [categories, setCategories] = useState<Category[]>([])
 
-interface CategoriesPageProps {
-  subcategories: Subcategory[]
-}
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const { subCategories } = await fetchCategoriesWithHierarchy()
+        setCategories(subCategories)
+      } catch (error) {
+        console.error('Error loading categories:', error)
+      }
+    }
+    loadCategories()
+  }, [])
 
-const CategoriesPage: React.FC<CategoriesPageProps> = ({ subcategories }) => {
-  const [drawerOpen, setDrawerOpen] = useState(false)
-  const theme = useTheme()
-
-  const toggleDrawer = (open: boolean) => () => {
-    setDrawerOpen(open)
-  }
-
-  const categoryLinkStyle: React.CSSProperties = {
-    textDecoration: 'none',
-    color: theme.palette.text.primary,
-  }
-
-  const categoryItemStyle: React.CSSProperties = {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-  }
-
-  const dividerStyle: React.CSSProperties = {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
+  const categoryPaperStyle = {
+    marginTop: '80px',
+    backgroundColor: '#333',
+    listStyle: 'none',
+    padding: '16px',
+    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    transition: 'transform 0.2s ease-in-out',
+    '&:hover': {
+      transform: 'scale(1.03)',
+    },
   }
 
   return (
-    <Container maxWidth="md">
-      <Header subcategories={subcategories.map((subcategory) => subcategory.name)} />
-      <List sx={{ mt: 10 }}>
-        {subcategories.map((subcategory) => (
-          <Link key={subcategory.id} to={`/categories/${subcategory.name}`} style={categoryLinkStyle}>
-            <ListItem disableGutters button style={categoryItemStyle}>
-              <ListItemText primary={subcategory.name} />
-            </ListItem>
-          </Link>
-        ))}
-      </List>
-      <Divider sx={dividerStyle} />
-      <Link to="/catalog" style={categoryLinkStyle}>
-        <Typography variant="body1">View All Products</Typography>
-      </Link>
-      <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
-        <List>
-          {subcategories.map((subcategory) => (
-            <Link key={subcategory.id} to={`/categories/${subcategory.name}`} style={categoryLinkStyle}>
-              <ListItem disableGutters button style={categoryItemStyle}>
-                <ListItemText primary={subcategory.name} />
-              </ListItem>
-            </Link>
+    <div>
+      <Header subcategories={[]} />
+      <Container style={{ marginTop: '32px' }}>
+        <Grid container spacing={3}>
+          {categories.map((category) => (
+            <Grid item key={category.id} xs={12} sm={6} md={4} lg={3}>
+              <Paper elevation={3} style={categoryPaperStyle}>
+                <CategoryList categories={[category]} />
+              </Paper>
+            </Grid>
           ))}
-        </List>
-      </Drawer>
-    </Container>
+        </Grid>
+      </Container>
+      <div style={{ minHeight: 'calc(100vh - 70px - 64px)', marginTop: '64px' }} className="content"></div>
+      <Footer />
+    </div>
   )
 }
 
-export default CategoriesPage
+export default observer(CategoriesPage)
