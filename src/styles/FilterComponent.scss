@@ -1,0 +1,69 @@
+/* Стили для обертки фильтров */
+.filter-wrapper {
+    background-color: rgba(30, 122, 194, 0.2);
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 20px 0;
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    // position: absolute; /* Используем position: sticky */
+    left: 0; /* Прилипает к левому краю */
+    top: 0;
+    height: 100%;
+    width: 200px;
+    overflow-y: auto;
+  }
+  
+  /* Стили для кнопок категорий (аккордеон) */
+  .filter-category-button {
+    background-color: rgba(30, 122, 194, 0.5); /* Приглушенный голубой с прозрачностью */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px 0;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100%;
+    text-align: left;
+  }
+  
+  .filter-category-button:hover {
+    background-color: rgba(30, 122, 194, 0.7); /* При наведении делаем чуть ярче */
+  }
+  
+  /* Стили для содержимого категории (аккордеон) */
+  .filter-category-content {
+    background-color: rgba(240, 240, 240, 0.9); /* Приглушенный серый с прозрачностью */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  /* Стили для чекбоксов */
+  .filter-checkbox-label {
+    display: block;
+    margin: 5px 0;
+    color: #1e709c; /* Темно-синий цвет текста */
+  }
+  
+  /* Стили для кнопки "Фильтровать" */
+  .filter-button {
+    background-color: rgba(40, 167, 69, 0.9); /* Приглушенный зеленый с прозрачностью */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin-top: auto; /* Отталкиваем кнопку вниз */
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100%;
+  }
+  
+  .filter-button:hover {
+    background-color: rgba(30, 138, 58, 0.9); /* При наведении делаем чуть ярче */
+  }

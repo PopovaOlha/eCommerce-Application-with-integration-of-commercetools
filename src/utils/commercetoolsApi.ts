@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { commercetoolsConfig } from '../commercetoolsConfig';
+import { Product, RawProductList} from '../types/interfaces';
 const URL_API = 'https://api.europe-west1.gcp.commercetools.com';
+import apiClient from '../api/axios'
 
 interface Category {
   id: string;
@@ -9,7 +11,6 @@ interface Category {
     id: string;
   };
 }
-
 interface RawCategory {
   id: string;
   name: { 'en-US': string };
@@ -21,7 +22,7 @@ export async function fetchCategoriesWithHierarchy(): Promise<{ mainCategories: 
     const authDataString = localStorage.getItem('authData');
     const token = JSON.parse(authDataString!);
 
-    const response = await axios.get(`${URL_API}/${commercetoolsConfig.projectKey}/categories`, {
+    const response = await apiClient.get(`${URL_API}/${commercetoolsConfig.projectKey}/categories`, {
       headers: {
         Authorization: `Bearer ${token.accessToken}`,
       },
@@ -43,21 +44,33 @@ export async function fetchCategoriesWithHierarchy(): Promise<{ mainCategories: 
   }
 }
 
-export async function fetchProductOfCategories(categoryId: string) {
+export async function fetchProductOfCategories(categoryId: string): Promise<Product[]> {
   try {
     const authDataString = localStorage.getItem('authData');
-      const token = JSON.parse(authDataString!);
-      const response = await axios.get(`${URL_API}/${commercetoolsConfig.projectKey}/product-projections/search?filter=categories.id:"${categoryId}"`,
+    const token = JSON.parse(authDataString!);
+    const response = await axios.get(`${URL_API}/${commercetoolsConfig.projectKey}/product-projections/search?filter=categories.id:"${categoryId}"`,
       {
         headers: {
           Authorization: `Bearer ${token.accessToken}`,
         },
-  });
-  const productDetails = response.data.results; 
-  console.log(productDetails);
-  return productDetails
-} catch (error) {
-  console.error('Error fetching products:', error);
-  return [];
-}
-}
+      });
+      return response.data.results.map((rawProduct: RawProductList) => {
+        const discountedPrice = rawProduct.masterVariant.prices.map(prices => prices).map(price => price.value.centAmount)
+        const discount = discountedPrice && discountedPrice.length > 0 ? discountedPrice[0] : null;
+        return {
+          id: rawProduct.id,
+          key: rawProduct.key,
+          name: rawProduct.name,
+          description: rawProduct.description || 'No description available',
+          imageUrl: rawProduct.masterVariant.images.map(image => image.url),
+          price: discountedPrice,
+          discount: discount,
+        };
+      });
+  
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      return [];
+    }
+  }
+      

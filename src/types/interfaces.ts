@@ -111,5 +111,24 @@ export interface Subcategory {
   id: string;
   name: string;
 }
+export interface RawProductList {
+  id: string;
+  key: string;
+  name: { 'en-US': string };
+  description: { 'en-US': string }
+  masterVariant: {
+    images: { url: string }[];
+    prices: {
+      value: {
+        centAmount: number;
+      };
+      discounted?: {
+        value: {
+          centAmount: number;
+        };
+      };
+    }[];
+  };
+}
 
 

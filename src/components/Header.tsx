@@ -48,7 +48,7 @@ const Header: React.FC<HeaderProps> = () => {
 
   const handleCategoriesLinkClick = async () => {
     try {
-      const categories = (await fetchCategoriesWithHierarchy()).subCategories
+      const categories = await fetchCategoriesWithHierarchy()
       console.log(categories)
       navigate('/categories')
     } catch (error) {
@@ -136,7 +136,7 @@ const Header: React.FC<HeaderProps> = () => {
             </>
           ) : (
             <>
-              <Button color="inherit" onClick={() => navigate('/categories')} sx={{ color: '#333' }}>
+              <Button color="inherit" onClick={handleCategoriesLinkClick} sx={{ color: '#333' }}>
                 Categories
               </Button>
               <Button color="inherit" onClick={() => navigate('/')} sx={{ color: '#333', marginLeft: '10px' }}>
