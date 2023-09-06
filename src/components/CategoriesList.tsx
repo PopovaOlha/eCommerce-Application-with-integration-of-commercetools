@@ -12,7 +12,7 @@ interface CategoryListProps {
 }
 
 const CategoryList: React.FC<CategoryListProps> = ({ categories }) => {
-  const { categoryStore } = useRootStore()
+  const { catalogStore } = useRootStore()
   const navigate = useNavigate()
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null)
   const [products, setProducts] = useState<Product[]>([])
@@ -23,6 +23,18 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories }) => {
       loadProductsForCategory(selectedCategoryId)
     }
   }, [selectedCategoryId])
+
+  useEffect(() => {
+    // Use catalogStore.fetchProducts() instead of catalogStore.getProductById(product)
+    catalogStore.fetchProducts()
+  }, [catalogStore])
+
+  // Initialize product as an empty object
+  const product: Product = products[selectedImageIndex] || {}
+
+  const handleViewDetails = () => {
+    navigate(`/product/${product.id}`)
+  }
 
   const loadProductsForCategory = async (categoryId: string) => {
     try {
@@ -39,13 +51,6 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories }) => {
 
   const handleImageClick = (index: number) => {
     setSelectedImageIndex(index)
-  }
-
-  const handleViewDetails = async () => {
-    if (selectedCategoryId) {
-      await categoryStore.getProductById(selectedCategoryId)
-      navigate(`/product/${selectedCategoryId}`)
-    }
   }
 
   return (
