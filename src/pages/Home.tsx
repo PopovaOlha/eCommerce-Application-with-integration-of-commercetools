@@ -9,15 +9,21 @@ function Home() {
   const backgroundStyle = {
     minHeight: 'calc(100vh - 70px - 64px)',
     marginTop: '64px',
-    backgroundImage: `url(${backgroundImage})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   }
 
+  const mobileBackgroundStyle = {
+    ...backgroundStyle,
+    backgroundImage: `url(${backgroundImage})`,
+  }
+
+  const isMobile = window.matchMedia('(max-width: 768px)').matches
+
   return (
     <div>
       <Header subcategories={[]} />
-      <div style={backgroundStyle} className="content"></div>
+      <div style={isMobile ? mobileBackgroundStyle : backgroundStyle} className="content"></div>
       <Footer />
     </div>
   )
