@@ -55,22 +55,21 @@ export async function fetchProductOfCategories(categoryId: string): Promise<Prod
       `${URL_API}/${commercetoolsConfig.projectKey}/product-projections/search?filter=categories.id:"${categoryId}"`
     )
     return response.data.results.map((rawProduct: RawProductList) => {
-      const discountedPrice = rawProduct.masterVariant.prices
-        .map((prices) => prices)
-        .map((price) => price.value.centAmount)
-      const discount = discountedPrice && discountedPrice.length > 0 ? discountedPrice[0] : null
+      const discountedPrice = rawProduct.masterVariant.prices.find(price => price.discounted);
+      const discount = discountedPrice ? discountedPrice.discounted!.value.centAmount : null;
+  
       return {
         id: rawProduct.id,
         key: rawProduct.key,
         name: rawProduct.name,
         description: rawProduct.description || 'No description available',
         imageUrl: rawProduct.masterVariant.images.map((image) => image.url),
-        price: discountedPrice,
+        price: rawProduct.masterVariant.prices.map((price) => price.value.centAmount),
         discount: discount,
-      }
-    })
+      };
+    });
   } catch (error) {
-    console.error('Error fetching products:', error)
-    return []
+    console.error('Error fetching products:', error);
+    return [];
   }
 }

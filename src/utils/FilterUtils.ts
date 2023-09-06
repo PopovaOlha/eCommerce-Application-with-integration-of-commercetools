@@ -15,9 +15,14 @@ interface Product {
         }[]
         prices: {
           value: {
-            centAmount: number
-          }
-        }[]
+            centAmount: number;
+          };
+          discounted?: {
+            value: {
+              centAmount: number;
+            };
+          };
+        }[];
         attributes: {
           name: string
           value: string
@@ -58,6 +63,15 @@ export async function getUniqueAttributes(): Promise<UniqueAttributes> {
       const colorAttr = product.masterData.current.masterVariant.attributes.find((attr) => attr.name === 'color')
       if (colorAttr && colorAttr.value) {
         uniqueColorValues.push(colorAttr.value)
+      }
+
+      const discountedPrice = product.masterData.current.masterVariant.prices.find(price => price.discounted);
+      if (discountedPrice && discountedPrice.discounted) {
+        product.masterData.current.masterVariant.prices.forEach(price => {
+          if (price.discounted) {
+            price.discounted = discountedPrice.discounted;
+          }
+        });
       }
     })
 

@@ -128,10 +128,10 @@ function FilterComponent({ onFilterChange }: FilterComponentProps) {
     <div className="filter-wrapper">
       {' '}
       {/* Применяем класс для обертки фильтров */}
-      <h2>Фильтры</h2>
+      <h2>Filters</h2>
       <div>
         <button className="filter-category-button" onClick={() => toggleCategory('manufacturer')}>
-          Искать по производителю
+          Search by manufacturer
         </button>
         {activeCategory === 'manufacturer' && (
           <div className="filter-category-content">
@@ -155,7 +155,7 @@ function FilterComponent({ onFilterChange }: FilterComponentProps) {
       </div>
       <div>
         <button className="filter-category-button" onClick={() => toggleCategory('size')}>
-          Искать по размеру
+          Search by size
         </button>
         {activeCategory === 'size' && (
           <div className="filter-category-content">
@@ -179,7 +179,7 @@ function FilterComponent({ onFilterChange }: FilterComponentProps) {
       </div>
       <div>
         <button className="filter-category-button" onClick={() => toggleCategory('color')}>
-          Искать по цвету
+          Search by color
         </button>
         {activeCategory === 'color' && (
           <div className="filter-category-content">
@@ -203,7 +203,7 @@ function FilterComponent({ onFilterChange }: FilterComponentProps) {
       </div>
       <div>
         <button className="filter-button" onClick={handleFilterButtonClick}>
-          Фильтровать
+          Filter
         </button>
       </div>
     </div>
