@@ -22,13 +22,13 @@ export async function fetchCategoriesWithHierarchy(): Promise<{
   subCategories: Category[]
 }> {
   try {
-    const authDataString = localStorage.getItem('authData')
-    const token = JSON.parse(authDataString!)
+    // const authDataString = localStorage.getItem('authData')
+    // const token = JSON.parse(authDataString!)
 
     const response = await apiClient.get(`${URL_API}/${commercetoolsConfig.projectKey}/categories`, {
-      headers: {
-        Authorization: `Bearer ${token.accessToken}`,
-      },
+      // headers: {
+      //   Authorization: `Bearer ${token.accessToken}`,
+      // },
     })
 
     const categories: Category[] = response.data.results.map((rawCategory: RawCategory) => ({
@@ -55,9 +55,9 @@ export async function fetchProductOfCategories(categoryId: string): Promise<Prod
       `${URL_API}/${commercetoolsConfig.projectKey}/product-projections/search?filter=categories.id:"${categoryId}"`
     )
     return response.data.results.map((rawProduct: RawProductList) => {
-      const discountedPrice = rawProduct.masterVariant.prices.find(price => price.discounted);
-      const discount = discountedPrice ? discountedPrice.discounted!.value.centAmount : null;
-  
+      const discountedPrice = rawProduct.masterVariant.prices.find((price) => price.discounted)
+      const discount = discountedPrice ? discountedPrice.discounted!.value.centAmount : null
+
       return {
         id: rawProduct.id,
         key: rawProduct.key,
@@ -66,10 +66,10 @@ export async function fetchProductOfCategories(categoryId: string): Promise<Prod
         imageUrl: rawProduct.masterVariant.images.map((image) => image.url),
         price: rawProduct.masterVariant.prices.map((price) => price.value.centAmount),
         discount: discount,
-      };
-    });
+      }
+    })
   } catch (error) {
-    console.error('Error fetching products:', error);
-    return [];
+    console.error('Error fetching products:', error)
+    return []
   }
 }

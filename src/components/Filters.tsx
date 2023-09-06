@@ -41,6 +41,11 @@ export interface ProductRaw {
       value: {
         centAmount: number
       }
+      discounted?: {
+        value: {
+          centAmount: number
+        }
+      }
     }[]
   }
 }
@@ -104,6 +109,9 @@ function FilterComponent({ onFilterChange }: FilterComponentProps) {
         description: rawProduct.description || 'No description available',
         imageUrl: rawProduct.masterVariant.images.map((image) => image.url),
         price: rawProduct.masterVariant.prices.map((price) => price.value.centAmount),
+        discount: rawProduct.masterVariant.prices.find((price) => price.discounted)
+          ? rawProduct.masterVariant.prices.find((price) => price.discounted)!.discounted!.value.centAmount
+          : null,
       }))
       onFilterChange(filteredProducts)
       return filteredProducts
