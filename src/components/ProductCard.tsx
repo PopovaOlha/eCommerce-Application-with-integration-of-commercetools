@@ -56,11 +56,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     >
       <CardMedia component="div" sx={mediaStyle}>
         <Carousel selectedItem={selectedImageIndex} showThumbs={false} dynamicHeight onClickItem={handleImageClick}>
-          {product.imageUrl.map((imageUrl, index) => (
-            <div key={index}>
-              <img src={imageUrl} alt={`Product Image ${index}`} className="product" />
-            </div>
-          ))}
+          {product.imageUrl &&
+            product.imageUrl.map((imageUrl, index) => (
+              <div key={index}>
+                <img src={imageUrl} alt={`Product Image ${index}`} className="product" />
+              </div>
+            ))}
         </Carousel>
       </CardMedia>
       <CardContent sx={{ padding: '1rem', textAlign: 'center' }}>

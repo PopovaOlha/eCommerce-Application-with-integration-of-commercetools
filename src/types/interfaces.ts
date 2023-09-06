@@ -1,6 +1,7 @@
 export interface AuthResponseData {
   token: string
   user: string
+  access_token: string
 }
 
 export interface LoginData {
@@ -65,7 +66,7 @@ export interface Product {
   description: { 'en-US': string };
   imageUrl: string[];
   price: number[];
-  discount?: number | null; // Добавляем discount в интерфейс Product
+  discount?: number | null; 
 }
 
 export interface RawProduct {
@@ -86,7 +87,7 @@ export interface RawProduct {
           value: {
             centAmount: number;
           };
-          discounted?: { // Добавляем discounted в интерфейс RawProduct
+          discounted?: { 
             value: {
               centAmount: number;
             };
@@ -99,4 +100,35 @@ export interface RawProduct {
 export interface HeaderProps {
   subcategories: string[];
 }
+
+export interface Category {
+  id: string;
+  name: { 'en-US': string };
+  parent?: { id: string };
+}
+
+export interface Subcategory {
+  id: string;
+  name: string;
+}
+export interface RawProductList {
+  id: string;
+  key: string;
+  name: { 'en-US': string };
+  description: { 'en-US': string }
+  masterVariant: {
+    images: { url: string }[];
+    prices: {
+      value: {
+        centAmount: number;
+      };
+      discounted?: {
+        value: {
+          centAmount: number;
+        };
+      };
+    }[];
+  };
+}
+
 

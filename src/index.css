@@ -99,3 +99,6 @@ button:focus-visible {
 .text-decoration {
   text-decoration: line-through;
 }
+.categories {
+  margin-top: 40px;
+}

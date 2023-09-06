@@ -1,6 +1,6 @@
-import { makeAutoObservable } from 'mobx';
 import { fetchProducts } from '../utils/productServiceUtils';
 import { Product } from '../types/interfaces';
+import { makeAutoObservable, runInAction } from 'mobx'
 
 class CatalogStore {
   selectedProduct: Product | null = null;
@@ -15,17 +15,22 @@ class CatalogStore {
 
   async fetchProducts() {
     if (this.products.length === 0) {
-      this.isLoading = true;
+      this.isLoading = true
       try {
-        const fetchedProducts = await fetchProducts();
-        this.products = fetchedProducts;
+        const fetchedProducts = await fetchProducts()
+        runInAction(() => {
+          this.products = fetchedProducts
+        })
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error fetching products:', error)
       } finally {
-        this.isLoading = false;
+        runInAction(() => {
+          this.isLoading = false
+        })
       }
     }
   }
+
   setSelectedProduct(product: Product) {
     this.selectedProduct = product;
   }
