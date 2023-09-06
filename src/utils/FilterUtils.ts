@@ -65,7 +65,7 @@ export async function getUniqueAttributes(): Promise<UniqueAttributes> {
     const uniqueSizeSet = new Set(uniqueSizeValues)
     const uniqueColorSet = new Set(uniqueColorValues)
     console.log([...uniqueManufacturerSet], [...uniqueSizeSet], [...uniqueColorSet])
-    localStorage.clear()
+
     return {
       uniqueManufacturerValues: [...uniqueManufacturerSet],
       uniqueSizeValues: [...uniqueSizeSet],
@@ -80,3 +80,4 @@ export async function getUniqueAttributes(): Promise<UniqueAttributes> {
     }
   }
 }
+// localStorage.clear()

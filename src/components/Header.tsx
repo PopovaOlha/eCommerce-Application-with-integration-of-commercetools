@@ -39,7 +39,7 @@ const Header: React.FC<HeaderProps> = () => {
   const navigate = useNavigate()
 
   const handleLogin = () => {
-    if (!authStore.isAuthenticated && !localStorage.getItem('authData')) {
+    if (!authStore.isAuthenticated && !localStorage.getItem('user')) {
       navigate('/login')
     } else {
       setShowAlreadyLoggedInModal(true)
@@ -59,7 +59,7 @@ const Header: React.FC<HeaderProps> = () => {
   const handleLogout = () => {
     authStore.logout()
     setIsLoggedIn(false)
-    localStorage.clear()
+    localStorage.removeItem('user')
     navigate('/')
   }
 
