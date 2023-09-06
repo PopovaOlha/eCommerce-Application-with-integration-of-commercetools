@@ -31,7 +31,6 @@ export async function fetchProducts(): Promise<Product[]> {
         discount: discount,
       };
     });
-
   } catch (error) {
     console.error('Error fetching products:', error);
     return [];
