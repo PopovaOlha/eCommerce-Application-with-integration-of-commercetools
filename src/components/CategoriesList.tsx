@@ -31,7 +31,7 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories }) => {
   const product: Product = products[selectedImageIndex] || {}
 
   const handleViewDetails = () => {
-    navigate(`/product/${product.id}`)
+    navigate(`/product/${product.id}`, { state: { productDiscount: product.discount } })
   }
 
   const loadProductsForCategory = async (categoryId: string) => {

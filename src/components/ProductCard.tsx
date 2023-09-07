@@ -24,7 +24,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   const handleViewDetails = async () => {
     await catalogStore.getProductById(product.id)
-    navigate(`/product/${product.id}`)
+    navigate(`/product/${product.id}`, { state: { productDiscount: product.discount } })
   }
 
   const handleImageClick = (index: number) => {

@@ -9,9 +9,12 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import { useRootStore } from '../App'
 import { fetchProductWithImages } from '../utils/productServiceUtils'
 import ImageModal from '../components/ImageModal'
+import { useLocation } from 'react-router-dom'
 import Header from '../components/Header'
 
 const ProductDetailPage: React.FC = () => {
+  const location = useLocation()
+  const productDiscount = location.state?.productDiscount
   const { productId } = useParams<{ productId: string }>()
   const { catalogStore } = useRootStore()
   const selectedProduct = catalogStore.getProductById(productId!)
@@ -95,6 +98,11 @@ const ProductDetailPage: React.FC = () => {
         <Typography variant="body2" fontSize="15px" fontWeight={'bold'} sx={{ marginTop: '0.5rem' }}>
           Price: {selectedProduct.price.map((price) => (price / 100).toFixed(2)).join(', ')} usd
         </Typography>
+        {productDiscount !== undefined && productDiscount > 0 && (
+          <Typography variant="body2" fontSize="15px" fontWeight={'bold'} sx={{ color: 'red' }}>
+            Discount: {`${(productDiscount / 100).toFixed(2)} usd`}
+          </Typography>
+        )}
         <Button variant="contained" color="primary" style={{ marginTop: '1rem' }}>
           Add to Cart
         </Button>
