@@ -55,8 +55,8 @@ const ProductPage: React.FC = () => {
   return (
     <div style={pageStyle}>
       <Header subcategories={[]} />
-      <Link to="/" style={backButtonStyle}>
-        <ArrowBackIcon style={backButtonIconStyle} /> Back to main page
+      <Link to="/categories" style={backButtonStyle}>
+        <ArrowBackIcon style={backButtonIconStyle} /> Back to categories
       </Link>
       <FilterComponent onFilterChange={handleFilterButtonClick} />
       <Container maxWidth="lg">
