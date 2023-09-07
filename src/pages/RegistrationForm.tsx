@@ -6,6 +6,7 @@ import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { observer } from 'mobx-react-lite'
 import Header from '../components/Header'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import {
   Typography,
   Box,
@@ -85,6 +86,19 @@ const RegistrationPage: React.FC = () => {
     background: 'radial-gradient(circle at 18.7% 37.8%, rgb(250, 250, 250) 0%, rgb(225, 234, 238) 90%)',
     minHeight: 'calc(100vh - 70px - 64px)',
     paddingTop: '10px',
+  }
+  const backButtonStyle: React.CSSProperties = {
+    marginTop: '80px',
+    paddingLeft: '25px',
+    display: 'flex',
+    alignItems: 'center',
+    textDecoration: 'none',
+    color: '#555',
+    marginBottom: '1rem',
+  }
+
+  const backButtonIconStyle: React.CSSProperties = {
+    marginRight: '0.5rem',
   }
 
   const handleSubmit = async (values: RegistrationValues) => {
@@ -271,6 +285,9 @@ const RegistrationPage: React.FC = () => {
   })
   return (
     <div style={pageStyle}>
+      <Link to="/" style={backButtonStyle}>
+        <ArrowBackIcon style={backButtonIconStyle} /> Back to main page
+      </Link>
       <Box
         maxWidth={isMobile ? '100%' : '600px'}
         margin="80px auto"
