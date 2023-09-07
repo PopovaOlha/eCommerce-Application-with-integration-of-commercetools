@@ -3,7 +3,7 @@ import '../index.css'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 
-import backgroundImageDesktop from '../images/1660766295_41-kartinkin-net-p-fon-dlya-zootovarov-krasivo-45.png'
+import backgroundImageDesktop from '../images/1679306621_bogatyr-club-p-zheltii-kot-foni-instagram-1.jpg'
 import backgroundImageMobile from '../images/1671769944_kalix-club-p-fon-domashnie.jpg'
 
 function Home() {

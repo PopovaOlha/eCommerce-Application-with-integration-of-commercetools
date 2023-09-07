@@ -10,10 +10,12 @@ import { Container, Grid, Paper, Typography, Divider, useTheme } from '@mui/mate
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Link } from 'react-router-dom'
 import { useRootStore } from '../App'
+
 function CategoriesPage() {
   const theme = useTheme()
   const [categories, setCategories] = useState<Category[]>([])
   const { catalogStore } = useRootStore()
+
   useEffect(() => {
     const loadCategories = async () => {
       try {
@@ -25,9 +27,11 @@ function CategoriesPage() {
     }
     loadCategories()
   }, [])
+
   useEffect(() => {
     catalogStore.fetchProducts()
   }, [])
+
   const categoryPaperStyle = {
     marginTop: '60px',
     backgroundColor: '#bbe4e9',
