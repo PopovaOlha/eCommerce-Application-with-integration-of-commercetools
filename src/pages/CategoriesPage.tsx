@@ -7,6 +7,7 @@ import CategoryList from '../components/CategoriesList'
 import { Category } from '../types/interfaces'
 import { fetchCategoriesWithHierarchy } from '../utils/commercetoolsApi'
 import { Container, Grid, Paper, Typography, Divider, useTheme } from '@mui/material'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Link } from 'react-router-dom'
 import { useRootStore } from '../App'
 function CategoriesPage() {
@@ -40,10 +41,24 @@ function CategoriesPage() {
       transform: 'scale(1.03)',
     },
   }
+  const backButtonStyle: React.CSSProperties = {
+    marginTop: '80px',
+    paddingLeft: '25px',
+    display: 'flex',
+    alignItems: 'center',
+    textDecoration: 'none',
+    color: '#555',
+    marginBottom: '1rem',
+  }
+  const pageStyle: React.CSSProperties = {
+    background: 'radial-gradient(circle at 18.7% 37.8%, rgb(250, 250, 250) 0%, rgb(225, 234, 238) 90%)',
+    minHeight: 'calc(100vh - 70px - 64px)',
+    paddingTop: '10px',
+  }
 
   const categoryLinkStyle: React.CSSProperties = {
     textDecoration: 'none',
-    marginTop: '100px',
+    marginTop: '60px',
     marginLeft: '100px',
     textDecorationLine: 'underline',
     display: 'block',
@@ -53,10 +68,16 @@ function CategoriesPage() {
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
   }
+  const backButtonIconStyle: React.CSSProperties = {
+    marginRight: '0.5rem',
+  }
 
   return (
-    <div>
+    <div style={pageStyle}>
       <Header subcategories={[]} />
+      <Link to="/" style={backButtonStyle}>
+        <ArrowBackIcon style={backButtonIconStyle} /> Back to main page
+      </Link>
       <Divider sx={dividerStyle} />
       <Link to="/catalog" style={categoryLinkStyle}>
         <Typography variant="body1">View All Products</Typography>

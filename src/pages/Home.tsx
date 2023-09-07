@@ -16,15 +16,14 @@ function Home() {
 
   const desktopBackgroundStyle = {
     ...backgroundStyle,
-    backgroundImage: `url(${backgroundImageDesktop})`, // Desktop background image
+    backgroundImage: `url(${backgroundImageDesktop})`,
   }
 
   const mobileBackgroundStyle = {
     ...backgroundStyle,
-    backgroundImage: `url(${backgroundImageMobile})`, // Mobile background image
+    backgroundImage: `url(${backgroundImageMobile})`,
   }
 
-  // Define a media query for mobile screens (adjust max-width as needed)
   const isMobile = window.matchMedia('(max-width: 768px)').matches
 
   return (

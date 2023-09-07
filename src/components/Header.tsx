@@ -99,12 +99,12 @@ const Header: React.FC<HeaderProps> = () => {
                 <MenuIcon sx={{ color: '#333' }} />
               </IconButton>
               <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerToggle}>
-                <ListItem button onClick={handleCategoriesLinkClick}>
-                  <ListItemText primary="Categories"></ListItemText>
-                </ListItem>
                 <List>
                   <ListItem button onClick={() => navigate('/')}>
                     <ListItemText primary="Home"></ListItemText>
+                  </ListItem>
+                  <ListItem button onClick={handleCategoriesLinkClick}>
+                    <ListItemText primary="Categories"></ListItemText>
                   </ListItem>
                   {isLoggedIn ? (
                     <>
@@ -136,11 +136,11 @@ const Header: React.FC<HeaderProps> = () => {
             </>
           ) : (
             <>
-              <Button color="inherit" onClick={handleCategoriesLinkClick} sx={{ color: '#333' }}>
-                Categories
-              </Button>
               <Button color="inherit" onClick={() => navigate('/')} sx={{ color: '#333', marginLeft: '10px' }}>
                 Home
+              </Button>
+              <Button color="inherit" onClick={handleCategoriesLinkClick} sx={{ color: '#333' }}>
+                Categories
               </Button>
               <Button color="inherit" onClick={handleLogin} sx={{ color: '#333' }}>
                 Login

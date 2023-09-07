@@ -81,6 +81,11 @@ const RegistrationPage: React.FC = () => {
     //    setIsDefaultBillingAddress(false) // Сбрасываем состояние "сделать адрес платежа дефолтным"
     //  }
   }
+  const pageStyle: React.CSSProperties = {
+    background: 'radial-gradient(circle at 18.7% 37.8%, rgb(250, 250, 250) 0%, rgb(225, 234, 238) 90%)',
+    minHeight: 'calc(100vh - 70px - 64px)',
+    paddingTop: '10px',
+  }
 
   const handleSubmit = async (values: RegistrationValues) => {
     try {
@@ -265,137 +270,82 @@ const RegistrationPage: React.FC = () => {
     }),
   })
   return (
-    <Box
-      maxWidth={isMobile ? '100%' : '600px'}
-      margin="80px auto"
-      padding={isMobile ? '16px' : '32px'}
-      boxShadow={isMobile ? 'none' : '0px 4px 6px rgba(0, 0, 0, 0.1)'}
-      borderRadius="8px"
-      bgcolor="white"
-    >
-      <div>
-        <Header subcategories={[]} />
-      </div>
-      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-        <Form>
-          <Typography variant="h4" color="#9ba6a5">
-            Register New User
-          </Typography>
-          <Box my={2}>
-            <Field name="firstName" as={TextField} label="First Name" fullWidth required />
-            <ErrorMessage name="firstName" component="div" className="error" />
-          </Box>
-          <Box my={2}>
-            <Field name="lastName" as={TextField} label="Last Name" fullWidth required />
-            <ErrorMessage name="lastName" component="div" className="error" />
-          </Box>
-          <Box my={2}>
-            <Field name="dateOfBirth" as={TextField} label="Birthday" placeholder="DD-MM-YYYY" fullWidth required />
-            <ErrorMessage name="dateOfBirth" component="div" className="error" />
-          </Box>
-          <Box my={2}>
-            <Field name="login" as={TextField} label="Email" fullWidth required />
-            <ErrorMessage name="login" component="div" className="error" />
-          </Box>
-          <Box my={2}>
-            <Field
-              name="password"
-              as={TextField}
-              label="Password"
-              type={showPassword ? 'text' : 'password'}
-              fullWidth
-              required
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={() => setShowPassword(!showPassword)} onMouseDown={(e) => e.preventDefault()}>
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <ErrorMessage name="password" component="div" className="error" />
-          </Box>
-          <Box my={2}>
-            <Typography variant="h5" color="#9ba6a5">
-              Shipping Address
+    <div style={pageStyle}>
+      <Box
+        maxWidth={isMobile ? '100%' : '600px'}
+        margin="80px auto"
+        padding={isMobile ? '16px' : '32px'}
+        boxShadow={isMobile ? 'none' : '0px 4px 6px rgba(0, 0, 0, 0.1)'}
+        borderRadius="8px"
+        bgcolor="white"
+      >
+        <div>
+          <Header subcategories={[]} />
+        </div>
+        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+          <Form>
+            <Typography variant="h4" color="#9ba6a5">
+              Register New User
             </Typography>
-            <Box my={1}>
-              <Field name="shippingAddress.streetName" as={TextField} label="Street Address" fullWidth required />
-              <ErrorMessage name="shippingAddress.streetName" component="div" className="error" />
+            <Box my={2}>
+              <Field name="firstName" as={TextField} label="First Name" fullWidth required />
+              <ErrorMessage name="firstName" component="div" className="error" />
             </Box>
-            <Box my={1}>
-              <Field name="shippingAddress.city" as={TextField} label="City" fullWidth required />
-              <ErrorMessage name="shippingAddress.city" component="div" className="error" />
+            <Box my={2}>
+              <Field name="lastName" as={TextField} label="Last Name" fullWidth required />
+              <ErrorMessage name="lastName" component="div" className="error" />
             </Box>
-            <Box my={1}>
-              <Field name="shippingAddress.postalCode" as={TextField} label="Postal Code" fullWidth required />
-              <ErrorMessage name="shippingAddress.postalCode" component="div" className="error" />
+            <Box my={2}>
+              <Field name="dateOfBirth" as={TextField} label="Birthday" placeholder="DD-MM-YYYY" fullWidth required />
+              <ErrorMessage name="dateOfBirth" component="div" className="error" />
             </Box>
-            <Box my={1}>
-              <FormControl fullWidth required>
-                <InputLabel>Country</InputLabel>
-                <Field name="shippingAddress.country">
-                  {({ field }: FieldProps) => (
-                    <Select {...field}>
-                      <MenuItem value="UA">Ukraine</MenuItem>
-                      <MenuItem value="PL">Poland</MenuItem>
-                    </Select>
-                  )}
-                </Field>
-              </FormControl>
+            <Box my={2}>
+              <Field name="login" as={TextField} label="Email" fullWidth required />
+              <ErrorMessage name="login" component="div" className="error" />
             </Box>
-            <Box my={1}>
-              <Field name="shippingAddress.state" as={TextField} label="State" fullWidth required />
-              <ErrorMessage name="shippingAddress.state" component="div" className="error" />
-            </Box>
-            <Box my={1}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={isDefaultShippingAddress}
-                    onChange={handleShippingDefaultChange}
-                    name="isDefaultShippingAddress"
-                  />
-                }
-                label="Set as Default Shipping Address"
-                style={{ color: 'red' }}
+            <Box my={2}>
+              <Field
+                name="password"
+                as={TextField}
+                label="Password"
+                type={showPassword ? 'text' : 'password'}
+                fullWidth
+                required
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPassword(!showPassword)}
+                        onMouseDown={(e) => e.preventDefault()}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={isSameAsBillingAndShippingAddress}
-                    onChange={handleSameAsShippingChange}
-                    name="isSameAsBillingAndShippingAddress"
-                  />
-                }
-                label="Use this address for billing"
-                style={{ color: 'red' }}
-              />
+              <ErrorMessage name="password" component="div" className="error" />
             </Box>
-          </Box>
-          {!isSameAsBillingAndShippingAddress && (
             <Box my={2}>
               <Typography variant="h5" color="#9ba6a5">
-                Billing Address
+                Shipping Address
               </Typography>
               <Box my={1}>
-                <Field name="billingAddress.streetName" as={TextField} label="Street Address" fullWidth required />
-                <ErrorMessage name="billingAddress.streetName" component="div" className="error" />
+                <Field name="shippingAddress.streetName" as={TextField} label="Street Address" fullWidth required />
+                <ErrorMessage name="shippingAddress.streetName" component="div" className="error" />
               </Box>
               <Box my={1}>
-                <Field name="billingAddress.city" as={TextField} label="City" fullWidth required />
-                <ErrorMessage name="billingAddress.city" component="div" className="error" />
+                <Field name="shippingAddress.city" as={TextField} label="City" fullWidth required />
+                <ErrorMessage name="shippingAddress.city" component="div" className="error" />
               </Box>
               <Box my={1}>
-                <Field name="billingAddress.postalCode" as={TextField} label="Postal Code" fullWidth required />
-                <ErrorMessage name="billingAddress.postalCode" component="div" className="error" />
+                <Field name="shippingAddress.postalCode" as={TextField} label="Postal Code" fullWidth required />
+                <ErrorMessage name="shippingAddress.postalCode" component="div" className="error" />
               </Box>
               <Box my={1}>
                 <FormControl fullWidth required>
                   <InputLabel>Country</InputLabel>
-                  <Field name="billingAddress.country">
+                  <Field name="shippingAddress.country">
                     {({ field }: FieldProps) => (
                       <Select {...field}>
                         <MenuItem value="UA">Ukraine</MenuItem>
@@ -406,42 +356,102 @@ const RegistrationPage: React.FC = () => {
                 </FormControl>
               </Box>
               <Box my={1}>
-                <Field name="billingAddress.state" as={TextField} label="State" fullWidth required />
-                <ErrorMessage name="billingAddress.state" component="div" className="error" />
+                <Field name="shippingAddress.state" as={TextField} label="State" fullWidth required />
+                <ErrorMessage name="shippingAddress.state" component="div" className="error" />
               </Box>
               <Box my={1}>
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={isDefaultBillingAddress}
-                      onChange={handleBillingDefaultChange}
-                      name="isDefaultBillingAddress"
+                      checked={isDefaultShippingAddress}
+                      onChange={handleShippingDefaultChange}
+                      name="isDefaultShippingAddress"
                     />
                   }
-                  label="Set as Default Billing Address"
+                  label="Set as Default Shipping Address"
+                  style={{ color: 'red' }}
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={isSameAsBillingAndShippingAddress}
+                      onChange={handleSameAsShippingChange}
+                      name="isSameAsBillingAndShippingAddress"
+                    />
+                  }
+                  label="Use this address for billing"
                   style={{ color: 'red' }}
                 />
               </Box>
             </Box>
-          )}
-          <Button type="submit" variant="contained" color="primary">
-            Register
-          </Button>
-          <div>
-            Already have an account? <Link to="/login">Log In</Link>
-          </div>
-          <Dialog open={showErrorModal} onClose={() => setShowErrorModal(false)}>
-            <DialogTitle>Error</DialogTitle>
-            <DialogContent>There is already an existing customer with the provided email</DialogContent>
-            <DialogActions>
-              <Button onClick={() => setShowErrorModal(false)} color="primary">
-                Close
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </Form>
-      </Formik>
-    </Box>
+            {!isSameAsBillingAndShippingAddress && (
+              <Box my={2}>
+                <Typography variant="h5" color="#9ba6a5">
+                  Billing Address
+                </Typography>
+                <Box my={1}>
+                  <Field name="billingAddress.streetName" as={TextField} label="Street Address" fullWidth required />
+                  <ErrorMessage name="billingAddress.streetName" component="div" className="error" />
+                </Box>
+                <Box my={1}>
+                  <Field name="billingAddress.city" as={TextField} label="City" fullWidth required />
+                  <ErrorMessage name="billingAddress.city" component="div" className="error" />
+                </Box>
+                <Box my={1}>
+                  <Field name="billingAddress.postalCode" as={TextField} label="Postal Code" fullWidth required />
+                  <ErrorMessage name="billingAddress.postalCode" component="div" className="error" />
+                </Box>
+                <Box my={1}>
+                  <FormControl fullWidth required>
+                    <InputLabel>Country</InputLabel>
+                    <Field name="billingAddress.country">
+                      {({ field }: FieldProps) => (
+                        <Select {...field}>
+                          <MenuItem value="UA">Ukraine</MenuItem>
+                          <MenuItem value="PL">Poland</MenuItem>
+                        </Select>
+                      )}
+                    </Field>
+                  </FormControl>
+                </Box>
+                <Box my={1}>
+                  <Field name="billingAddress.state" as={TextField} label="State" fullWidth required />
+                  <ErrorMessage name="billingAddress.state" component="div" className="error" />
+                </Box>
+                <Box my={1}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={isDefaultBillingAddress}
+                        onChange={handleBillingDefaultChange}
+                        name="isDefaultBillingAddress"
+                      />
+                    }
+                    label="Set as Default Billing Address"
+                    style={{ color: 'red' }}
+                  />
+                </Box>
+              </Box>
+            )}
+            <Button type="submit" variant="contained" color="primary">
+              Register
+            </Button>
+            <div>
+              Already have an account? <Link to="/login">Log In</Link>
+            </div>
+            <Dialog open={showErrorModal} onClose={() => setShowErrorModal(false)}>
+              <DialogTitle>Error</DialogTitle>
+              <DialogContent>There is already an existing customer with the provided email</DialogContent>
+              <DialogActions>
+                <Button onClick={() => setShowErrorModal(false)} color="primary">
+                  Close
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </Form>
+        </Formik>
+      </Box>
+    </div>
   )
 }
 export default observer(RegistrationPage)

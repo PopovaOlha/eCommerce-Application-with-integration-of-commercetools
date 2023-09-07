@@ -25,11 +25,9 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories }) => {
   }, [selectedCategoryId])
 
   useEffect(() => {
-    // Use catalogStore.fetchProducts() instead of catalogStore.getProductById(product)
     catalogStore.fetchProducts()
   }, [catalogStore])
 
-  // Initialize product as an empty object
   const product: Product = products[selectedImageIndex] || {}
 
   const handleViewDetails = () => {

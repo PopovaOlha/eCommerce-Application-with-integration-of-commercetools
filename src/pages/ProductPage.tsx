@@ -6,6 +6,8 @@ import Header from '../components/Header'
 import { Box, Container, Grid, useMediaQuery, useTheme } from '@mui/material'
 import FilterComponent from '../components/Filters'
 import { Product } from '../components/Filters'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { Link } from 'react-router-dom'
 
 const ProductPage: React.FC = () => {
   const { catalogStore } = useRootStore()
@@ -13,11 +15,30 @@ const ProductPage: React.FC = () => {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(catalogStore.products)
 
   const handleFilterButtonClick = async (filters: Product[]) => {
-    setFilteredProducts(filters) // Обновляем состояние с отфильтрованными товарами
+    setFilteredProducts(filters)
   }
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+
+  const backButtonStyle: React.CSSProperties = {
+    marginTop: '80px',
+    display: 'flex',
+    alignItems: 'center',
+    textDecoration: 'none',
+    color: '#555',
+    marginBottom: '1rem',
+  }
+
+  const backButtonIconStyle: React.CSSProperties = {
+    marginRight: '0.5rem',
+  }
+
+  const pageStyle: React.CSSProperties = {
+    background: 'radial-gradient(circle at 18.7% 37.8%, rgb(250, 250, 250) 0%, rgb(225, 234, 238) 90%)',
+    minHeight: 'calc(100vh - 70px - 64px)',
+    paddingTop: '10px',
+  }
 
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -32,8 +53,11 @@ const ProductPage: React.FC = () => {
   )
 
   return (
-    <div>
+    <div style={pageStyle}>
       <Header subcategories={[]} />
+      <Link to="/" style={backButtonStyle}>
+        <ArrowBackIcon style={backButtonIconStyle} /> Back to main page
+      </Link>
       <FilterComponent onFilterChange={handleFilterButtonClick} />
       <Container maxWidth="lg">
         <Box mt={10} ref={containerRef}>
