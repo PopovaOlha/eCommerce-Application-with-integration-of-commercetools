@@ -17,9 +17,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     const query = event.target.value
     setSearchQuery(query)
 
-    // Здесь мы фильтруем товары по имени и формируем список подсказок (suggestions).
-    // Мы также устанавливаем флаг isDropdownOpen, чтобы открыть выпадающее окно.
-
     const filteredSuggestions = catalogStore.products
       .filter((product) => product.name['en-US'].includes(query.toLowerCase()))
       .map((product) => product.name['en-US'])
@@ -29,25 +26,25 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   }
 
   const handleSearchClick = () => {
-    // При нажатии на кнопку поиска вызываем обработчик onSearch с текущим запросом.
     onSearch(searchQuery)
-    // Закрываем выпадающее окно.
     setDropdownOpen(false)
   }
 
   const handleSuggestionClick = (suggestion: string) => {
-    // При клике на подсказку:
-    // - Заполняем поле поиска выбранной подсказкой.
     setSearchQuery(suggestion)
-    // - Закрываем выпадающее окно.
     setDropdownOpen(false)
-    // - Вызываем обработчик onSearch с выбранной подсказкой для выполнения поиска.
     onSearch(suggestion)
   }
 
   return (
     <div>
-      <TextField variant="outlined" placeholder="Search products..." value={searchQuery} onChange={handleInputChange} />
+      <TextField
+        variant="outlined"
+        placeholder="Search products..."
+        value={searchQuery}
+        onChange={handleInputChange}
+        style={{ width: '50%', margin: '15px' }}
+      />
       <IconButton onClick={handleSearchClick} aria-label="Search">
         <SearchIcon />
       </IconButton>
