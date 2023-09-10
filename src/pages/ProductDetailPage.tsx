@@ -80,7 +80,7 @@ const ProductDetailPage: React.FC = () => {
   return (
     <Container maxWidth="md">
       <Box mt={15}>
-        <Link to="/catalog" style={backButtonStyle}>
+        <Link to="/categories" style={backButtonStyle}>
           <ArrowBackIcon style={backButtonIconStyle} /> Back to catalog
         </Link>
         <Header subcategories={[]} />

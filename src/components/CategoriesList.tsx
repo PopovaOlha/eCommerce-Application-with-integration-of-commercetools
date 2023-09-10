@@ -17,10 +17,12 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories }) => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null)
   const [products, setProducts] = useState<Product[]>([])
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0)
+  const [isProductListOpen, setIsProductListOpen] = useState(false)
 
   useEffect(() => {
     if (selectedCategoryId) {
       loadProductsForCategory(selectedCategoryId)
+      setIsProductListOpen(true)
     }
   }, [selectedCategoryId])
 
@@ -44,7 +46,13 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories }) => {
   }
 
   const handleCategoryClick = (categoryId: string) => {
-    setSelectedCategoryId(categoryId)
+    if (selectedCategoryId === categoryId) {
+      setSelectedCategoryId(null)
+      setIsProductListOpen(false)
+    } else {
+      setSelectedCategoryId(categoryId)
+      setIsProductListOpen(true)
+    }
   }
 
   const handleImageClick = (index: number) => {
@@ -55,12 +63,12 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories }) => {
     <div>
       <ul>
         {categories.map((category) => (
-          <li key={category.id}>
+          <li key={category.id} style={{ listStyleType: 'none' }}>
             <button onClick={() => handleCategoryClick(category.id)}>{category.name['en-US']}</button>
           </li>
         ))}
       </ul>
-      {selectedCategoryId && (
+      {selectedCategoryId && isProductListOpen && (
         <div>
           {products.map((product) => (
             <Card

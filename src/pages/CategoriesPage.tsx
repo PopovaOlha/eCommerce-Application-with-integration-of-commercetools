@@ -10,6 +10,7 @@ import { Container, Grid, Paper, Typography, Divider, useTheme } from '@mui/mate
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Link } from 'react-router-dom'
 import { useRootStore } from '../App'
+import Breadcrumb from '../components/Breadcrumb'
 
 function CategoriesPage() {
   const theme = useTheme()
@@ -79,6 +80,7 @@ function CategoriesPage() {
   return (
     <div style={pageStyle}>
       <Header subcategories={[]} />
+      <Breadcrumb categories={[]} isSearchPage={false} />
       <Link to="/" style={backButtonStyle}>
         <ArrowBackIcon style={backButtonIconStyle} /> Back to main page
       </Link>

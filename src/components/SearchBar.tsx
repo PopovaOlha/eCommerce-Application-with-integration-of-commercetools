@@ -18,7 +18,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     setSearchQuery(query)
 
     if (query.trim() === '') {
-      // Если строка поиска пуста, очистите выпадающий список
       setSuggestions([])
       setDropdownOpen(false)
       return

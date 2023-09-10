@@ -9,6 +9,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Link } from 'react-router-dom'
 import SearchBar from '../components/SearchBar' // Импортируем компонент SearchBar
 import { Product } from '../types/interfaces'
+import Breadcrumb from '../components/Breadcrumb'
 
 const ProductPage: React.FC = () => {
   const [foundProduct, setFoundProduct] = useState<Product | null>(null)
@@ -55,7 +56,7 @@ const ProductPage: React.FC = () => {
   return (
     <div style={pageStyle}>
       <Header subcategories={[]} />
-
+      <Breadcrumb categories={[]} isSearchPage={false} />
       <Link to="/categories" style={backButtonStyle}>
         <ArrowBackIcon style={backButtonIconStyle} /> Back to categories
       </Link>
