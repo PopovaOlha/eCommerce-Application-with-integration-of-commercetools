@@ -17,8 +17,15 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     const query = event.target.value
     setSearchQuery(query)
 
+    if (query.trim() === '') {
+      // Если строка поиска пуста, очистите выпадающий список
+      setSuggestions([])
+      setDropdownOpen(false)
+      return
+    }
+
     const filteredSuggestions = catalogStore.products
-      .filter((product) => product.name['en-US'].includes(query.toLowerCase()))
+      .filter((product) => product.name['en-US'].toLowerCase().startsWith(query.toLowerCase()))
       .map((product) => product.name['en-US'])
 
     setSuggestions(filteredSuggestions)
