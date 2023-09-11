@@ -91,7 +91,7 @@ function CategoriesPage() {
       <Container style={{ marginTop: '22px' }}>
         <Grid container spacing={3}>
           {categories.map((category) => (
-            <Grid item key={category.id} xs={12} sm={6} md={4} lg={3}>
+            <Grid item key={category.id} xs={12} sm={6} md={4} lg={4}>
               <Paper elevation={3} style={categoryPaperStyle}>
                 <CategoryList categories={[category]} />
               </Paper>

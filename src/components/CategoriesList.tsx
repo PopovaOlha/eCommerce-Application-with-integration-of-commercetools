@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { fetchProductOfCategories } from '../utils/commercetoolsApi'
-import { Card, CardContent, CardMedia, Typography, Button, Link as MuiLink, Box } from '@mui/material'
+import { Card, CardContent, CardMedia, Typography, Button, Link as MuiLink, Box, IconButton } from '@mui/material'
 import { Category, Product } from '../types/interfaces'
 import { Carousel } from 'react-responsive-carousel'
 import { useRootStore } from '../App'
 import { useNavigate } from 'react-router-dom'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 
 interface CategoryListProps {
   categories: Category[]
@@ -59,6 +60,19 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories }) => {
     setSelectedImageIndex(index)
   }
 
+  const iconStyle = {
+    border: '1px solid grey',
+    borderRadius: '50%',
+    padding: '5px',
+    marginLeft: '20px',
+    '&:hover': {
+      backgroundColor: '#555',
+      position: 'absolute',
+      boxShadow: '0 2px 60px #0000003d',
+      border: '1px solid #eaeaea',
+    },
+  }
+
   return (
     <div>
       <ul>
@@ -69,23 +83,28 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories }) => {
         ))}
       </ul>
       {selectedCategoryId && isProductListOpen && (
-        <div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', position: 'relative' }}>
           {products.map((product) => (
             <Card
               key={product.id}
               sx={{
+                position: 'relative',
                 display: 'flex',
                 flexDirection: 'column',
-                maxWidth: 300,
-                height: 430,
-                margin: '1rem',
-                paddingTop: '20px',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                borderRadius: 8,
+                width: '300px',
+                height: '400px',
+                margin: 0,
+                padding: '15px 15px 20px',
+                background: '#fff',
+                borderRadius: '12px',
+                border: '1px solid #eaeaea',
                 overflow: 'hidden',
+                transition: 'all .5s ease',
                 '&:hover': {
-                  transition: 'transform 0.3s',
-                  transform: 'scale(1.05)',
+                  boxShadow: '0 2px 60px #0000003d',
+                  border: '1px solid #eaeaea',
+                  zIndex: '10000',
+                  height: 'auto',
                 },
               }}
             >
@@ -121,7 +140,10 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories }) => {
                   </Typography>
                   {product.discount === null ? (
                     <Typography variant="body2" fontSize="12px">
-                      {product.price.map((price) => (price / 100).toFixed(2)).join(', ')} USD
+                      {product.price.map((price) => (price / 100).toFixed(2)).join(', ')} USD{' '}
+                      <IconButton color="inherit" style={iconStyle}>
+                        <ShoppingCartIcon sx={{ color: '#333' }} />
+                      </IconButton>
                     </Typography>
                   ) : (
                     <>
@@ -129,7 +151,10 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories }) => {
                         {product.price.map((price) => (price / 100).toFixed(2)).join(', ')} USD
                       </Typography>
                       <Typography variant="body2" fontSize="12px" color="red" marginLeft="5px">
-                        {product.discount !== null ? (product.discount! / 100).toFixed(2) : ''} USD
+                        {product.discount !== null ? (product.discount! / 100).toFixed(2) : ''} USD{' '}
+                        <IconButton color="inherit" style={iconStyle}>
+                          <ShoppingCartIcon sx={{ color: '#333' }} />
+                        </IconButton>
                       </Typography>
                     </>
                   )}
