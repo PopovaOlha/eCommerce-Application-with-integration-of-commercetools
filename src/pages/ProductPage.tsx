@@ -7,7 +7,7 @@ import { Box, Container, Grid, useMediaQuery, useTheme } from '@mui/material'
 import FilterComponent from '../components/Filters'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Link } from 'react-router-dom'
-import SearchBar from '../components/SearchBar' // Импортируем компонент SearchBar
+import SearchBar from '../components/SearchBar'
 import { Product } from '../types/interfaces'
 import Breadcrumb from '../components/Breadcrumb'
 
