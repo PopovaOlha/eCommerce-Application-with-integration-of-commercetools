@@ -16,7 +16,7 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const navigate = useNavigate()
   const currentLocale = 'en-US'
-  const { catalogStore } = useRootStore()
+  const { catalogStore, cartStore } = useRootStore()
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
 
   useEffect(() => {
@@ -27,6 +27,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     await catalogStore.getProductById(product.id)
     navigate(`/product/${product.id}`, { state: { productDiscount: product.discount } })
   }
+
+  const handleAddToCart = async (productId: string, quantity: number) => {
+    await cartStore.createCart() // Создаем новую корзину перед добавлением товара
+    cartStore.addToCart(productId, quantity) // Добавляем товар в корзину
+  }
+
   const iconStyle = {
     border: '1px solid grey',
     borderRadius: '50%',
@@ -98,7 +104,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             {product.discount === null ? (
               <Typography variant="body2" fontSize="12px">
                 {product.price.map((price) => (price / 100).toFixed(2)).join(', ')} USD{' '}
-                <IconButton color="inherit" style={iconStyle}>
+                <IconButton color="inherit" style={iconStyle} onClick={() => handleAddToCart(product.id, 1)}>
                   <ShoppingCartIcon sx={{ color: '#333' }} />
                 </IconButton>
               </Typography>
