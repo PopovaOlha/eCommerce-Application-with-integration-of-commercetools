@@ -1,24 +1,66 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useRootStore } from '../App'
 import ProductCard from '../components/ProductCard'
 import Header from '../components/Header'
-import { Box, Container, Grid, useMediaQuery, useTheme } from '@mui/material'
+import { Box, Container, Grid, useMediaQuery, useTheme, CircularProgress, LinearProgress } from '@mui/material'
 import FilterComponent from '../components/Filters'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Link } from 'react-router-dom'
 import SearchBar from '../components/SearchBar'
 import { Product } from '../types/interfaces'
 import Breadcrumb from '../components/Breadcrumb'
+import { fetchProducts } from '../utils/productServiceUtils'
 
 const ProductPage: React.FC = () => {
-  const [foundProduct, setFoundProduct] = useState<Product | null>(null)
   const { catalogStore } = useRootStore()
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(catalogStore.products)
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [hasMoreProducts, setHasMoreProducts] = useState(true)
+  const [loadedProductsCount, setLoadedProductsCount] = useState(0)
+  const [foundProduct, setFoundProduct] = useState<Product | null>(null)
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
+  const handleScroll = () => {
+    const scrollY = window.scrollY
+    const windowHeight = window.innerHeight
+    const documentHeight = document.documentElement.scrollHeight
+
+    if (scrollY + windowHeight >= documentHeight - 100) {
+      loadMoreProducts()
+    }
+  }
+
+  const loadMoreProducts = async () => {
+    if (isLoadingMore || !hasMoreProducts) return
+
+    setIsLoadingMore(true)
+
+    try {
+      const response = await fetchProducts()
+
+      if (Array.isArray(response) && response.length === 0) {
+        setHasMoreProducts(false)
+      } else if (Array.isArray(response)) {
+        setFilteredProducts((prevProducts) => [...prevProducts, ...response])
+        setLoadedProductsCount(loadedProductsCount + response.length)
+      }
+    } catch (error) {
+      console.error('Произошла ошибка при загрузке продуктов:', error)
+    } finally {
+      setIsLoadingMore(false)
+    }
+  }
   const backButtonStyle: React.CSSProperties = {
     marginTop: '80px',
     display: 'flex',
@@ -43,9 +85,12 @@ const ProductPage: React.FC = () => {
   }
 
   const handleSearch = (query: string) => {
-    const found = catalogStore.products.find((product) => product.name['en-US'].toLowerCase() === query.toLowerCase())
-    const filteredResults = catalogStore.products.filter((product) =>
-      product.name['en-US'].includes(query.toLowerCase())
+    const found = catalogStore.products.find(
+      (product) => product.name && product.name['en-US'] && product.name['en-US'].toLowerCase() === query.toLowerCase()
+    )
+
+    const filteredResults = catalogStore.products.filter(
+      (product) => product.name && product.name['en-US'] && product.name['en-US'].includes(query.toLowerCase())
     )
 
     setFoundProduct(found || null)
@@ -75,14 +120,24 @@ const ProductPage: React.FC = () => {
       <Container maxWidth="lg">
         <Box mt={10}>
           <Grid container spacing={isMobile ? 2 : 3}>
-            {filteredProducts.map((product) => (
-              <Grid key={product.id} item xs={12} sm={6} md={4} lg={4}>
+            {filteredProducts.map((product, index) => (
+              <Grid key={`${product.id}-${index}`} item xs={12} sm={6} md={4} lg={4}>
                 <ProductCard product={product} />
               </Grid>
             ))}
           </Grid>
         </Box>
       </Container>
+      {isLoadingMore ? (
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+          <CircularProgress />
+          <LinearProgress color="secondary" style={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} />
+        </div>
+      ) : hasMoreProducts ? (
+        <button onClick={loadMoreProducts}>Load More</button>
+      ) : (
+        <p>No more products to load.</p>
+      )}
     </div>
   )
 }

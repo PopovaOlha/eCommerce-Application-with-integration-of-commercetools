@@ -19,8 +19,8 @@ export async function fetchProducts(): Promise<Product[]> {
 
     return response.data.results.map((rawProduct) => {
       const discountedPrice = rawProduct.masterData.current.masterVariant.prices.find((price) => price.discounted)
-      const discount = discountedPrice ? discountedPrice.discounted!.value.centAmount : null
-
+      const discount = discountedPrice ? discountedPrice.discounted!.value.centAmount : null;
+      console.log(response.data.results.map((rawProduct) => rawProduct))
       return {
         id: rawProduct.id,
         key: rawProduct.key,

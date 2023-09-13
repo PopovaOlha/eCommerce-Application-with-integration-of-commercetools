@@ -24,21 +24,21 @@ class CartStore {
 
   async createCart() {
     try {
+      if (!this.cartId) {
         const requestData = {
-            currency: 'USD', 
-          };
-      this.isLoading = true;
-     
-      const response = await api.post(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts`, requestData
-       );
-       this.cartId = response.data.id
-      this.cartItems = []; 
+          currency: 'USD',
+        };
+        this.isLoading = true;
+  
+        const response = await api.post(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/carts`, requestData);
+        this.cartId = response.data.id;
+      }
+  
       this.isLoading = false;
     } catch (error) {
       this.isLoading = false;
     }
   }
-
 
   async addToCart(productId: string, quantity: number): Promise<void> {
     try {
@@ -52,7 +52,6 @@ class CartStore {
             {
         action: 'addLineItem',
         productId: productId,
-        variantId : 1,
         quantity: quantity,
             }
         ]
