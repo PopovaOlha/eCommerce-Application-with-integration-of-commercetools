@@ -3,7 +3,7 @@ import UserStore from './UserStore';
 import AuthStore from './AuthStore';
 import CatalogStore from './CatalogStore';
 import CategoryStore from './CategoryStore';
-import CartStore from './cartStore'
+import CartStore from './CartStore'
 
 
 
