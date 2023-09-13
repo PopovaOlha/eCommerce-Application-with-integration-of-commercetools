@@ -29,14 +29,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   }
 
   const handleAddToCart = async (productId: string, quantity: number) => {
-    await cartStore.createCart() // Создаем новую корзину перед добавлением товара
-    cartStore.addToCart(productId, quantity) // Добавляем товар в корзину
+    await cartStore.createCart()
+    cartStore.addToCart(productId, quantity)
   }
 
   const iconStyle = {
     border: '1px solid grey',
     borderRadius: '50%',
-    padding: '5px',
+    padding: '10px',
     marginLeft: '20px',
     '&:hover': {
       backgroundColor: '#555',

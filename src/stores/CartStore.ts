@@ -29,7 +29,7 @@ class CartStore {
           };
       this.isLoading = true;
      
-      const response = await api.post(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/carts`, requestData
+      const response = await api.post(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts`, requestData
        );
        this.cartId = response.data.id
       this.cartItems = []; 
