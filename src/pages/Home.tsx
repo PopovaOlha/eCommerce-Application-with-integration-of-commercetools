@@ -5,6 +5,7 @@ import Header from '../components/Header'
 
 import backgroundImageDesktop from '../images/1679306621_bogatyr-club-p-zheltii-kot-foni-instagram-1.jpg'
 import backgroundImageMobile from '../images/1671769944_kalix-club-p-fon-domashnie.jpg'
+import SecondHeader from '../components/SecondHeader'
 
 function Home() {
   const backgroundStyle = {
@@ -29,6 +30,7 @@ function Home() {
   return (
     <div>
       <Header subcategories={[]} />
+      <SecondHeader />
       <div style={isMobile ? mobileBackgroundStyle : desktopBackgroundStyle} className="content"></div>
       <Footer />
     </div>
