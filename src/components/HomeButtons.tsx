@@ -1,4 +1,4 @@
-import { Container, Grid, Paper } from '@mui/material'
+import { Container, Grid, Paper, useMediaQuery, useTheme } from '@mui/material'
 import { useEffect, useState } from 'react'
 import CategoryList from '../components/CategoriesList'
 import { Category } from '../types/interfaces'
@@ -7,7 +7,8 @@ import { fetchCategoriesWithHierarchy } from '../utils/commercetoolsApi'
 
 function HomeButton() {
   const [categories, setCategories] = useState<Category[]>([])
-  console.log(setCategories)
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -35,6 +36,13 @@ function HomeButton() {
     },
   }
 
+  const categoryPaperMobileStyle = {
+    ...categoryPaperStyle,
+    fontSize: '0.5rem',
+    padding: '8px',
+    margin: '12px',
+  }
+
   return (
     <div>
       <Container
@@ -51,10 +59,10 @@ function HomeButton() {
           cursor: 'pointer',
         }}
       >
-        <Grid container spacing={3}>
+        <Grid container spacing={isMobile ? 1 : 3}>
           {categories.map((category) => (
             <Grid item key={category.id} xs={12} sm={6} md={4} lg={4}>
-              <Paper elevation={3} style={categoryPaperStyle}>
+              <Paper elevation={3} style={isMobile ? categoryPaperMobileStyle : categoryPaperStyle}>
                 <CategoryList categories={[category]} />
               </Paper>
             </Grid>
