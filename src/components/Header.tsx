@@ -100,6 +100,9 @@ const Header: React.FC<HeaderProps> = () => {
               </IconButton>
               <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerToggle}>
                 <List>
+                  <ListItem button onClick={handleDrawerToggle}>
+                    <ListItemText primary="Close menu" />
+                  </ListItem>
                   <ListItem button onClick={() => navigate('/')}>
                     <ListItemText primary="Home"></ListItemText>
                   </ListItem>
