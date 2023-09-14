@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   const rootStore = useRootStore()
-  const { authStore } = rootStore
+  const { authStore, headerStore } = rootStore
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(authStore.isAuthenticated)
   const [showAlreadyLoggedInModal, setShowAlreadyLoggedInModal] = useState<boolean>(false)
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
@@ -122,16 +122,22 @@ const Header: React.FC<HeaderProps> = () => {
                       <ListItemText primary="Register" />
                     </ListItem>
                   )}
-                  <ListItem button>
-                    <Link to="*">Cart</Link>
-                  </ListItem>
+                  <IconButton color="inherit" onClick={() => navigate('/cart')}>
+                    <ShoppingCartIcon sx={{ color: '#333', backgroundColor: 'red' }} />
+                    <span className="cart-counter" style={{ color: 'red' }}>
+                      {headerStore.cartCount}
+                    </span>
+                  </IconButton>
                   <ListItem button onClick={() => navigate('/user-profile')}>
                     <ListItemText primary="User" />
                   </ListItem>
                 </List>
               </Drawer>
-              <IconButton color="inherit">
+              <IconButton color="inherit" onClick={() => navigate('/cart')}>
                 <ShoppingCartIcon sx={{ color: '#333' }} />
+                <span className="cart-counter" style={{ color: 'red' }}>
+                  {headerStore.cartCount}
+                </span>
               </IconButton>
             </>
           ) : (
@@ -159,9 +165,11 @@ const Header: React.FC<HeaderProps> = () => {
                   Register
                 </Button>
               )}
-              <IconButton color="inherit">
+              <IconButton color="inherit" onClick={() => navigate('/cart')}>
                 <ShoppingCartIcon sx={{ color: '#333' }} />
-                <Link to="*">Cart</Link>
+                <span className="cart-counter" style={{ color: 'red' }}>
+                  {headerStore.cartCount}
+                </span>
               </IconButton>
             </>
           )}

@@ -46,18 +46,21 @@ class CartStore {
     try {
       this.isLoading = true;
       
-      const cartId: string =  localStorage.getItem('cartId')!;
+      const cartId: string = localStorage.getItem('cartId')!;
+      
+      const currentCartState = await this.getCurrentCartState(cartId);
   
       const requestData = {
-        version : 1,
+        version: currentCartState.version, 
         actions: [
-            {
-        action: 'addLineItem',
-        productId: productId,
-        quantity: quantity,
-            }
+          {
+            action: 'addLineItem',
+            productId: productId,
+            quantity: quantity,
+          }
         ]
-    }
+      }
+  
       const response: AxiosResponse<ApiResponse> = await api.post(
         `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts/${cartId}`,
         requestData,
@@ -68,6 +71,19 @@ class CartStore {
     } catch (error) {
       this.isLoading = false;
       console.error('Произошла ошибка при добавлении товара в корзину:', error);
+    }
+  }
+  
+  async getCurrentCartState(cartId: string): Promise<{ version: number }> {
+    try {
+      const response: AxiosResponse<{ version: number }> = await api.get(
+        `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts/${cartId}`
+      );
+  
+      return { version: response.data.version };
+    } catch (error) {
+      console.error('Ошибка при получении текущего состояния корзины:', error);
+      throw error; 
     }
   }
 

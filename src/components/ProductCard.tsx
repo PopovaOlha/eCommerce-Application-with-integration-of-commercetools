@@ -16,8 +16,9 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const navigate = useNavigate()
   const currentLocale = 'en-US'
-  const { catalogStore, cartStore } = useRootStore()
+  const { catalogStore, cartStore, headerStore } = useRootStore() // Добавлено headerStore
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+  const [isAddedToCart, setIsAddedToCart] = useState(false) // Добавлено состояние
 
   useEffect(() => {
     catalogStore.fetchProducts()
@@ -29,8 +30,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   }
 
   const handleAddToCart = async (productId: string, quantity: number) => {
-    await cartStore.createCart()
-    cartStore.addToCart(productId, quantity)
+    if (!isAddedToCart) {
+      console.log('productId:', productId)
+      await cartStore.createCart()
+      cartStore.addToCart(productId, quantity)
+      headerStore.setCartCount(headerStore.cartCount + 1)
+      setIsAddedToCart(true)
+    }
   }
 
   const iconStyle = {
@@ -104,7 +110,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             {product.discount === null ? (
               <Typography variant="body2" fontSize="12px">
                 {product.price.map((price) => (price / 100).toFixed(2)).join(', ')} USD{' '}
-                <IconButton color="inherit" style={iconStyle} onClick={() => handleAddToCart(product.id, 1)}>
+                <IconButton
+                  color="inherit"
+                  style={iconStyle}
+                  onClick={() => handleAddToCart(product.id, 1)}
+                  disabled={isAddedToCart} // Блокируем кнопку, если товар уже добавлен
+                >
                   <ShoppingCartIcon sx={{ color: '#333' }} />
                 </IconButton>
               </Typography>
@@ -115,7 +126,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 </Typography>
                 <Typography variant="body2" fontSize="12px" color={'red'} marginLeft={'5px'}>
                   {product.discount !== null ? (product.discount! / 100).toFixed(2) : ''} USD{' '}
-                  <IconButton color="inherit" style={iconStyle} onClick={() => handleAddToCart(product.id, 1)}>
+                  <IconButton
+                    color="inherit"
+                    style={iconStyle}
+                    onClick={() => handleAddToCart(product.id, 1)}
+                    disabled={isAddedToCart} // Блокируем кнопку, если товар уже добавлен
+                  >
                     <ShoppingCartIcon sx={{ color: '#333' }} />
                   </IconButton>
                 </Typography>
