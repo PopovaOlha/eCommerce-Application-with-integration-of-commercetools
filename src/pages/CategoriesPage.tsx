@@ -47,7 +47,7 @@ function CategoriesPage() {
     },
   }
   const backButtonStyle: React.CSSProperties = {
-    marginTop: '80px',
+    marginTop: '30px',
     paddingLeft: '25px',
     display: 'flex',
     alignItems: 'center',

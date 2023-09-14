@@ -11,6 +11,7 @@ import '../src/styles/user-profile.scss'
 import { ToastContainer } from 'react-toastify'
 // import Header from './components/Header'
 import CategoriesPage from './pages/CategoriesPage'
+import SubcategoryPage from './pages/subcategories'
 
 const RootStoreContext = createContext<RootStore | null>(null)
 
@@ -41,6 +42,7 @@ function App() {
           <Route path="/product/:productId" element={<ProductDetailPage />} />
           <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/user-profile" element={<UserProfilePage />} />
+          <Route path="/subcategory/:categoryId" element={<SubcategoryPage />} />
         </Routes>
       </RootStoreContext.Provider>
     </BrowserRouter>

@@ -19,6 +19,7 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories }) => {
   const [products, setProducts] = useState<Product[]>([])
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0)
   const [isProductListOpen, setIsProductListOpen] = useState(false)
+  console.log(setSelectedCategoryId)
 
   useEffect(() => {
     if (selectedCategoryId) {
@@ -47,13 +48,8 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories }) => {
   }
 
   const handleCategoryClick = (categoryId: string) => {
-    if (selectedCategoryId === categoryId) {
-      setSelectedCategoryId(null)
-      setIsProductListOpen(false)
-    } else {
-      setSelectedCategoryId(categoryId)
-      setIsProductListOpen(true)
-    }
+    const subcategoryUrl = `/subcategory/${categoryId}`
+    navigate(subcategoryUrl)
   }
 
   const handleImageClick = (index: number) => {
