@@ -1,3 +1,4 @@
+import axios from 'axios'
 import apiClient from '../api/axios'
 import { commercetoolsConfig } from '../commercetoolsConfig'
 import { Product, RawProduct } from '../types/interfaces'
@@ -8,7 +9,7 @@ export async function fetchProducts(): Promise<Product[]> {
   try {
     const authDataString = localStorage.getItem('authData')
     const token = JSON.parse(authDataString!)
-    const response = await apiClient.get<{ results: RawProduct[] }>(
+    const response = await axios.get<{ results: RawProduct[] }>(
       `${apiUrl}/${commercetoolsConfig.projectKey}/products`,
       {
         headers: {

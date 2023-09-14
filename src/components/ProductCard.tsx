@@ -115,7 +115,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 </Typography>
                 <Typography variant="body2" fontSize="12px" color={'red'} marginLeft={'5px'}>
                   {product.discount !== null ? (product.discount! / 100).toFixed(2) : ''} USD{' '}
-                  <IconButton color="inherit" style={iconStyle}>
+                  <IconButton color="inherit" style={iconStyle} onClick={() => handleAddToCart(product.id, 1)}>
                     <ShoppingCartIcon sx={{ color: '#333' }} />
                   </IconButton>
                 </Typography>

@@ -85,7 +85,3 @@ export const registerUser = async (
     console.log('ERROR: ', error)
   }
 }
-
-
-
-

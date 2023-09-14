@@ -26,12 +26,14 @@ class CartStore {
     try {
       if (!this.cartId) {
         const requestData = {
+          country: 'US',
           currency: 'USD',
         };
         this.isLoading = true;
   
-        const response = await api.post(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/carts`, requestData);
+        const response = await api.post(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts`, requestData);
         this.cartId = response.data.id;
+        localStorage.setItem('cartId', response.data.id);
       }
   
       this.isLoading = false;
@@ -44,7 +46,7 @@ class CartStore {
     try {
       this.isLoading = true;
       
-      const cartId: string = this.cartId;
+      const cartId: string =  localStorage.getItem('cartId')!;
   
       const requestData = {
         version : 1,
@@ -57,7 +59,7 @@ class CartStore {
         ]
     }
       const response: AxiosResponse<ApiResponse> = await api.post(
-        `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/carts/${cartId}`,
+        `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts/${cartId}`,
         requestData,
       );
   
