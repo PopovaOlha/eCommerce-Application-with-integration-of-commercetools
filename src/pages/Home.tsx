@@ -10,7 +10,7 @@ import SecondHeader from '../components/SecondHeader'
 function Home() {
   const backgroundStyle = {
     minHeight: 'calc(100vh - 70px - 64px)',
-    marginTop: '64px',
+    marginTop: '-5px',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   }

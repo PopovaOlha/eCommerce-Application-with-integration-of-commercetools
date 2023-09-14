@@ -123,7 +123,7 @@ const Header: React.FC<HeaderProps> = () => {
                     </ListItem>
                   )}
                   <IconButton color="inherit" onClick={() => navigate('/cart')}>
-                    <ShoppingCartIcon sx={{ color: '#333', backgroundColor: 'red' }} />
+                    <ShoppingCartIcon sx={{ color: '#333' }} />
                     <span className="cart-counter" style={{ color: 'red' }}>
                       {headerStore.cartCount}
                     </span>
