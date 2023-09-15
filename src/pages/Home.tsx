@@ -6,10 +6,11 @@ import backgroundImageDesktop from '../images/1671769944_kalix-club-p-fon-domash
 import backgroundImageMobile from '../images/1671769944_kalix-club-p-fon-domashnie.jpg'
 import SecondHeader from '../components/SecondHeader'
 import HomeButton from '../components/HomeButtons'
+import AdaptiveButton from '../components/AdaptiveButton'
 
 function Home() {
   const backgroundStyle = {
-    minHeight: 'calc(100vh - 70px - 64px)',
+    minHeight: 'calc(150vh - 70px - 64px)',
     marginTop: '-5px',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
@@ -32,6 +33,7 @@ function Home() {
       <Header subcategories={[]} />
       <SecondHeader />
       <HomeButton />
+      <AdaptiveButton />
       <div style={isMobile ? mobileBackgroundStyle : desktopBackgroundStyle} className="content"></div>
       <Footer />
     </div>

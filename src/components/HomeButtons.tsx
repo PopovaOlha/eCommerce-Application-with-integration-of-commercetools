@@ -1,5 +1,5 @@
-import { Container, Grid, Paper, useMediaQuery, useTheme } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
+import { Drawer, Container, Grid, Paper, Typography, Button } from '@mui/material'
 import CategoryList from '../components/CategoriesList'
 import { Category } from '../types/interfaces'
 import { observer } from 'mobx-react-lite'
@@ -7,8 +7,12 @@ import { fetchCategoriesWithHierarchy } from '../utils/commercetoolsApi'
 
 function HomeButton() {
   const [categories, setCategories] = useState<Category[]>([])
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  const toggleDrawer = () => {
+    setIsDrawerOpen(!isDrawerOpen)
+  }
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -20,56 +24,101 @@ function HomeButton() {
       }
     }
     loadCategories()
+
+    // Определяем, является ли экран мобильным при загрузке компонента
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768) // Меняйте значение ширины экрана по вашему усмотрению
+    }
+    handleResize() // Вызываем функцию при загрузке компонента
+    window.addEventListener('resize', handleResize) // Добавляем слушатель события изменения размера окна
+
+    // Очищаем слушатель при размонтировании компонента
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
   }, [])
 
-  const categoryPaperStyle = {
-    marginTop: '60px',
-    backgroundColor: '#bbe4e9',
-    listStyle: 'none',
-    padding: '16px',
-    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    transition: 'transform 0.2s ease-in-out',
-    '&:hover': {
-      transform: 'scale(1.03)',
-    },
-  }
-
-  const categoryPaperMobileStyle = {
-    ...categoryPaperStyle,
-    fontSize: '0.5rem',
-    padding: '8px',
-    margin: '12px',
+  const handleCategoryClick = (categoryId: string) => {
+    console.log(`Category clicked with ID: ${categoryId}`)
   }
 
   return (
     <div>
-      <Container
-        sx={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          width: '50%',
-          transform: 'translate(-50%, -50%)',
-          listStyle: 'none',
-          padding: '16px',
-          boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-          borderRadius: '8px',
-          cursor: 'pointer',
-        }}
-      >
-        <Grid container spacing={isMobile ? 1 : 3}>
+      {!isMobile && (
+        <Container
+          sx={{
+            listStyle: 'none',
+            padding: '16px',
+            boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '16px',
+            justifyContent: 'space-between',
+          }}
+        >
           {categories.map((category) => (
             <Grid item key={category.id} xs={12} sm={6} md={4} lg={4}>
-              <Paper elevation={3} style={isMobile ? categoryPaperMobileStyle : categoryPaperStyle}>
+              <Paper
+                elevation={3}
+                onClick={() => handleCategoryClick(category.id)}
+                sx={{
+                  padding: '16px',
+                  backgroundColor: 'white',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  transition: 'transform 0.2s ease-in-out',
+                  '&:hover': {
+                    transform: 'scale(1.03)',
+                    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
+                  },
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '8px' }}
+                ></Typography>
                 <CategoryList categories={[category]} />
               </Paper>
             </Grid>
           ))}
-        </Grid>
-      </Container>
+        </Container>
+      )}
+
+      {/* Боковая панель для мобильных устройств */}
+      <Drawer
+        anchor="top"
+        open={isDrawerOpen}
+        onClose={toggleDrawer}
+        sx={{
+          '& .MuiDrawer-paper': {
+            width: '100%',
+            borderTopLeftRadius: '8px',
+            borderTopRightRadius: '8px',
+            transition: 'transform 0.2s ease-in-out',
+            transformOrigin: 'top center',
+          },
+        }}
+      >
+        <div style={{ padding: '16px' }}>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={toggleDrawer}
+            sx={{
+              margin: '0 auto',
+              display: { xs: 'block', sm: 'none' },
+            }}
+          >
+            Close Categories
+          </Button>
+          <h2>Categories</h2>
+          <CategoryList categories={categories} />
+        </div>
+      </Drawer>
     </div>
   )
 }
+
 export default observer(HomeButton)
