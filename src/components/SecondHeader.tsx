@@ -1,6 +1,7 @@
 import { Box, Link, useMediaQuery, useTheme, Typography } from '@mui/material'
 import PhoneIcon from '@mui/icons-material/Phone'
 import { Link as RouterLink } from 'react-router-dom'
+import AdaptiveButton from './AdaptiveButton'
 
 const Header = () => {
   const theme = useTheme()
@@ -40,6 +41,7 @@ const Header = () => {
             </>
           )}
         </Box>
+        <AdaptiveButton />
         <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
           <PhoneIcon sx={{ color: '#333', mr: 1 }} />
           <Typography variant="body2">+123 456 789</Typography>

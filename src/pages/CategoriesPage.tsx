@@ -10,7 +10,6 @@ import { Container, Grid, Paper, Typography, Divider, useTheme } from '@mui/mate
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Link } from 'react-router-dom'
 import { useRootStore } from '../App'
-import Breadcrumb from '../components/Breadcrumb'
 
 function CategoriesPage() {
   const theme = useTheme()
@@ -47,7 +46,7 @@ function CategoriesPage() {
     },
   }
   const backButtonStyle: React.CSSProperties = {
-    marginTop: '30px',
+    marginTop: '60px',
     paddingLeft: '25px',
     display: 'flex',
     alignItems: 'center',
@@ -56,7 +55,7 @@ function CategoriesPage() {
     marginBottom: '1rem',
   }
   const pageStyle: React.CSSProperties = {
-    background: 'radial-gradient(circle at 18.7% 37.8%, rgb(250, 250, 250) 0%, rgb(225, 234, 238) 90%)',
+    background: '#fff',
     minHeight: 'calc(100vh - 70px - 64px)',
     paddingTop: '10px',
   }
@@ -80,7 +79,6 @@ function CategoriesPage() {
   return (
     <div style={pageStyle}>
       <Header subcategories={[]} />
-      <Breadcrumb categories={[]} isSearchPage={false} />
       <Link to="/" style={backButtonStyle}>
         <ArrowBackIcon style={backButtonIconStyle} /> Back to main page
       </Link>

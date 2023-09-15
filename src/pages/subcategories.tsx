@@ -9,7 +9,6 @@ import { useRootStore } from '../App'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
-import Breadcrumb from '../components/Breadcrumb'
 
 const SubcategoryPage: React.FC = () => {
   const navigate = useNavigate()
@@ -62,7 +61,7 @@ const SubcategoryPage: React.FC = () => {
     marginRight: '0.5rem',
   }
   const backButtonStyle: React.CSSProperties = {
-    marginTop: '30px',
+    marginTop: '80px',
     paddingLeft: '25px',
     display: 'flex',
     alignItems: 'center',
@@ -74,7 +73,6 @@ const SubcategoryPage: React.FC = () => {
   return (
     <div>
       <Header subcategories={[]} />
-      <Breadcrumb categories={[]} isSearchPage={false} />
       <Link to="/" style={backButtonStyle}>
         <ArrowBackIcon style={backButtonIconStyle} /> Back to main page
       </Link>
