@@ -15,6 +15,12 @@ function Home() {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   }
+  const backStyleMobyle = {
+    minHeight: 'calc(80vh - 70px - 64px)',
+    marginTop: '-5px',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  }
 
   const desktopBackgroundStyle = {
     ...backgroundStyle,
@@ -22,7 +28,7 @@ function Home() {
   }
 
   const mobileBackgroundStyle = {
-    ...backgroundStyle,
+    ...backStyleMobyle,
     backgroundImage: `url(${backgroundImageMobile})`,
   }
 
