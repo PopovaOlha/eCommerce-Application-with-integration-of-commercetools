@@ -25,14 +25,12 @@ function HomeButton() {
     }
     loadCategories()
 
-    // Определяем, является ли экран мобильным при загрузке компонента
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768) // Меняйте значение ширины экрана по вашему усмотрению
+      setIsMobile(window.innerWidth <= 768)
     }
-    handleResize() // Вызываем функцию при загрузке компонента
-    window.addEventListener('resize', handleResize) // Добавляем слушатель события изменения размера окна
+    handleResize()
+    window.addEventListener('resize', handleResize)
 
-    // Очищаем слушатель при размонтировании компонента
     return () => {
       window.removeEventListener('resize', handleResize)
     }
@@ -86,7 +84,6 @@ function HomeButton() {
         </Container>
       )}
 
-      {/* Боковая панель для мобильных устройств */}
       <Drawer
         anchor="top"
         open={isDrawerOpen}

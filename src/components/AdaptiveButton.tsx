@@ -50,6 +50,8 @@ function AdaptiveButton() {
             borderTopRightRadius: '8px',
             transition: 'transform 0.2s ease-in-out',
             transformOrigin: 'top center',
+            backgroundColor: '#f9f9f9',
+            textAlign: 'center',
           },
         }}
       >
@@ -66,7 +68,6 @@ function AdaptiveButton() {
           >
             Close Categories
           </Button>
-          <h2>Categories</h2>
           <CategoryList categories={categories} />
         </div>
       </Drawer>
