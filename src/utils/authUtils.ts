@@ -2,12 +2,8 @@ import { AxiosResponse } from 'axios'
 import { commercetoolsConfig } from '../commercetoolsConfig'
 import apiClient from '../api/axios'
 import { Address, AuthResponseData, CustomerData, CustomerResponseData, LoginData } from '../types/interfaces'
-
-export const authenticateUser = async (
-  email: string,
-  password: string,
-  navigate: (path: string) => void
-) => {
+import axios from 'axios'
+export const authenticateUser = async (email: string, password: string, navigate: (path: string) => void) => {
   const loginData: LoginData = {
     email,
     password,
@@ -18,15 +14,40 @@ export const authenticateUser = async (
     const response: AxiosResponse<AuthResponseData> = await apiClient.post(apiUrl, loginData)
 
     if (response.status === 200) {
-      navigate('/')
       const authData = JSON.parse(localStorage.getItem('authData')!)
       // authData.accessToken = response.data.token;
       localStorage.setItem('user', JSON.stringify(response.data))
-      console.log("user: ", response.data)
+      console.log('user: ', response.data)
       console.log('результат', authData)
+      const responselogin = await axios.post(
+        'https://auth.europe-west1.gcp.commercetools.com/oauth/ecommerceapl/customers/token',
+        `grant_type=password&username=${loginData.email}&password=${loginData.password}`,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          auth: {
+            username: '4kLyKQZdTuzWnVXZ49PHdL2w',
+            password: 'KhoW4Or8xc53f3e9x0lUUdeCdBm4mm1H',
+          },
+        }
+      )
+      const expDate = new Date(responselogin.data.expires_in)
+      localStorage.setItem(
+        'authData',
+        JSON.stringify({
+          accessToken: responselogin.data.access_token,
+          expDate: expDate,
+          tokenType: responselogin.data.token_type,
+          refreshToken: responselogin.data.refresh_token,
+        })
+      )
+      navigate('/')
       return true
-    } else if (response.status === 400){
-alert('Account with the given credentials not found.');
+
+      console.log('work now')
+    } else if (response.status === 400) {
+      alert('Account with the given credentials not found.')
     } else {
       return false
     }
@@ -75,8 +96,31 @@ export const registerUser = async (
   try {
     const response: AxiosResponse<CustomerResponseData> = await apiClient.post(apiUrl, requestData)
     if (response.status === 201) {
-      navigate('/')
       localStorage.setItem('user', JSON.stringify(response.data))
+      const responselogin = await axios.post(
+        'https://auth.europe-west1.gcp.commercetools.com/oauth/ecommerceapl/customers/token',
+        `grant_type=password&username=${requestData.email}&password=${requestData.password}`,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          auth: {
+            username: '4kLyKQZdTuzWnVXZ49PHdL2w',
+            password: 'KhoW4Or8xc53f3e9x0lUUdeCdBm4mm1H',
+          },
+        }
+      )
+      const expDate = new Date(responselogin.data.expires_in)
+      localStorage.setItem(
+        'authData',
+        JSON.stringify({
+          accessToken: responselogin.data.access_token,
+          expDate: expDate,
+          tokenType: responselogin.data.token_type,
+          refreshToken: responselogin.data.refresh_token,
+        })
+      )
+      navigate('/')
       return true
     } else {
       return false

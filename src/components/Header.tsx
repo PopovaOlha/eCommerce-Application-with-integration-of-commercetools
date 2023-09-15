@@ -33,7 +33,7 @@ const Header: React.FC<HeaderProps> = () => {
 
   const rootStore = useRootStore()
   const { authStore, headerStore } = rootStore
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(authStore.isAuthenticated)
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!localStorage.getItem('user'))
   const [showAlreadyLoggedInModal, setShowAlreadyLoggedInModal] = useState<boolean>(false)
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
   const navigate = useNavigate()
@@ -59,7 +59,7 @@ const Header: React.FC<HeaderProps> = () => {
   const handleLogout = () => {
     authStore.logout()
     setIsLoggedIn(false)
-    localStorage.removeItem('user')
+    localStorage.clear()
     navigate('/')
   }
 
