@@ -11,7 +11,6 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Link } from 'react-router-dom'
 import { useRootStore } from '../App'
 import Breadcrumb from '../components/Breadcrumb'
-import '../images/d-animals.png'
 
 function CategoriesPage() {
   const theme = useTheme()

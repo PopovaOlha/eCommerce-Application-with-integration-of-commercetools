@@ -33,6 +33,8 @@ function AdaptiveButton() {
         onClick={toggleDrawer}
         sx={{
           margin: '16px',
+          padding: '10px 16px',
+          fontSize: '10px',
           display: { xs: 'block', sm: 'none' },
           color: '#333',
         }}

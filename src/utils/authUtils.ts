@@ -9,7 +9,7 @@ export const authenticateUser = async (email: string, password: string, navigate
     password,
   }
 
-  const apiUrl = `/${commercetoolsConfig.projectKey}/login`
+  const apiUrl = `/${commercetoolsConfig.projectKey}/me/login`
   try {
     const response: AxiosResponse<AuthResponseData> = await apiClient.post(apiUrl, loginData)
 
@@ -91,7 +91,8 @@ export const registerUser = async (
     requestData.defaultBillingAddress = 1
   }
 
-  const apiUrl = `/${commercetoolsConfig.projectKey}/customers`
+  const apiUrl = `/${commercetoolsConfig.projectKey}/me/signup`
+  
 
   try {
     const response: AxiosResponse<CustomerResponseData> = await apiClient.post(apiUrl, requestData)

@@ -78,10 +78,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           overflow: 'hidden',
           transition: 'all .5s ease',
           '&:hover': {
-            position: 'absolute',
             boxShadow: '0 2px 60px #0000003d',
             border: '1px solid #eaeaea',
-            zIndex: '10000',
+            zIndex: '1',
             height: 'auto',
           },
         }}
