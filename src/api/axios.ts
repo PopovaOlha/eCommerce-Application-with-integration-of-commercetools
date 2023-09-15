@@ -76,6 +76,8 @@ api.interceptors.response.use(
         return api.request(originalRequest)
       } catch (e) {
         console.log('Нету токена')
+        localStorage.clear()
+        return api.request(originalRequest)
       }
     }
   }

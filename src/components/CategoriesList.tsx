@@ -15,11 +15,11 @@ interface CategoryListProps {
 const CategoryList: React.FC<CategoryListProps> = ({ categories }) => {
   const { catalogStore } = useRootStore()
   const navigate = useNavigate()
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null)
+  const [selectedCategoryId] = useState<string | null>(null)
   const [products, setProducts] = useState<Product[]>([])
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0)
   const [isProductListOpen, setIsProductListOpen] = useState(false)
-  console.log(setSelectedCategoryId)
+  // console.log(setSelectedCategoryId)
 
   useEffect(() => {
     if (selectedCategoryId) {
