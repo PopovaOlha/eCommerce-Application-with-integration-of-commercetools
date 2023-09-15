@@ -11,6 +11,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Link } from 'react-router-dom'
 import { useRootStore } from '../App'
 import Breadcrumb from '../components/Breadcrumb'
+import '../images/d-animals.png'
 
 function CategoriesPage() {
   const theme = useTheme()
@@ -56,7 +57,7 @@ function CategoriesPage() {
     marginBottom: '1rem',
   }
   const pageStyle: React.CSSProperties = {
-    background: 'radial-gradient(circle at 18.7% 37.8%, rgb(250, 250, 250) 0%, rgb(225, 234, 238) 90%)',
+    background: 'white',
     minHeight: 'calc(100vh - 70px - 64px)',
     paddingTop: '10px',
   }
