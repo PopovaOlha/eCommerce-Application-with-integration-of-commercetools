@@ -12,6 +12,7 @@ import { ToastContainer } from 'react-toastify'
 // import Header from './components/Header'
 import CategoriesPage from './pages/CategoriesPage'
 import SubcategoryPage from './pages/subcategories'
+import CartPage from './pages/CartPage'
 
 const RootStoreContext = createContext<RootStore | null>(null)
 
@@ -43,6 +44,7 @@ function App() {
           <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/user-profile" element={<UserProfilePage />} />
           <Route path="/subcategory/:categoryId" element={<SubcategoryPage />} />
+          <Route path="/cart" element={<CartPage />} />
         </Routes>
       </RootStoreContext.Provider>
     </BrowserRouter>
