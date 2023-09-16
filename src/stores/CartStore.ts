@@ -1,5 +1,4 @@
 import { makeAutoObservable } from 'mobx'
-import axios from 'axios'
 import api from '../api/axios'
 import { commercetoolsConfig } from '../commercetoolsConfig'
 import { AxiosResponse } from 'axios'
@@ -106,9 +105,11 @@ class CartStore {
 
   async removeFromCart(productId: string) {
     try {
+
+    
       this.isLoading = true;
 
-      await axios.delete(`/api/remove-from-cart/${productId}`);
+      await api.delete(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/${productId}`);
 
       this.cartItems = this.cartItems.filter((item) => item.productId !== productId);
 
@@ -122,7 +123,7 @@ class CartStore {
     try {
       this.isLoading = true;
 
-      await api.put(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/${productId}`, { quantity });
+      await api.put(`/${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/${productId}`, { quantity });
 
       const updatedCartItems = this.cartItems.map((item) => {
         if (item.productId === productId) {

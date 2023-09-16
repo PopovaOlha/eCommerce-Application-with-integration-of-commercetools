@@ -128,8 +128,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                   <IconButton
                     color="inherit"
                     style={iconStyle}
-                    onClick={() => handleAddToCart(product.id, 1)}
-                    disabled={isAddedToCart} // Блокируем кнопку, если товар уже добавлен
+                    onClick={() => handleAddToCart(product.id, 2)}
+                    disabled={isAddedToCart}
                   >
                     <ShoppingCartIcon sx={{ color: '#333' }} />
                   </IconButton>
