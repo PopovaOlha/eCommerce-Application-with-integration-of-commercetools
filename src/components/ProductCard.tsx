@@ -16,9 +16,9 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const navigate = useNavigate()
   const currentLocale = 'en-US'
-  const { catalogStore, cartStore, headerStore } = useRootStore() // Добавлено headerStore
+  const { catalogStore, cartStore, headerStore } = useRootStore()
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
-  const [isAddedToCart, setIsAddedToCart] = useState(false) // Добавлено состояние
+  const [isAddedToCart, setIsAddedToCart] = useState(false)
 
   useEffect(() => {
     catalogStore.fetchProducts()
@@ -70,8 +70,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           flexDirection: 'column',
           width: '300px',
           height: '400px',
-          margin: 0,
-          padding: '15px 15px 20px',
+          margin: '0 auto',
+          padding: '15px',
           background: '#fff',
           borderRadius: '12px',
           border: '1px solid #eaeaea',
@@ -80,7 +80,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           '&:hover': {
             boxShadow: '0 2px 60px #0000003d',
             border: '1px solid #eaeaea',
-            zIndex: '1',
+            zIndex: '10000',
             height: 'auto',
           },
         }}
@@ -113,7 +113,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                   color="inherit"
                   style={iconStyle}
                   onClick={() => handleAddToCart(product.id, 1)}
-                  disabled={isAddedToCart} // Блокируем кнопку, если товар уже добавлен
+                  disabled={isAddedToCart}
                 >
                   <ShoppingCartIcon sx={{ color: '#333' }} />
                 </IconButton>

@@ -102,3 +102,11 @@ button:focus-visible {
 .categories {
   margin-top: 40px;
 }
+
+.product-image {
+  width: 30%;
+}
+
+.cart-item {
+  margin-top: 80px;
+}

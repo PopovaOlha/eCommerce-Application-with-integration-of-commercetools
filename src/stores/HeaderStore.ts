@@ -5,6 +5,7 @@ class HeaderStore {
 
   constructor() {
     makeAutoObservable(this);
+
   }
 
   setCartCount(count: number) {

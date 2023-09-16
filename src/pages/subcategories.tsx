@@ -16,6 +16,7 @@ const SubcategoryPage: React.FC = () => {
   const { catalogStore } = useRootStore()
   const [products, setProducts] = useState<Product[]>([])
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0)
+  const [, setSelectedProduct] = useState<Product | null>(null)
 
   useEffect(() => {
     if (categoryId) {
@@ -42,7 +43,8 @@ const SubcategoryPage: React.FC = () => {
   const product: Product = products[selectedImageIndex] || {}
 
   const handleViewDetails = () => {
-    navigate(`/product/${product.id}`, { state: { productDiscount: product.discount } })
+    setSelectedProduct(product)
+    navigate(`/product/${product.id}`, { state: { product, productDiscount: product.discount } })
   }
 
   const iconStyle = {
@@ -89,6 +91,7 @@ const SubcategoryPage: React.FC = () => {
         {products.map((product) => (
           <Card
             key={product.id}
+            onClick={() => handleImageClick(products.indexOf(product))}
             sx={{
               position: 'relative',
               display: 'flex',
@@ -96,7 +99,7 @@ const SubcategoryPage: React.FC = () => {
               width: '250px',
               height: '350px',
               margin: 0,
-              padding: '15px 15px 20px',
+              padding: '15px',
               background: '#fff',
               borderRadius: '12px',
               border: '1px solid #eaeaea',

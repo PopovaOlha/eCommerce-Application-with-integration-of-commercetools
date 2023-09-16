@@ -1,38 +1,75 @@
 import { observer } from 'mobx-react-lite'
+import Header from '../components/Header'
+import '../index.css'
 import { useRootStore } from '../App'
 import { Product } from '../types/interfaces'
-import Header from '../components/Header'
+import { Container, Card, CardContent, CardActions, Typography, IconButton, Grid } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
+import AddIcon from '@mui/icons-material/Add'
+import RemoveIcon from '@mui/icons-material/Remove'
 
-function CartPage() {
+const CartPage = () => {
   const { cartStore, catalogStore } = useRootStore()
 
-  const calculateTotalPrice = () => {
-    let total = 0
-    cartStore.cartItems.forEach((item) => {
-      const product: Product | undefined = catalogStore.getProductById(item.productId)
-      if (product) {
-        total += (product.price[0] * item.quantity) / 100
-      }
-    })
-    return total
-  }
+  const cartItems = cartStore.cartItems.map((item) => {
+    const product: Product | undefined = catalogStore.getProductById(item.productId)
+    if (product) {
+      return (
+        <Card key={item.productId} className="cart-item">
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid item xs={3}>
+                {product.imageUrl.map((image, index) => (
+                  <img key={index} src={image} alt={`Product Image ${index}`} className="product-image" />
+                ))}
+              </Grid>
+              <Grid item xs={9}>
+                <Typography variant="h6" gutterBottom>
+                  {product.name['en-US']}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" gutterBottom>
+                  Quantity: {item.quantity}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" gutterBottom>
+                  Price per unit: ${(item.price / 100).toFixed(2)}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" gutterBottom>
+                  Total Price: ${(item.totalPrice / 100).toFixed(2)}
+                </Typography>
+              </Grid>
+            </Grid>
+          </CardContent>
+          <CardActions>
+            <IconButton aria-label="Remove" color="error" onClick={() => cartStore.removeFromCart(item.productId)}>
+              <DeleteIcon />
+            </IconButton>
+            <IconButton
+              aria-label="Increase Quantity"
+              onClick={() => cartStore.updateCartItemQuantity(item.productId, item.quantity + 1)}
+            >
+              <AddIcon />
+            </IconButton>
+            <IconButton
+              aria-label="Decrease Quantity"
+              onClick={() => cartStore.updateCartItemQuantity(item.productId, item.quantity - 1)}
+            >
+              <RemoveIcon />
+            </IconButton>
+          </CardActions>
+        </Card>
+      )
+    } else {
+      return null
+    }
+  })
 
   return (
-    <div>
+    <Container>
       <Header subcategories={[]} />
-      <ul style={{ margin: '80px 40px' }}>
-        {cartStore.cartItems.map((item) => (
-          <li key={item.productId}>
-            Product ID: {item.productId} <br />
-            Quantity: {item.quantity} <br />
-            <button onClick={() => cartStore.removeFromCart(item.productId)}>Remove</button>
-            <button onClick={() => cartStore.updateCartItemQuantity(item.productId, item.quantity + 1)}>+</button>
-            <button onClick={() => cartStore.updateCartItemQuantity(item.productId, item.quantity - 1)}>-</button>
-          </li>
-        ))}
-      </ul>
-      <div>Total Price: ${calculateTotalPrice().toFixed(2)}</div>
-    </div>
+      <Grid container spacing={2} className="cart-container">
+        {cartItems}
+      </Grid>
+    </Container>
   )
 }
 

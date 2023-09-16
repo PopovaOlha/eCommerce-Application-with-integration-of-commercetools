@@ -4,14 +4,30 @@ import { commercetoolsConfig } from '../commercetoolsConfig'
 import { AxiosResponse } from 'axios'
 import { useRootStore } from '../App'
 
-interface CartItem {
+interface LineItem {
   productId: string;
-  quantity: number; 
+  quantity: number;
+  price: {
+    value: {
+      centAmount: number;
+    }
+  };
+  totalPrice: {
+    centAmount: number;
+  };
+
 }
 
+interface CartItem {
+  productId: string;
+  quantity: number;
+  price: number;
+  totalPrice: number
+}
 interface ApiResponse {
   id: string;
   name: string;
+  lineItems: LineItem[];
 }
 
 class CartStore {
@@ -59,11 +75,11 @@ class CartStore {
   async addToCart(productId: string, quantity: number): Promise<void> {
     try {
       this.isLoading = true;
-
+  
       const cartId: string = localStorage.getItem('cartId')!;
-
+  
       const currentCartState = await this.getCurrentCartState(cartId);
-
+  
       const requestData = {
         version: currentCartState.version,
         actions: [
@@ -74,16 +90,25 @@ class CartStore {
           },
         ],
       };
-
+  
       const response: AxiosResponse<ApiResponse> = await api.post(
         `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts/${cartId}`,
         requestData
       );
-
+  
       console.log('Товар успешно добавлен в корзину:', response.data);
-
-      this.cartItems.push({ productId, quantity }); 
-
+  
+      const lineItem = response.data.lineItems.find((item) => item.productId === productId);
+  
+      if (lineItem) {
+        this.cartItems.push({
+          productId,
+          quantity: lineItem.quantity,
+          price: lineItem.price.value.centAmount,
+          totalPrice: lineItem.totalPrice.centAmount,
+        });
+      }
+  
       this.isLoading = false;
     } catch (error) {
       this.isLoading = false;
@@ -111,6 +136,7 @@ class CartStore {
       await api.delete(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/${productId}`);
 
       this.cartItems = this.cartItems.filter((item) => item.productId !== productId);
+
       const rootStore = useRootStore();
       rootStore.headerStore.decrementCartCount();
       
