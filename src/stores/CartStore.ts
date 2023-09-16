@@ -2,6 +2,7 @@ import { makeAutoObservable } from 'mobx'
 import api from '../api/axios'
 import { commercetoolsConfig } from '../commercetoolsConfig'
 import { AxiosResponse } from 'axios'
+import { useRootStore } from '../App'
 
 interface CartItem {
   productId: string;
@@ -105,14 +106,14 @@ class CartStore {
 
   async removeFromCart(productId: string) {
     try {
-
-    
       this.isLoading = true;
 
       await api.delete(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/${productId}`);
 
       this.cartItems = this.cartItems.filter((item) => item.productId !== productId);
-
+      const rootStore = useRootStore();
+      rootStore.headerStore.decrementCartCount();
+      
       this.isLoading = false;
     } catch (error) {
       this.isLoading = false;
@@ -123,7 +124,7 @@ class CartStore {
     try {
       this.isLoading = true;
 
-      await api.put(`/${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/${productId}`, { quantity });
+      await api.put(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/${productId}`, { quantity });
 
       const updatedCartItems = this.cartItems.map((item) => {
         if (item.productId === productId) {
