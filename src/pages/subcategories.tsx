@@ -13,10 +13,11 @@ import Header from '../components/Header'
 const SubcategoryPage: React.FC = () => {
   const navigate = useNavigate()
   const { categoryId } = useParams()
-  const { catalogStore } = useRootStore()
+  const { catalogStore, cartStore, headerStore } = useRootStore()
   const [products, setProducts] = useState<Product[]>([])
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0)
   const [, setSelectedProduct] = useState<Product | null>(null)
+  const [isAddedToCart, setIsAddedToCart] = useState(false)
 
   useEffect(() => {
     if (categoryId) {
@@ -32,6 +33,17 @@ const SubcategoryPage: React.FC = () => {
       console.error('Error fetching products:', error)
     }
   }
+
+  const handleAddToCart = async (productId: string, quantity: number) => {
+    if (!isAddedToCart) {
+      console.log('productId:', productId)
+      await cartStore.createCart()
+      cartStore.addToCart(productId, quantity)
+      headerStore.setCartCount(headerStore.cartCount + 1)
+      setIsAddedToCart(true)
+    }
+  }
+
   const handleImageClick = (index: number) => {
     setSelectedImageIndex(index)
   }
@@ -157,7 +169,12 @@ const SubcategoryPage: React.FC = () => {
                     </Typography>
                     <Typography variant="body2" fontSize="12px" color="red" marginLeft="5px">
                       {product.discount !== null ? (product.discount! / 100).toFixed(2) : ''} USD{' '}
-                      <IconButton color="inherit" style={iconStyle}>
+                      <IconButton
+                        color="inherit"
+                        style={iconStyle}
+                        onClick={() => handleAddToCart(product.id, 2)}
+                        disabled={isAddedToCart}
+                      >
                         <ShoppingCartIcon sx={{ color: '#333' }} />
                       </IconButton>
                     </Typography>

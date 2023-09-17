@@ -8,7 +8,6 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import { Carousel } from 'react-responsive-carousel'
-import Footer from '../components/Footer'
 import { Link } from 'react-router-dom'
 
 const CartPage = () => {
@@ -94,7 +93,7 @@ const CartPage = () => {
       <Grid container spacing={2} className="cart-container">
         {cartItems}
       </Grid>
-      <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '20px', alignItems: 'center' }}>
+      <div className="cart-mobyle">
         <div style={{ padding: '20px 40px' }}>
           <Button variant="outlined" color="primary">
             <Link to="/catalog">CONTINUE SHOPPING</Link>
@@ -103,15 +102,13 @@ const CartPage = () => {
         {hasItemsInCart && (
           <div className="cart-buttons">
             <div>Total Price: ${calculateTotalPrice().toFixed(2)}</div>
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" className="checkout-button">
               Сheckout
             </Button>
           </div>
         )}
       </div>
-      <div style={{ position: 'fixed', bottom: '0', left: '0', width: '100%' }}>
-        <Footer />
-      </div>
+      <div style={{ position: 'fixed', bottom: '0', left: '0', width: '100%' }}></div>
     </Container>
   )
 }

@@ -131,11 +131,27 @@ button:focus-visible {
   border-radius: 8px;
   margin: 15px;
 }
+.cart-mobyle {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  align-items: center;
+}
 
 @media (max-width: 600px) {
   .cart-item {
     display: block;
     margin: auto;
     margin-top: 80px;
+  }
+  .cart-buttons {
+    margin-bottom: 70px;
+  }
+  .cart-mobyle {
+    display: block;
+  }
+  .checkout-button button {
+    font-size: 5px;
+    padding: 5px 10px;
   }
 }
