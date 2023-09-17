@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite'
 import Header from '../components/Header'
 import '../index.css'
 import { useRootStore } from '../App'
-import { Product } from '../types/interfaces'
+import { Product, CartItem } from '../types/interfaces'
 import { Container, Card, CardContent, CardActions, Typography, IconButton, Grid, Button } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
@@ -10,13 +10,38 @@ import RemoveIcon from '@mui/icons-material/Remove'
 import { Carousel } from 'react-responsive-carousel'
 import Footer from '../components/Footer'
 import { Link } from 'react-router-dom'
+import CartStore from '../stores/CartStore'
 
-const CartPage = () => {
-  const { cartStore, catalogStore } = useRootStore()
+const CartPage = ({ cartStore }: { cartStore: CartStore }) => {
+  const { catalogStore } = useRootStore()
+  const items = localStorage.getItem('cartItem')!
+  const cartItemsLocal: CartItem[] = JSON.parse(items)
+
+  /*const handlePromoCodeChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    const inputElement = event.target as HTMLInputElement;
+    if (inputElement) {
+      const promoCode = inputElement.value;
+      cartStore.setPromoCode(promoCode);
+    }
+  };
+
+  const handleApplyPromoCode = async () => {
+    try {
+      const promoCode = cartStore.promoCode;
+      const result = await cartStore.applyPromoCode(promoCode);
+      if (result.success) {
+        console.log('Промокод успешно применен, скидка:', result.discount);
+      } else {
+        console.error('Ошибка при применении промокода:', result.error);
+      }
+    } catch (error) {
+      console.error('Произошла ошибка:', error);
+    }
+  };*/
 
   const calculateTotalPrice = () => {
     let total = 0
-    cartStore.cartItems.forEach((item) => {
+    cartItemsLocal.forEach((item) => {
       const product: Product | undefined = catalogStore.getProductById(item.productId)
       if (product) {
         total += (product.price[0] * item.quantity) / 100
@@ -24,9 +49,9 @@ const CartPage = () => {
     })
     return total
   }
-  const hasItemsInCart = cartStore.cartItems!.some((item) => item !== null)
+  const hasItemsInCart = cartItemsLocal!.some((item) => item !== null)
 
-  const cartItems = cartStore.cartItems.map((item) => {
+  const cartItems = cartItemsLocal.map((item) => {
     const product: Product | undefined = catalogStore.getProductById(item.productId)
     if (product) {
       return (
@@ -87,7 +112,6 @@ const CartPage = () => {
       return null
     }
   })
-
   return (
     <Container>
       <Header subcategories={[]} />
@@ -99,6 +123,15 @@ const CartPage = () => {
           <Button variant="outlined" color="primary">
             <Link to="/catalog">CONTINUE SHOPPING</Link>
           </Button>
+          {/* <div>
+        <input
+          type="text"
+          placeholder="enter promotional code"
+          value={cartStore.promoCode} 
+          onChange={handlePromoCodeChange}
+        />
+         <button onclick={handleApplyPromoCode} >Apply</button>
+</div> */}
         </div>
         {hasItemsInCart && (
           <div className="cart-buttons">
