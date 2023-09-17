@@ -3,27 +3,9 @@ import api from '../api/axios'
 import { commercetoolsConfig } from '../commercetoolsConfig'
 import { AxiosResponse } from 'axios'
 import { useRootStore } from '../App'
+import { CartItem, LineItem } from '../types/interfaces'
 
-interface LineItem {
-  productId: string;
-  quantity: number;
-  price: {
-    value: {
-      centAmount: number;
-    }
-  };
-  totalPrice: {
-    centAmount: number;
-  };
 
-}
-
-interface CartItem {
-  productId: string;
-  quantity: number;
-  price: number;
-  totalPrice: number
-}
 interface ApiResponse {
   id: string;
   name: string;

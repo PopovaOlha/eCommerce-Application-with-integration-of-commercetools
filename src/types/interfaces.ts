@@ -130,5 +130,25 @@ export interface RawProductList {
     }[];
   };
 }
+export interface LineItem {
+  productId: string;
+  quantity: number;
+  price: {
+    value: {
+      centAmount: number;
+    }
+  };
+  totalPrice: {
+    centAmount: number;
+  };
+
+}
+
+export interface CartItem {
+  productId: string;
+  quantity: number;
+  price: number;
+  totalPrice: number
+}
 
 
