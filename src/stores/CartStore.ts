@@ -1,58 +1,67 @@
 import { makeAutoObservable } from 'mobx'
-import axios from 'axios'
 import api from '../api/axios'
 import { commercetoolsConfig } from '../commercetoolsConfig'
 import { AxiosResponse } from 'axios'
+import { useRootStore } from '../App'
+import { CartItem, LineItem } from '../types/interfaces'
 
-interface CartItem {
-  productId: string
-}
 
 interface ApiResponse {
-  id: string
-  name: string
+  id: string;
+  name: string;
+  lineItems: LineItem[];
 }
 
 class CartStore {
-  isLoading = false
-  cartItems: CartItem[] = []
-  cartId!: string
+  isLoading = false;
+  cartItems: CartItem[] = [];
+  cartId!: string;
 
   constructor() {
-    makeAutoObservable(this)
+    makeAutoObservable(this);
   }
 
+  async getCart(): Promise<string> {
+    try {
+      const response: AxiosResponse = await api.get(
+        `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts`
+      )
+      console.log()
+      return response.data.results[0].id
+    } catch (error) {
+      console.error('Ошибка при получении текущего состояния корзины:', error)
+      throw error
+    }
+  }
   async createCart() {
     try {
-      if (!this.cartId) {
-        const requestData = {
-          country: 'US',
-          currency: 'USD',
-        }
-        this.isLoading = true
-
-        const response = await api.post(
-          `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts`,
-          requestData
-        )
-        this.cartId = response.data.id
-        localStorage.setItem('cartId', response.data.id)
-      }
-
+      this.isLoading = true
+      this.cartId = await this.getCart()
       this.isLoading = false
+      localStorage.setItem('cartId', this.cartId)
     } catch (error) {
       this.isLoading = false
+      const requestData = {
+        country: 'US',
+        currency: 'USD',
+      }
+      const response = await api.post(
+        `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts`,
+        requestData
+      )
+      this.cartId = response.data.id
+      localStorage.setItem('cartId', response.data.id)
     }
   }
 
   async addToCart(productId: string, quantity: number): Promise<void> {
     try {
-      this.isLoading = true
-
-      const cartId: string = localStorage.getItem('cartId')!
-
-      const currentCartState = await this.getCurrentCartState(cartId)
-
+      this.isLoading = true;
+  
+      const cartId: string = localStorage.getItem('cartId')!;
+  
+      const currentCartState = await this.getCurrentCartState(cartId);
+  
       const requestData = {
         version: currentCartState.version,
         actions: [
@@ -62,18 +71,30 @@ class CartStore {
             quantity: quantity,
           },
         ],
-      }
-
+      };
+  
       const response: AxiosResponse<ApiResponse> = await api.post(
         `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts/${cartId}`,
         requestData
-      )
-
-      console.log('Товар успешно добавлен в корзину:', response.data)
-      this.isLoading = false
+      );
+  
+      console.log('Товар успешно добавлен в корзину:', response.data);
+  
+      const lineItem = response.data.lineItems.find((item) => item.productId === productId);
+  
+      if (lineItem) {
+        this.cartItems.push({
+          productId,
+          quantity: lineItem.quantity,
+          price: lineItem.price.value.centAmount,
+          totalPrice: lineItem.totalPrice.centAmount,
+        });
+      }
+  
+      this.isLoading = false;
     } catch (error) {
-      this.isLoading = false
-      console.error('Произошла ошибка при добавлении товара в корзину:', error)
+      this.isLoading = false;
+      console.error('Произошла ошибка при добавлении товара в корзину:', error);
     }
   }
 
@@ -81,48 +102,51 @@ class CartStore {
     try {
       const response: AxiosResponse<{ version: number }> = await api.get(
         `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts/${cartId}`
-      )
+      );
 
-      return { version: response.data.version }
+      return { version: response.data.version };
     } catch (error) {
-      console.error('Ошибка при получении текущего состояния корзины:', error)
-      throw error
+      console.error('Ошибка при получении текущего состояния корзины:', error);
+      throw error;
     }
   }
 
   async removeFromCart(productId: string) {
     try {
-      this.isLoading = true
+      this.isLoading = true;
 
-      await axios.delete(`/api/remove-from-cart/${productId}`)
+      await api.delete(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/${productId}`);
 
-      this.cartItems = this.cartItems.filter((item) => item.productId !== productId)
+      this.cartItems = this.cartItems.filter((item) => item.productId !== productId);
 
-      this.isLoading = false
+      const rootStore = useRootStore();
+      rootStore.headerStore.decrementCartCount();
+      
+      this.isLoading = false;
     } catch (error) {
-      this.isLoading = false
+      this.isLoading = false;
     }
   }
 
   async updateCartItemQuantity(productId: string, quantity: number) {
     try {
-      this.isLoading = true
+      this.isLoading = true;
 
-      await axios.put(`/api/update-cart-item-quantity/${productId}`, { quantity })
+      await api.put(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/${productId}`, { quantity });
 
       const updatedCartItems = this.cartItems.map((item) => {
         if (item.productId === productId) {
-          return { ...item, quantity }
+          return { ...item, quantity };
         }
-        return item
-      })
+        return item;
+      });
 
-      this.cartItems = updatedCartItems
-      this.isLoading = false
+      this.cartItems = updatedCartItems;
+      this.isLoading = false;
     } catch (error) {
-      this.isLoading = false
+      this.isLoading = false;
     }
   }
 }
 
-export default CartStore
+export default CartStore;

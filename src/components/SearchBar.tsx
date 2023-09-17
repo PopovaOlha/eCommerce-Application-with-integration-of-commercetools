@@ -25,7 +25,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 
     const filteredSuggestions = catalogStore.products
       .filter((product) => product.name['en-US'].toLowerCase().startsWith(query.toLowerCase()))
-      .map((product) => product.name['en-US'])
+      .map((product) => product.name['en-US'].toLowerCase())
 
     setSuggestions(filteredSuggestions)
     setDropdownOpen(true)
