@@ -18,6 +18,7 @@ const SubcategoryPage: React.FC = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0)
   const [, setSelectedProduct] = useState<Product | null>(null)
   const [isAddedToCart, setIsAddedToCart] = useState(false)
+  const product: Product = products[selectedImageIndex] || {}
 
   useEffect(() => {
     if (categoryId) {
@@ -34,11 +35,11 @@ const SubcategoryPage: React.FC = () => {
     }
   }
 
-  const handleAddToCart = async (productId: string, quantity: number) => {
+  const handleAddToCart = async (productId: string) => {
     if (!isAddedToCart) {
       console.log('productId:', productId)
       await cartStore.createCart()
-      cartStore.addToCart(productId, quantity)
+      cartStore.addToCart(productId)
       headerStore.setCartCount(headerStore.cartCount + 1)
       setIsAddedToCart(true)
     }
@@ -51,8 +52,6 @@ const SubcategoryPage: React.FC = () => {
   useEffect(() => {
     catalogStore.fetchProducts()
   }, [catalogStore])
-
-  const product: Product = products[selectedImageIndex] || {}
 
   const handleViewDetails = () => {
     setSelectedProduct(product)
@@ -172,7 +171,7 @@ const SubcategoryPage: React.FC = () => {
                       <IconButton
                         color="inherit"
                         style={iconStyle}
-                        onClick={() => handleAddToCart(product.id, 2)}
+                        onClick={() => handleAddToCart(product.id)}
                         disabled={isAddedToCart}
                       >
                         <ShoppingCartIcon sx={{ color: '#333' }} />

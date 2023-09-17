@@ -29,11 +29,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     navigate(`/product/${product.id}`, { state: { productDiscount: product.discount } })
   }
 
-  const handleAddToCart = async (productId: string, quantity: number) => {
+  const handleAddToCart = async (productId: string) => {
     if (!isAddedToCart) {
       console.log('productId:', productId)
       await cartStore.createCart()
-      cartStore.addToCart(productId, quantity)
+      cartStore.addToCart(productId)
       headerStore.setCartCount(headerStore.cartCount + 1)
       setIsAddedToCart(true)
     }
@@ -112,7 +112,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 <IconButton
                   color="inherit"
                   style={iconStyle}
-                  onClick={() => handleAddToCart(product.id, 1)}
+                  onClick={() => handleAddToCart(product.id)}
                   disabled={isAddedToCart}
                 >
                   <ShoppingCartIcon sx={{ color: '#333' }} />
@@ -128,7 +128,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                   <IconButton
                     color="inherit"
                     style={iconStyle}
-                    onClick={() => handleAddToCart(product.id, 2)}
+                    onClick={() => handleAddToCart(product.id)}
                     disabled={isAddedToCart}
                   >
                     <ShoppingCartIcon sx={{ color: '#333' }} />
