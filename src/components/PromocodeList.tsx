@@ -20,8 +20,8 @@ const PromoCodeList: React.FC = () => {
   }, [])
 
   return (
-    <div>
-      <h2>Активные промокоды:</h2>
+    <div style={{ width: '100%', borderTop: '6px solid #333' }}>
+      <h2>Active promocodes:</h2>
       <ul style={{ color: '#333' }}>
         {activePromoCodes.map((promoCode) => (
           <li key={promoCode}>{promoCode}</li>

@@ -16,6 +16,7 @@ import { Box, Container, Grid } from '@mui/material'
 import { Link } from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import PromocodeList from '../components/PromocodeList'
+import Slider from '../components/Slider'
 
 function Home() {
   const { catalogStore } = useRootStore()
@@ -36,7 +37,7 @@ function Home() {
   }
 
   const backgroundStyle = {
-    minHeight: 'calc(170vh - 70px - 64px)',
+    minHeight: 'calc(100vh - 70px - 64px)',
     marginTop: '-5px',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
@@ -81,8 +82,8 @@ function Home() {
     <div>
       <Header subcategories={[]} />
       <SecondHeader />
-      <SearchBar onSearch={handleSearch} />
       <div style={isMobile ? mobileBackgroundStyle : desktopBackgroundStyle} className="content">
+        <SearchBar onSearch={handleSearch} />
         {foundProduct ? (
           <div>
             <Link to="/categories" style={backButtonStyle}>
@@ -107,8 +108,9 @@ function Home() {
           </Box>
         </Container>
         <HomeButton />
-        <PromocodeList />
       </div>
+      <PromocodeList />
+      <Slider />
       <Footer />
     </div>
   )

@@ -153,6 +153,7 @@ button:focus-visible {
   }
   .cart-buttons {
     margin-bottom: 70px;
+    padding: 5px 15px;
   }
   .cart-mobyle {
     display: block;
@@ -161,4 +162,5 @@ button:focus-visible {
     font-size: 5px;
     padding: 5px 10px;
   }
+ 
 }

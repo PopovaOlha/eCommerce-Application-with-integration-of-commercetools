@@ -17,7 +17,7 @@ const SubcategoryPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([])
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0)
   const [, setSelectedProduct] = useState<Product | null>(null)
-  const [isAddedToCart, setIsAddedToCart] = useState(false)
+  const [isAddedToCartMap, setIsAddedToCartMap] = useState<{ [productId: string]: boolean }>({})
   const product: Product = products[selectedImageIndex] || {}
 
   useEffect(() => {
@@ -36,12 +36,16 @@ const SubcategoryPage: React.FC = () => {
   }
 
   const handleAddToCart = async (productId: string) => {
-    if (!isAddedToCart) {
+    console.log(productId)
+    if (!isAddedToCartMap[productId]) {
       console.log('productId:', productId)
       await cartStore.createCart()
       cartStore.addToCart(productId)
       headerStore.setCartCount(headerStore.cartCount + 1)
-      setIsAddedToCart(true)
+      setIsAddedToCartMap((prevState) => ({
+        ...prevState,
+        [productId]: true, // Устанавливаем для данного продукта значение true
+      }))
     }
   }
 
@@ -53,9 +57,9 @@ const SubcategoryPage: React.FC = () => {
     catalogStore.fetchProducts()
   }, [catalogStore])
 
-  const handleViewDetails = () => {
-    setSelectedProduct(product)
-    navigate(`/product/${product.id}`, { state: { product, productDiscount: product.discount } })
+  const handleViewDetails = (selectedProduct: Product) => {
+    setSelectedProduct(selectedProduct)
+    navigate(`/product/${selectedProduct.id}`, { state: { product, productDiscount: product.discount } })
   }
 
   const iconStyle = {
@@ -102,7 +106,7 @@ const SubcategoryPage: React.FC = () => {
         {products.map((product) => (
           <Card
             key={product.id}
-            onClick={() => handleImageClick(products.indexOf(product))}
+            // onClick={() => handleImageClick(products.indexOf(product))}
             sx={{
               position: 'relative',
               display: 'flex',
@@ -157,7 +161,12 @@ const SubcategoryPage: React.FC = () => {
                 {product.discount === null ? (
                   <Typography variant="body2" fontSize="12px">
                     {product.price.map((price) => (price / 100).toFixed(2)).join(', ')} USD{' '}
-                    <IconButton color="inherit" style={iconStyle}>
+                    <IconButton
+                      color="inherit"
+                      style={iconStyle}
+                      onClick={() => handleAddToCart(product.id)}
+                      disabled={isAddedToCartMap[product.id]}
+                    >
                       <ShoppingCartIcon sx={{ color: '#333' }} />
                     </IconButton>
                   </Typography>
@@ -172,7 +181,7 @@ const SubcategoryPage: React.FC = () => {
                         color="inherit"
                         style={iconStyle}
                         onClick={() => handleAddToCart(product.id)}
-                        disabled={isAddedToCart}
+                        disabled={isAddedToCartMap[product.id]}
                       >
                         <ShoppingCartIcon sx={{ color: '#333' }} />
                       </IconButton>
@@ -180,7 +189,12 @@ const SubcategoryPage: React.FC = () => {
                   </>
                 )}
               </Box>
-              <MuiLink component={Button} color="primary" sx={{ marginTop: '0.1rem' }} onClick={handleViewDetails}>
+              <MuiLink
+                component={Button}
+                color="primary"
+                sx={{ marginTop: '0.1rem' }}
+                onClick={() => handleViewDetails(product)}
+              >
                 View Details
               </MuiLink>
             </CardContent>
