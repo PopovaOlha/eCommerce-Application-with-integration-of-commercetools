@@ -16,12 +16,13 @@ const ProductDetailPage: React.FC = () => {
   const location = useLocation()
   const productDiscount = location.state?.productDiscount
   const { productId } = useParams<{ productId: string }>()
-  const { catalogStore } = useRootStore()
+  const { catalogStore, cartStore, headerStore } = useRootStore()
   const selectedProduct = catalogStore.getProductById(productId!)
 
   const [isImageModalOpen, setImageModalOpen] = useState(false)
   const [enlargedImageUrl, setEnlargedImageUrl] = useState('')
 
+  const [isAddedToCart, setIsAddedToCart] = useState(false)
   useEffect(() => {
     const fetchProductDetails = async () => {
       if (selectedProduct) {
@@ -40,7 +41,15 @@ const ProductDetailPage: React.FC = () => {
   if (!selectedProduct) {
     return <div>Loading...</div>
   }
-
+  const handleAddToCart = async (productId: string) => {
+    if (!isAddedToCart) {
+      console.log('productId:', productId)
+      await cartStore.createCart()
+      cartStore.addToCart(productId)
+      headerStore.setCartCount(headerStore.cartCount + 1)
+      setIsAddedToCart(true)
+    }
+  }
   const currentLocale = 'en-US'
 
   const theme = useTheme()
@@ -103,7 +112,12 @@ const ProductDetailPage: React.FC = () => {
             Discount: {`${(productDiscount / 100).toFixed(2)} usd`}
           </Typography>
         )}
-        <Button variant="contained" color="primary" style={{ marginTop: '1rem' }}>
+        <Button
+          variant="contained"
+          color="primary"
+          style={{ marginTop: '1rem' }}
+          onClick={() => handleAddToCart(selectedProduct.id)}
+        >
           Add to Cart
         </Button>
       </Box>
