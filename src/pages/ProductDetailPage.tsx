@@ -46,7 +46,11 @@ const ProductDetailPage: React.FC = () => {
       console.log('productId:', productId)
       await cartStore.createCart()
       cartStore.addToCart(productId)
-      headerStore.setCartCount(headerStore.cartCount + 1)
+      const cartItem = JSON.parse(localStorage.getItem('cartItem')!)
+      console.log(cartItem)
+      if (cartItem === null || !cartItem.some((item: { productId: string }) => item.productId === productId)) {
+        headerStore.setCartCount(headerStore.cartCount + 1)
+      }
       setIsAddedToCart(true)
     }
   }

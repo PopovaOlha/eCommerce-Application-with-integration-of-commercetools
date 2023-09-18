@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 
 const CartPage = () => {
-  const { cartStore, catalogStore } = useRootStore()
+  const { cartStore, catalogStore, headerStore } = useRootStore()
   const [cartItemsLocal, setCartItemsLocal] = useState<CartItem[]>([])
 
   useEffect(() => {
@@ -46,6 +46,10 @@ const CartPage = () => {
     // Обновляем cartItemsLocal без использования флага
     const updatedCartItems = cartItemsLocal.filter((item) => item.productId !== productId)
     setCartItemsLocal(updatedCartItems)
+    const cartItem = JSON.parse(localStorage.getItem('cartItem')!)
+    console.log(cartItem)
+
+    headerStore.decrementCartCount()
   }
   const handleupdateCartItemQuantity = async (productId: string, quantity: number) => {
     try {
@@ -79,6 +83,7 @@ const CartPage = () => {
       if (quantity <= 0) {
         const updatedCartItems = cartItemsLocal.filter((item) => item.productId !== productId)
         setCartItemsLocal(updatedCartItems)
+        headerStore.decrementCartCount()
       } else {
         // В противном случае, обновляем cartItemsLocal с обновленными данными
         const updatedCartItems = cartItemsLocal.map((item) => {
@@ -95,10 +100,10 @@ const CartPage = () => {
     }
   }
   const hasItemsInCart = cartItemsLocal!.some((item) => item !== null)
-
+  console.log('sadasda')
   const cartItems = cartItemsLocal.map((item) => {
     const product: Product | undefined = catalogStore.getProductById(item.productId)
-
+    console.log(product)
     if (product) {
       return (
         <>
@@ -164,28 +169,36 @@ const CartPage = () => {
       return null
     }
   })
-
+  console.log(cartItems)
+  console.log(hasItemsInCart)
   return (
     <Container>
       <Header subcategories={[]} />
       <Grid container spacing={2} className="cart-container">
-        {cartItems}
-      </Grid>
-      <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '20px', alignItems: 'center' }}>
-        <div style={{ padding: '20px 40px' }}>
-          <Button variant="outlined" color="primary">
-            <Link to="/catalog">CONTINUE SHOPPING</Link>
-          </Button>
-        </div>
-        {hasItemsInCart && (
-          <div className="cart-buttons">
-            <div>Total Price: ${calculateTotalPrice().toFixed(2)}</div>
-            <Button variant="contained" color="primary">
-              Сheckout
+        <div
+          style={{
+            display: 'inherit',
+            margin: '50px auto auto auto',
+            marginTop: '50px',
+          }}
+        >
+          <div style={{ padding: '20px 40px' }}>
+            <Button variant="outlined" color="primary">
+              <Link to="/catalog">CONTINUE SHOPPING</Link>
             </Button>
           </div>
-        )}
-      </div>
+          {hasItemsInCart && (
+            <div className="cart-buttons">
+              <div>Total Price: ${calculateTotalPrice().toFixed(2)}</div>
+              <Button variant="contained" color="primary">
+                Сheckout
+              </Button>
+            </div>
+          )}
+        </div>
+        {cartItems}
+      </Grid>
+
       <div style={{ position: 'fixed', bottom: '0', left: '0', width: '100%' }}>
         <Footer />
       </div>

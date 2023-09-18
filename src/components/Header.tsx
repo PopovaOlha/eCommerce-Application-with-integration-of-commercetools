@@ -31,7 +31,7 @@ const Header: React.FC<HeaderProps> = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const { cartStore } = useRootStore()
   const rootStore = useRootStore()
-  const { authStore } = rootStore
+  const { authStore, headerStore } = rootStore
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!localStorage.getItem('user'))
   const [showAlreadyLoggedInModal, setShowAlreadyLoggedInModal] = useState<boolean>(false)
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
@@ -79,7 +79,7 @@ const Header: React.FC<HeaderProps> = () => {
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen)
   }
-  const cartItemCount = JSON.parse(localStorage.getItem('cartItem') || '[]').length
+
   return (
     <>
       <AppBar sx={{ width: '100%', backgroundColor: '#fff' }}>
@@ -137,7 +137,7 @@ const Header: React.FC<HeaderProps> = () => {
                   <IconButton color="inherit" onClick={() => handleCartButtonClick()}>
                     <ShoppingCartIcon sx={{ color: '#333' }} />
                     <span className="cart-counter" style={{ color: 'red' }}>
-                      {cartItemCount}
+                      {headerStore.cartCount}
                     </span>
                   </IconButton>
                   <ListItem button onClick={() => navigate('/user-profile')}>
@@ -145,10 +145,10 @@ const Header: React.FC<HeaderProps> = () => {
                   </ListItem>
                 </List>
               </Drawer>
-              <IconButton color="inherit" onClick={() => navigate('/cart')}>
+              <IconButton color="inherit" onClick={() => handleCartButtonClick()}>
                 <ShoppingCartIcon sx={{ color: '#333' }} />
                 <span className="cart-counter" style={{ color: 'red' }}>
-                  {cartItemCount}
+                  {headerStore.cartCount}
                 </span>
               </IconButton>
             </>
@@ -180,7 +180,7 @@ const Header: React.FC<HeaderProps> = () => {
               <IconButton color="inherit" onClick={() => navigate('/cart')}>
                 <ShoppingCartIcon sx={{ color: '#333' }} />
                 <span className="cart-counter" style={{ color: 'red' }}>
-                  {cartItemCount}
+                  {headerStore.cartCount}
                 </span>
               </IconButton>
             </>
