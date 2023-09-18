@@ -8,27 +8,27 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import { Carousel } from 'react-responsive-carousel'
+import Footer from '../components/Footer'
 import { Link } from 'react-router-dom'
-import CartStore from '../stores/CartStore'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-const CartPage = ({ cartStore }: { cartStore: CartStore }) => {
-  const { catalogStore } = useRootStore()
-  const [promoCodeInput, setPromoCodeInput] = useState('')
-  const items = localStorage.getItem('cartItem')!
-  const cartItemsLocal: CartItem[] = JSON.parse(items)
-  const DataPromoCode = localStorage.getItem('promoCode')
-  const promoCode = JSON.parse(DataPromoCode!)
-  const [activePromoCodes, setActivePromoCodes] = useState<string[]>(promoCode)
-  console.log(setActivePromoCodes)
-  const handleApplyPromoCode = () => {
-    if (promoCodeInput && activePromoCodes.includes(promoCodeInput)) {
-      cartStore.applyPromoCode(promoCodeInput)
-      setPromoCodeInput('')
-    } else {
-      alert('Недействительный промокод')
+const CartPage = () => {
+  const { cartStore, catalogStore } = useRootStore()
+  const [cartItemsLocal, setCartItemsLocal] = useState<CartItem[]>([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await cartStore.createCart()
+      const cartId: string = localStorage.getItem('cartId')!
+      await cartStore.getCurrentCartState(cartId)
+
+      const items = localStorage.getItem('cartItem')!
+      const parsedItems: CartItem[] = JSON.parse(items)
+      setCartItemsLocal(parsedItems)
     }
-  }
+
+    fetchData()
+  }, [cartStore])
 
   const calculateTotalPrice = () => {
     let total = 0
@@ -40,10 +40,65 @@ const CartPage = ({ cartStore }: { cartStore: CartStore }) => {
     })
     return total
   }
+  const handleRemoveFromCart = async (productId: string) => {
+    await cartStore.removeFromCart(productId)
+
+    // Обновляем cartItemsLocal без использования флага
+    const updatedCartItems = cartItemsLocal.filter((item) => item.productId !== productId)
+    setCartItemsLocal(updatedCartItems)
+  }
+  const handleupdateCartItemQuantity = async (productId: string, quantity: number) => {
+    try {
+      const cartItemToUpdate = cartItemsLocal.find((item) => item.productId === productId)
+
+      if (!cartItemToUpdate) {
+        console.error('Товар не найден в корзине.')
+        return
+      }
+
+      let updatedCartItem: CartItem
+
+      if (typeof cartItemToUpdate.discountPrice === 'number') {
+        updatedCartItem = {
+          ...cartItemToUpdate,
+          quantity: quantity,
+          totalPrice: cartItemToUpdate.discountPrice * quantity,
+        }
+      } else {
+        updatedCartItem = {
+          ...cartItemToUpdate,
+          quantity: quantity,
+          totalPrice: cartItemToUpdate.price * quantity,
+        }
+      }
+
+      // Обновляем корзину на сервере
+      await cartStore.updateCartItemQuantity(productId, quantity)
+
+      // Проверяем, если количество товара меньше или равно нулю, то удаляем товар из массива
+      if (quantity <= 0) {
+        const updatedCartItems = cartItemsLocal.filter((item) => item.productId !== productId)
+        setCartItemsLocal(updatedCartItems)
+      } else {
+        // В противном случае, обновляем cartItemsLocal с обновленными данными
+        const updatedCartItems = cartItemsLocal.map((item) => {
+          if (item.productId === productId) {
+            return updatedCartItem
+          }
+          return item
+        })
+
+        setCartItemsLocal(updatedCartItems)
+      }
+    } catch (error) {
+      console.error('Произошла ошибка при обновлении количества товара в корзине:', error)
+    }
+  }
   const hasItemsInCart = cartItemsLocal!.some((item) => item !== null)
 
   const cartItems = cartItemsLocal.map((item) => {
     const product: Product | undefined = catalogStore.getProductById(item.productId)
+
     if (product) {
       return (
         <>
@@ -74,24 +129,30 @@ const CartPage = ({ cartStore }: { cartStore: CartStore }) => {
                     Price per unit: ${(item.price / 100).toFixed(2)}
                   </Typography>
                   <Typography variant="body2" color="textSecondary" gutterBottom>
+                    Discount Price:{' '}
+                    {typeof item.discountPrice === 'string'
+                      ? item.discountPrice
+                      : (item.discountPrice / 100).toFixed(2)}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary" gutterBottom>
                     Total Price: ${(item.totalPrice / 100).toFixed(2)}
                   </Typography>
                 </Grid>
               </Grid>
             </CardContent>
             <CardActions>
-              <IconButton aria-label="Remove" color="error" onClick={() => cartStore.removeFromCart(item.productId)}>
+              <IconButton aria-label="Remove" color="error" onClick={() => handleRemoveFromCart(item.productId)}>
                 <DeleteIcon />
               </IconButton>
               <IconButton
                 aria-label="Increase Quantity"
-                onClick={() => cartStore.updateCartItemQuantity(item.productId, item.quantity + 1)}
+                onClick={() => handleupdateCartItemQuantity(item.productId, item.quantity + 1)}
               >
                 <AddIcon />
               </IconButton>
               <IconButton
                 aria-label="Decrease Quantity"
-                onClick={() => cartStore.updateCartItemQuantity(item.productId, item.quantity - 1)}
+                onClick={() => handleupdateCartItemQuantity(item.productId, item.quantity - 1)}
               >
                 <RemoveIcon />
               </IconButton>
@@ -103,6 +164,7 @@ const CartPage = ({ cartStore }: { cartStore: CartStore }) => {
       return null
     }
   })
+
   return (
     <Container>
       <Header subcategories={[]} />
@@ -114,16 +176,6 @@ const CartPage = ({ cartStore }: { cartStore: CartStore }) => {
           <Button variant="outlined" color="primary">
             <Link to="/catalog">CONTINUE SHOPPING</Link>
           </Button>
-          <div>
-            <input
-              type="text"
-              placeholder="Enter promotional code"
-              value={promoCodeInput}
-              onChange={(e) => setPromoCodeInput(e.target.value)}
-              className="cart-input"
-            />
-            <button onClick={handleApplyPromoCode}>Apply</button>
-          </div>
         </div>
         {hasItemsInCart && (
           <div className="cart-buttons">
@@ -134,7 +186,9 @@ const CartPage = ({ cartStore }: { cartStore: CartStore }) => {
           </div>
         )}
       </div>
-      <div style={{ position: 'fixed', bottom: '0', left: '0', width: '100%' }}></div>
+      <div style={{ position: 'fixed', bottom: '0', left: '0', width: '100%' }}>
+        <Footer />
+      </div>
     </Container>
   )
 }

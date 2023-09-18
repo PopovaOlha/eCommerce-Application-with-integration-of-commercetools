@@ -2,7 +2,6 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { observer } from 'mobx-react-lite'
 import PetsIcon from '@mui/icons-material/Pets'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-
 import React, { useState } from 'react'
 import { Person } from '@mui/icons-material'
 import {
@@ -30,9 +29,9 @@ import { fetchCategoriesWithHierarchy } from '../utils/commercetoolsApi'
 const Header: React.FC<HeaderProps> = () => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-
+  const { cartStore } = useRootStore()
   const rootStore = useRootStore()
-  const { authStore, headerStore } = rootStore
+  const { authStore } = rootStore
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!localStorage.getItem('user'))
   const [showAlreadyLoggedInModal, setShowAlreadyLoggedInModal] = useState<boolean>(false)
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
@@ -45,7 +44,17 @@ const Header: React.FC<HeaderProps> = () => {
       setShowAlreadyLoggedInModal(true)
     }
   }
+  const handleCartButtonClick = async () => {
+    // Выполните первое действие, например, переход на страницу корзины
+    const cartId: string = localStorage.getItem('cartId')!
 
+    navigate('/cart')
+    await cartStore.createCart()
+    await cartStore.getCurrentCartState(cartId)
+    // Выполните другие действия
+    // Например, можно вызвать функцию, отправить запрос на сервер и т. д.
+    // Просто добавьте здесь нужные действия.
+  }
   const handleCategoriesLinkClick = async () => {
     try {
       const categories = await fetchCategoriesWithHierarchy()
@@ -70,7 +79,7 @@ const Header: React.FC<HeaderProps> = () => {
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen)
   }
-
+  const cartItemCount = JSON.parse(localStorage.getItem('cartItem') || '[]').length
   return (
     <>
       <AppBar sx={{ width: '100%', backgroundColor: '#fff' }}>
@@ -125,10 +134,10 @@ const Header: React.FC<HeaderProps> = () => {
                       <ListItemText primary="Register" />
                     </ListItem>
                   )}
-                  <IconButton color="inherit" onClick={() => navigate('/cart')}>
+                  <IconButton color="inherit" onClick={() => handleCartButtonClick()}>
                     <ShoppingCartIcon sx={{ color: '#333' }} />
                     <span className="cart-counter" style={{ color: 'red' }}>
-                      {headerStore.cartCount}
+                      {cartItemCount}
                     </span>
                   </IconButton>
                   <ListItem button onClick={() => navigate('/user-profile')}>
@@ -139,7 +148,7 @@ const Header: React.FC<HeaderProps> = () => {
               <IconButton color="inherit" onClick={() => navigate('/cart')}>
                 <ShoppingCartIcon sx={{ color: '#333' }} />
                 <span className="cart-counter" style={{ color: 'red' }}>
-                  {headerStore.cartCount}
+                  {cartItemCount}
                 </span>
               </IconButton>
             </>
@@ -171,7 +180,7 @@ const Header: React.FC<HeaderProps> = () => {
               <IconButton color="inherit" onClick={() => navigate('/cart')}>
                 <ShoppingCartIcon sx={{ color: '#333' }} />
                 <span className="cart-counter" style={{ color: 'red' }}>
-                  {headerStore.cartCount}
+                  {cartItemCount}
                 </span>
               </IconButton>
             </>
