@@ -54,7 +54,7 @@ class CartStore {
     }
   }
 
-  async addToCart(productId: string, quantity: number): Promise<void> {
+  async addToCart(productId: string): Promise<void> {
     try {
       this.isLoading = true;
   
@@ -68,7 +68,6 @@ class CartStore {
           {
             action: 'addLineItem',
             productId: productId,
-            quantity: quantity,
           },
         ],
       };

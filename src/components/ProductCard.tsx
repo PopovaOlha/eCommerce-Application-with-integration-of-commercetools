@@ -33,7 +33,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     if (!isAddedToCart) {
       console.log('productId:', productId)
       await cartStore.createCart()
-      cartStore.addToCart(productId)
+      cartStore.addToCart(product.id)
       headerStore.setCartCount(headerStore.cartCount + 1)
       setIsAddedToCart(true)
     }
