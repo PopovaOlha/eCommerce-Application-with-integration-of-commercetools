@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import '../styles/slider.scss'
+import { Divider, Typography, useTheme } from '@mui/material'
+import { Link } from 'react-router-dom'
 
 interface Slide {
   eachSlide: string
@@ -7,7 +9,7 @@ interface Slide {
 
 const slides: Slide[] = [
   {
-    eachSlide: 'url(https://www.washingtonian.com/wp-content/uploads/2021/01/header.png)',
+    eachSlide: 'url(https://www.amny.com/wp-content/uploads/2023/04/header-5.png)',
   },
   {
     eachSlide:
@@ -20,7 +22,7 @@ const slides: Slide[] = [
     eachSlide: 'url(https://media.cmsmax.com/syu7sbneqwoxyfrc3bi9s/cbd-pets-1.jpg)',
   },
   {
-    eachSlide: 'url(https://www.amny.com/wp-content/uploads/2023/04/header-5.png)',
+    eachSlide: 'url(https://www.washingtonian.com/wp-content/uploads/2021/01/header.png)',
   },
   {
     eachSlide: 'url(https://www.petage.com/wp-content/uploads/2020/09/Honest-Paws-Family-Shot-002.jpg)',
@@ -28,6 +30,22 @@ const slides: Slide[] = [
 ]
 
 const Slider: React.FC = () => {
+  const theme = useTheme()
+  const categoryLinkStyle: React.CSSProperties = {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontFamily: 'fantasy',
+    textDecoration: 'none',
+    marginTop: '60px',
+    marginLeft: '100px',
+    textDecorationLine: 'underline',
+    display: 'block',
+    color: theme.palette.text.primary,
+  }
+  const dividerStyle: React.CSSProperties = {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+  }
   const [active, setActive] = useState<number>(0)
   const [autoplay, setAutoplay] = useState<boolean>(false)
   const max: number = slides.length
@@ -61,7 +79,12 @@ const Slider: React.FC = () => {
 
   const renderSlides = () =>
     slides.map((item, index) => (
-      <div className={`each-slide ${isActive(index)}`} key={index} style={{ backgroundImage: item.eachSlide }}></div>
+      <div className={`each-slide ${isActive(index)}`} key={index} style={{ backgroundImage: item.eachSlide }}>
+        <Divider sx={dividerStyle} />
+        <Link to="/catalog" style={categoryLinkStyle}>
+          <Typography variant="body1">View All Products</Typography>
+        </Link>
+      </div>
     ))
 
   const renderDots = () =>

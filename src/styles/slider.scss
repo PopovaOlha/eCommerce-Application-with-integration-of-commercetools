@@ -1,6 +1,6 @@
 .slider{
     width: 100svw;
-    height: 80vh;
+    height: 100vh;
     overflow: hidden;
     position: relative;
   
@@ -9,6 +9,17 @@
         transition: .5s all linear;
         will-change: transform;
     }
+    @media (min-width: 601px) {
+        .slider {
+          width: 50%; /* Ширина для широких экранов */
+          height: 200px; /* Высота для широких экранов */
+          margin: 0 auto;
+        }
+      
+        .wrapper {
+          width: 50%; /* 100% ширина для содержимого слайдов */
+        }
+      }
   
     .arrows {
         position: absolute;
@@ -107,10 +118,3 @@
         background-color: transparent;
     }
 }
-@media (max-width: 600px) {
-    .slider {
-      width: auto; /* Удалите ограничение по ширине */
-      height: auto; /* Удалите ограничение по высоте */
-      position: relative;
-    }
-  }

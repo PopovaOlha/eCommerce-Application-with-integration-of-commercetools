@@ -2,6 +2,11 @@ import React from 'react'
 import { Grid, Typography, Paper, Link } from '@mui/material'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import { styled } from '@mui/system'
+import Olha from '../images/photo_5199661638637179179_x.jpg'
+import Nastya from '../images/photo_5199804356105456563_y.jpg'
+import Sergey from '../images/photo.jpg'
+import Footer from '../components/Footer'
+import Header from '../components/Header'
 
 const TeamMemberPaper = styled(Paper)(({ theme }) => ({
   marginBottom: theme.spacing(4),
@@ -42,20 +47,38 @@ interface TeamMember {
 
 const team: TeamMember[] = [
   {
-    name: 'Анна Ковалева',
-    role: 'Главный разработчик',
-    bio: 'Анна обладает более 10-летним опытом разработки веб-приложений и специализируется на React и TypeScript. Она руководит проектом, координирует работу команды и отвечает за техническую стратегию.',
-    github: 'https://github.com/AnnaKoval',
-    imageSrc: 'https://example.com/anna.jpg',
+    name: 'Sergey',
+    role: 'Frontend Developer',
+    bio: 'Sergey has more than 4 years of experience in frontend development. He specializes in React, Redux, and UI/UX design. In the team, he is responsible for developing the user interface.',
+    github: 'https://github.com/zero8273',
+    imageSrc: Sergey,
   },
-  // Добавьте остальных участников команды аналогичным образом
+  {
+    name: 'Olga',
+    role: 'Lead Developer',
+    bio: "Olga has over 2 years of experience in web application development and specializes in React and TypeScript. She leads the project, coordinates the team's work, and is responsible for the technical strategy.",
+    github: 'https://github.com/PopovaOlha',
+    imageSrc: Olha,
+  },
+  {
+    name: 'Nastya',
+    role: 'Backend Developer',
+    bio: 'Nastya is responsible for the backend part of the application and databases. She has over 2 years of experience in backend development using Node.js and MongoDB. She takes care of server security and performance.',
+    github: 'https://github.com/AnastasiiaDedela',
+    imageSrc: Nastya,
+  },
 ]
 
 const AboutUs: React.FC = () => {
   return (
-    <div style={{ padding: '16px' }}>
-      <Typography variant="h4" gutterBottom>
-        О нас
+    <div style={{ padding: '30px' }}>
+      <Header subcategories={[]} />
+      <Typography
+        variant="h4"
+        gutterBottom
+        style={{ textAlign: 'center', margin: 'auto', marginTop: '50px', marginBottom: '20px', fontWeight: 'bold' }}
+      >
+        About Us
       </Typography>
       <Grid container spacing={3}>
         {team.map((member, index) => (
@@ -71,7 +94,7 @@ const AboutUs: React.FC = () => {
                   <Typography variant="body2">{member.bio}</Typography>
                   <GitHubLink href={member.github} target="_blank" rel="noopener noreferrer">
                     <GitHubIconStyled />
-                    GitHub профиль
+                    GitHub Profile
                   </GitHubLink>
                 </Grid>
               </Grid>
@@ -79,6 +102,25 @@ const AboutUs: React.FC = () => {
           </Grid>
         ))}
       </Grid>
+      <div
+        style={{
+          border: '2px solid grey',
+          padding: '25px 50px',
+          marginTop: '30px',
+          borderRadius: '8px',
+          background: 'radial-gradient(592px at 48.2% 50%, rgba(255, 255, 249, 0.6) 0%, rgb(160, 199, 254) 74.6%)',
+        }}
+      >
+        <Typography variant="h5">Our Wishes to You</Typography>
+        <Typography variant="body1">
+          We hope you enjoy using our product! Our team has put a lot of effort into creating a valuable and
+          user-friendly experience for you. If you have any suggestions, feedback, or questions, please feel free to
+          reach out to us. Your satisfaction is our priority!
+        </Typography>
+      </div>
+      <div style={{ position: 'fixed', bottom: '0', left: '0', width: '100%' }}>
+        <Footer />
+      </div>
     </div>
   )
 }

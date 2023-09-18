@@ -1,6 +1,11 @@
 import React from 'react'
 import { Box, Typography, Link } from '@mui/material'
 import RSSchoolLogo from '../images/rs_school_js.svg'
+import FacebookIcon from '@mui/icons-material/Facebook'
+import InstagramIcon from '@mui/icons-material/Instagram'
+import GitHubIcon from '@mui/icons-material/GitHub'
+import MailOutlineIcon from '@mui/icons-material/MailOutline'
+import { Link as RouterLink } from 'react-router-dom'
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear()
@@ -19,8 +24,10 @@ const Footer: React.FC = () => {
         alignItems: 'center',
         height: '30px',
         '@media (max-width: 600px)': {
+          // Медиа-запрос для мобильных устройств
           flexDirection: 'column',
           padding: '10px',
+          height: 'auto', // Высота адаптирована для мобильных устройств
         },
       }}
     >
@@ -35,6 +42,15 @@ const Footer: React.FC = () => {
           Built with ❤️ by eCommerce-Application team
         </Typography>
       </Box>
+      <div style={{ display: 'flex', gap: '10px' }}>
+        <RouterLink to="/about" style={{ textDecoration: 'none', color: 'inherit' }}>
+          about us
+        </RouterLink>
+        <FacebookIcon />
+        <InstagramIcon />
+        <GitHubIcon />
+        <MailOutlineIcon />
+      </div>
     </Box>
   )
 }

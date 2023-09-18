@@ -109,12 +109,12 @@ const CartPage = ({ cartStore }: { cartStore: CartStore }) => {
       <Grid container spacing={2} className="cart-container">
         {cartItems}
       </Grid>
-      <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '20px', alignItems: 'center' }}>
+      <div className="cart-item">
         <div style={{ padding: '20px 40px' }}>
           <Button variant="outlined" color="primary">
             <Link to="/catalog">CONTINUE SHOPPING</Link>
           </Button>
-          <div>
+          <div style={{ display: 'flex', justifyContent: 'center', margin: 'auto' }}>
             <input
               type="text"
               placeholder="Enter promotional code"
@@ -122,7 +122,9 @@ const CartPage = ({ cartStore }: { cartStore: CartStore }) => {
               onChange={(e) => setPromoCodeInput(e.target.value)}
               className="cart-input"
             />
-            <button onClick={handleApplyPromoCode}>Apply</button>
+            <button style={{ borderRadius: '1px solid #333' }} onClick={handleApplyPromoCode}>
+              Apply
+            </button>
           </div>
         </div>
         {hasItemsInCart && (
