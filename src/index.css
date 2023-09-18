@@ -137,6 +137,13 @@ button:focus-visible {
   margin-top: 20px;
   align-items: center;
 }
+.cart-input {
+  margin-top: 10px;
+  margin-right: 10px;
+  padding: 10px 20px;
+  border-radius: 6px;
+  background-color: #d9dbf0;
+}
 
 @media (max-width: 600px) {
   .cart-item {

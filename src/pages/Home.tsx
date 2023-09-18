@@ -15,6 +15,7 @@ import ProductCard from '../components/ProductCard'
 import { Box, Container, Grid } from '@mui/material'
 import { Link } from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import PromocodeList from '../components/PromocodeList'
 
 function Home() {
   const { catalogStore } = useRootStore()
@@ -106,6 +107,7 @@ function Home() {
           </Box>
         </Container>
         <HomeButton />
+        <PromocodeList />
       </div>
       <Footer />
     </div>

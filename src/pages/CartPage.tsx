@@ -8,36 +8,27 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import { Carousel } from 'react-responsive-carousel'
-import Footer from '../components/Footer'
 import { Link } from 'react-router-dom'
 import CartStore from '../stores/CartStore'
+import { useState } from 'react'
 
 const CartPage = ({ cartStore }: { cartStore: CartStore }) => {
   const { catalogStore } = useRootStore()
+  const [promoCodeInput, setPromoCodeInput] = useState('')
   const items = localStorage.getItem('cartItem')!
   const cartItemsLocal: CartItem[] = JSON.parse(items)
-
-  /*const handlePromoCodeChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    const inputElement = event.target as HTMLInputElement;
-    if (inputElement) {
-      const promoCode = inputElement.value;
-      cartStore.setPromoCode(promoCode);
+  const DataPromoCode = localStorage.getItem('promoCode')
+  const promoCode = JSON.parse(DataPromoCode!)
+  const [activePromoCodes, setActivePromoCodes] = useState<string[]>(promoCode)
+  console.log(setActivePromoCodes)
+  const handleApplyPromoCode = () => {
+    if (promoCodeInput && activePromoCodes.includes(promoCodeInput)) {
+      cartStore.applyPromoCode(promoCodeInput)
+      setPromoCodeInput('')
+    } else {
+      alert('Недействительный промокод')
     }
-  };
-
-  const handleApplyPromoCode = async () => {
-    try {
-      const promoCode = cartStore.promoCode;
-      const result = await cartStore.applyPromoCode(promoCode);
-      if (result.success) {
-        console.log('Промокод успешно применен, скидка:', result.discount);
-      } else {
-        console.error('Ошибка при применении промокода:', result.error);
-      }
-    } catch (error) {
-      console.error('Произошла ошибка:', error);
-    }
-  };*/
+  }
 
   const calculateTotalPrice = () => {
     let total = 0
@@ -123,15 +114,16 @@ const CartPage = ({ cartStore }: { cartStore: CartStore }) => {
           <Button variant="outlined" color="primary">
             <Link to="/catalog">CONTINUE SHOPPING</Link>
           </Button>
-          {/* <div>
-        <input
-          type="text"
-          placeholder="enter promotional code"
-          value={cartStore.promoCode} 
-          onChange={handlePromoCodeChange}
-        />
-         <button onclick={handleApplyPromoCode} >Apply</button>
-</div> */}
+          <div>
+            <input
+              type="text"
+              placeholder="Enter promotional code"
+              value={promoCodeInput}
+              onChange={(e) => setPromoCodeInput(e.target.value)}
+              className="cart-input"
+            />
+            <button onClick={handleApplyPromoCode}>Apply</button>
+          </div>
         </div>
         {hasItemsInCart && (
           <div className="cart-buttons">
@@ -142,9 +134,7 @@ const CartPage = ({ cartStore }: { cartStore: CartStore }) => {
           </div>
         )}
       </div>
-      <div style={{ position: 'fixed', bottom: '0', left: '0', width: '100%' }}>
-        <Footer />
-      </div>
+      <div style={{ position: 'fixed', bottom: '0', left: '0', width: '100%' }}></div>
     </Container>
   )
 }

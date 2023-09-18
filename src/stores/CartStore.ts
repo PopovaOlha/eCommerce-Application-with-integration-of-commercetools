@@ -10,13 +10,15 @@ interface ApiResponse {
   name: string
   lineItems: LineItem[]
 }
+interface PromoCode {
+  code: string;
+}
 
 class CartStore {
   isLoading = false
   cartItems: CartItem[] = []
   cartId!: string
-  //promoCode!: string; 
-  //discount = 0;
+  appliedPromoCode?: string
 
   constructor() {
     makeAutoObservable(this)
@@ -153,27 +155,54 @@ const updatedCartItems = this.cartItems.map((item) => {
       this.isLoading = false
     }
   }
-  /*setPromoCode(code: string) {
-    this.promoCode = code;
+  async getActivePromoCodes() {
+    try {
+       const authDataString = localStorage.getItem('authData');
+       const token = JSON.parse(authDataString!);
+      const response = await api.get(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/discount-codes`, {
+        params: {
+          isActive: true, 
+        },
+        headers: {
+          Authorization: `Bearer ${token.accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      const activePromoCodes = response.data.results.map((promoCode: PromoCode ) => promoCode.code);
+      return activePromoCodes;
+    } catch (error) {
+      console.error('Ошибка при получении активных промокодов:', error);
+      throw error;
+    }
   }
+  async applyPromoCode(promoCode: string) {
+    try {
+      const response = await api.post(
+        `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}`,
+        { promoCode },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
 
-  async  applyPromoCode(promoCode: string) {
-  try {
-    const response: AxiosResponse = await api.get(`/${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/discount-codes/${promoCode}`
-    );
+      
+      const discountInfo = response.data.discount; 
+      const { discountAmount, discountPercent } = discountInfo;
 
-      const data = response.data;
-    return {
-      success: true,
-      discount: data.cartDiscount,
-    };
-  } catch (error) {
-    console.error('Ошибка при применении промокода:', error);
-    return {
-      success: false,
-      error: 'Произошла ошибка при применении промокода',
-    };
+      
+      this.appliedPromoCode = promoCode;
+      
+      for (const item of this.cartItems) {
+        if (discountAmount) {
+          item.price -= discountAmount;
+        } else if (discountPercent) {
+          item.price -= (item.price * discountPercent) / 100;
+        }
+      }
+    } catch (error) {
+      console.error('Ошибка при применении промокода:', error);
+    }
   }
-}*/
 }
+
+
 export default CartStore;
