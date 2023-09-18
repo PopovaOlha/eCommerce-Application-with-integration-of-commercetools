@@ -18,9 +18,10 @@ const CartPage = ({ cartStore }: { cartStore: CartStore }) => {
   const items = localStorage.getItem('cartItem')!
   const cartItemsLocal: CartItem[] = JSON.parse(items)
   const DataPromoCode = localStorage.getItem('promoCode')
-  const promoCode = JSON.parse(DataPromoCode!)
+  const promoCode = JSON.parse(DataPromoCode || '[]')
   const [activePromoCodes, setActivePromoCodes] = useState<string[]>(promoCode)
   console.log(setActivePromoCodes)
+
   const handleApplyPromoCode = () => {
     if (promoCodeInput && activePromoCodes.includes(promoCodeInput)) {
       cartStore.applyPromoCode(promoCodeInput)
