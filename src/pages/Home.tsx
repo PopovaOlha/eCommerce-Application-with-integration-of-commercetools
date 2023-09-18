@@ -12,7 +12,6 @@ import SearchBar from '../components/SearchBar'
 import { useState } from 'react'
 import { Product } from '../types/interfaces'
 import ProductCard from '../components/ProductCard'
-import { Box, Container, Grid } from '@mui/material'
 import { Link } from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import PromocodeList from '../components/PromocodeList'
@@ -21,19 +20,13 @@ import Slider from '../components/Slider'
 function Home() {
   const { catalogStore } = useRootStore()
   const [foundProduct, setFoundProduct] = useState<Product | null>(null)
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>(catalogStore.products)
 
   const handleSearch = (query: string) => {
     const found = catalogStore.products.find(
       (product) => product.name && product.name['en-US'] && product.name['en-US'].toLowerCase() === query.toLowerCase()
     )
 
-    const filteredResults = catalogStore.products.filter(
-      (product) => product.name && product.name['en-US'] && product.name['en-US'].includes(query.toLowerCase())
-    )
-
     setFoundProduct(found || null)
-    setFilteredProducts(filteredResults)
   }
 
   const backgroundStyle = {
@@ -96,17 +89,6 @@ function Home() {
         ) : (
           <h5 style={{ marginLeft: '15px' }}>View Products</h5>
         )}
-        <Container maxWidth="lg">
-          <Box mt={10}>
-            <Grid container spacing={isMobile ? 2 : 3}>
-              {filteredProducts.map((product, index) => (
-                <Grid key={`${product.id}-${index}`} item xs={12} sm={6} md={4} lg={4}>
-                  <ProductCard product={product} />
-                </Grid>
-              ))}
-            </Grid>
-          </Box>
-        </Container>
         <HomeButton />
       </div>
       <PromocodeList />

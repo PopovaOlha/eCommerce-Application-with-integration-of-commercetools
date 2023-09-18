@@ -16,12 +16,13 @@ const ProductDetailPage: React.FC = () => {
   const location = useLocation()
   const productDiscount = location.state?.productDiscount
   const { productId } = useParams<{ productId: string }>()
-  const { catalogStore } = useRootStore()
+  const { catalogStore, cartStore, headerStore } = useRootStore()
   const selectedProduct = catalogStore.getProductById(productId!)
 
   const [isImageModalOpen, setImageModalOpen] = useState(false)
   const [enlargedImageUrl, setEnlargedImageUrl] = useState('')
 
+  const [isAddedToCart, setIsAddedToCart] = useState(false)
   useEffect(() => {
     const fetchProductDetails = async () => {
       if (selectedProduct) {
@@ -40,15 +41,27 @@ const ProductDetailPage: React.FC = () => {
   if (!selectedProduct) {
     return <div>Loading...</div>
   }
-
+  const handleAddToCart = async (productId: string) => {
+    if (!isAddedToCart) {
+      console.log('productId:', productId)
+      await cartStore.createCart()
+      cartStore.addToCart(productId)
+      const cartItem = JSON.parse(localStorage.getItem('cartItem')!)
+      console.log(cartItem)
+      if (cartItem === null || !cartItem.some((item: { productId: string }) => item.productId === productId)) {
+        headerStore.setCartCount(headerStore.cartCount + 1)
+      }
+      setIsAddedToCart(true)
+    }
+  }
   const currentLocale = 'en-US'
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   const productImageStyle: React.CSSProperties = {
-    width: '20%',
-    maxHeight: isMobile ? 'auto' : 'auto',
+    width: 'auto',
+    maxHeight: isMobile ? '60vh' : '60vh',
     objectFit: 'cover',
     borderRadius: '8px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
@@ -85,7 +98,7 @@ const ProductDetailPage: React.FC = () => {
         </Link>
         <Header subcategories={[]} />
         <Typography variant="h4">{selectedProduct.name[currentLocale]}</Typography>
-        <Carousel showThumbs={false} dynamicHeight>
+        <Carousel showThumbs={false}>
           {selectedProduct.imageUrl.map((imageUrl, index) => (
             <div key={index} onClick={() => openImageModal(imageUrl)}>
               <img src={imageUrl} alt={`Product Image ${index}`} style={productImageStyle} />
@@ -103,7 +116,12 @@ const ProductDetailPage: React.FC = () => {
             Discount: {`${(productDiscount / 100).toFixed(2)} usd`}
           </Typography>
         )}
-        <Button variant="contained" color="primary" style={{ marginTop: '1rem' }}>
+        <Button
+          variant="contained"
+          color="primary"
+          style={{ marginTop: '1rem' }}
+          onClick={() => handleAddToCart(selectedProduct.id)}
+        >
           Add to Cart
         </Button>
       </Box>

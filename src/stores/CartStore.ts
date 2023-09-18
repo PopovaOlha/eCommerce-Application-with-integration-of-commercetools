@@ -2,23 +2,20 @@ import { makeAutoObservable } from 'mobx'
 import api from '../api/axios'
 import { commercetoolsConfig } from '../commercetoolsConfig'
 import { AxiosResponse } from 'axios'
-import { useRootStore } from '../App'
+// import { useRootStore } from '../App'
 import { CartItem, LineItem } from '../types/interfaces'
 
 interface ApiResponse {
   id: string
   name: string
   lineItems: LineItem[]
-}
-interface PromoCode {
-  code: string;
+  version: number
 }
 
 class CartStore {
   isLoading = false
   cartItems: CartItem[] = []
   cartId!: string
-  appliedPromoCode?: string
 
   constructor() {
     makeAutoObservable(this)
@@ -30,10 +27,13 @@ class CartStore {
         `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts`
       )
       console.log()
-      return response.data.results[0].id
+      return response.data.results[response.data.results.length - 1].id
     } catch (error) {
-      console.error('Ошибка при получении текущего состояния корзины:', error)
-      throw error
+      const response: AxiosResponse = await api.get(
+        `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts`
+      )
+      console.log()
+      return response.data.results[response.data.results.length - 1].id
     }
   }
   async createCart() {
@@ -83,21 +83,21 @@ class CartStore {
 
       console.log('Товар успешно добавлен в корзину:', response.data)
 
-      const lineItem = response.data.lineItems.find((item) => item.productId === productId)
-      if (localStorage.getItem('cartItem') !== null) {
-        const items = localStorage.getItem('cartItem')!
-        const cartItemsLocal: CartItem[] = JSON.parse(items)
-        this.cartItems = cartItemsLocal
-      }
-      if (lineItem) {
-        this.cartItems.push({
-          productId,
-          quantity: lineItem.quantity,
-          price: lineItem.price.value.centAmount,
-          totalPrice: lineItem.totalPrice.centAmount,
-        })
-        localStorage.setItem('cartItem', JSON.stringify(this.cartItems))
-      }
+      // const lineItem = response.data.lineItems.find((item) => item.productId === productId)
+      // // if (localStorage.getItem('cartItem') !== null) {
+      // //   const items = localStorage.getItem('cartItem')!
+      // //   const cartItemsLocal: CartItem[] = JSON.parse(items)
+      // //   this.cartItems = cartItemsLocal
+      // // }
+      // if (lineItem) {
+      //   this.cartItems.push({
+      //     productId,
+      //     quantity: lineItem.quantity,
+      //     price: lineItem.price.value.centAmount,
+      //     totalPrice: lineItem.totalPrice.centAmount,
+      //   })
+      //   localStorage.setItem('cartItem', JSON.stringify(this.cartItems))
+      // }
 
       this.isLoading = false
     } catch (error) {
@@ -108,11 +108,22 @@ class CartStore {
 
   async getCurrentCartState(cartId: string): Promise<{ version: number }> {
     try {
-      
-      const response: AxiosResponse<{ version: number }> = await api.get(
+      const response: AxiosResponse<ApiResponse> = await api.get(
         `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts/${cartId}`
       )
+      console.log(response.data.lineItems)
+      const cartItems = response.data.lineItems.map((lineItem) => ({
+        lineId: lineItem.id,
+        productId: lineItem.productId,
+        quantity: lineItem.quantity,
+        price: lineItem.price.value.centAmount,
+        totalPrice: lineItem.totalPrice.centAmount,
+        discountPrice: lineItem.price.discounted?.value.centAmount ?? 'no discount',
+      }))
 
+      // Присваиваем this.cartItems новый массив с товарами корзины
+      this.cartItems = cartItems
+      localStorage.setItem('cartItem', JSON.stringify(this.cartItems))
       return { version: response.data.version }
     } catch (error) {
       console.error('Ошибка при получении текущего состояния корзины:', error)
@@ -124,14 +135,26 @@ class CartStore {
     try {
       this.isLoading = true
 
-      await api.delete(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/${productId}`)
+      const cartId: string = localStorage.getItem('cartId')!
 
-      this.cartItems = this.cartItems.filter((item) => item.productId !== productId)
+      const currentCartState = await this.getCurrentCartState(cartId)
+      const items = localStorage.getItem('cartItem')!
+      const cartItemsLocal: CartItem[] = JSON.parse(items)
+      console.log(cartItemsLocal)
+      const [lineItem] = cartItemsLocal.filter((item) => item.productId === productId)
+      console.log(lineItem)
+      const requestData = {
+        version: currentCartState.version,
+        actions: [
+          {
+            action: 'removeLineItem',
+            lineItemId: lineItem.lineId,
+            // quantity: 1,
+          },
+        ],
+      }
 
-      const rootStore = useRootStore()
-      rootStore.headerStore.decrementCartCount()
-
-      this.isLoading = false
+      await api.post(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts/${cartId}`, requestData)
     } catch (error) {
       this.isLoading = false
     }
@@ -141,68 +164,30 @@ class CartStore {
     try {
       this.isLoading = true
 
-      await api.put(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/${productId}`, { quantity })
-const updatedCartItems = this.cartItems.map((item) => {
-        if (item.productId === productId) {
-          return { ...item, quantity }
-        }
-        return item
-      })
+      const cartId: string = localStorage.getItem('cartId')!
 
-      this.cartItems = updatedCartItems
-      this.isLoading = false
-    } catch (error) {
-      this.isLoading = false
-    }
-  }
-  async getActivePromoCodes() {
-    try {
-       const authDataString = localStorage.getItem('authData');
-       const token = JSON.parse(authDataString!);
-      const response = await api.get(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/discount-codes`, {
-        params: {
-          isActive: true, 
-        },
-        headers: {
-          Authorization: `Bearer ${token.accessToken}`,
-          'Content-Type': 'application/json',
-        },
-      });
-  
-      const activePromoCodes = response.data.results.map((promoCode: PromoCode ) => promoCode.code);
-      return activePromoCodes;
-    } catch (error) {
-      console.error('Ошибка при получении активных промокодов:', error);
-      throw error;
-    }
-  }
-  async applyPromoCode(promoCode: string) {
-    try {
-      const response = await api.post(
-        `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}`,
-        { promoCode },
-        { headers: { 'Content-Type': 'application/json' } }
-      );
-
-      
-      const discountInfo = response.data.discount; 
-      const { discountAmount, discountPercent } = discountInfo;
-
-      
-      this.appliedPromoCode = promoCode;
-      
-      for (const item of this.cartItems) {
-        if (discountAmount) {
-          item.price -= discountAmount;
-        } else if (discountPercent) {
-          item.price -= (item.price * discountPercent) / 100;
-        }
+      const currentCartState = await this.getCurrentCartState(cartId)
+      const items = localStorage.getItem('cartItem')!
+      const cartItemsLocal: CartItem[] = JSON.parse(items)
+      console.log(cartItemsLocal)
+      const [lineItem] = cartItemsLocal.filter((item) => item.productId === productId)
+      console.log(lineItem)
+      const requestData = {
+        version: currentCartState.version,
+        actions: [
+          {
+            action: 'changeLineItemQuantity',
+            lineItemId: lineItem.lineId,
+            quantity: quantity,
+          },
+        ],
       }
+
+      await api.post(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts/${cartId}`, requestData)
     } catch (error) {
-      console.error('Ошибка при применении промокода:', error);
+      this.isLoading = false
     }
   }
 }
 
-
-export default CartStore;
+export default CartStore
