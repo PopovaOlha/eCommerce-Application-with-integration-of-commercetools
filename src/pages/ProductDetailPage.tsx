@@ -60,8 +60,8 @@ const ProductDetailPage: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   const productImageStyle: React.CSSProperties = {
-    width: '20%',
-    maxHeight: isMobile ? 'auto' : 'auto',
+    width: 'auto',
+    maxHeight: isMobile ? '60vh' : '60vh',
     objectFit: 'cover',
     borderRadius: '8px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
@@ -98,7 +98,7 @@ const ProductDetailPage: React.FC = () => {
         </Link>
         <Header subcategories={[]} />
         <Typography variant="h4">{selectedProduct.name[currentLocale]}</Typography>
-        <Carousel showThumbs={false} dynamicHeight>
+        <Carousel showThumbs={false}>
           {selectedProduct.imageUrl.map((imageUrl, index) => (
             <div key={index} onClick={() => openImageModal(imageUrl)}>
               <img src={imageUrl} alt={`Product Image ${index}`} style={productImageStyle} />
