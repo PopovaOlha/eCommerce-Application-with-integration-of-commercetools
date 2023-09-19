@@ -15,6 +15,7 @@ import ProductCard from '../components/ProductCard'
 // import { Box, Container, Grid } from '@mui/material'
 import { Link } from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import Slider from '../components/Slider'
 // import PromocodeList from '../components/PromocodeList'
 
 function Home() {
@@ -109,6 +110,7 @@ function Home() {
         <HomeButton />
         {/* <PromocodeList /> */}
       </div>
+      <Slider />
       <Footer />
     </div>
   )

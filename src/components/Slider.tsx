@@ -1,142 +1,180 @@
 import React, { useState, useEffect } from 'react'
 import '../styles/slider.scss'
-import { Divider, Typography, useTheme } from '@mui/material'
-import { Link } from 'react-router-dom'
 
-interface Slide {
-  eachSlide: string
+interface Player {
+  title: string
+  desc: string
+  image: string
 }
 
-const slides: Slide[] = [
+interface CarouselSlideItemProps {
+  pos: number
+  idx: number
+  activeIdx: number
+}
+
+const slideWidth = 30
+
+const _items: { player: Player }[] = [
   {
-    eachSlide: 'url(https://www.amny.com/wp-content/uploads/2023/04/header-5.png)',
+    player: {
+      title: 'Efren Reyes',
+      desc: 'Known as "The Magician", Efren Reyes is well regarded by many professionals as the greatest all-around player of all time.',
+      image: 'https://i.postimg.cc/RhYnBf5m/er-slider.jpg',
+    },
   },
   {
-    eachSlide:
-      'url(https://res.cloudinary.com/sagacity/image/upload/c_crop,h_500,w_1000,x_0,y_0/c_limit,dpr_auto,f_auto,fl_lossy,q_80,w_1080/header_ibll99.png)',
+    player: {
+      title: "Ronnie O'Sullivan",
+      desc: "Ronald Antonio O'Sullivan is a six-time world champion and is the most successful player in the history of snooker.",
+      image: 'https://i.postimg.cc/qBGQNc37/ro-slider.jpg',
+    },
   },
   {
-    eachSlide: 'url(https://cbd.market/wp-content/uploads/2021/09/cbd-dot-treats-dog-chews-cbd.market.jpg)',
+    player: {
+      title: 'Shane Van Boening',
+      desc: 'The "South Dakota Kid" is hearing-impaired and uses a hearing aid, but it has not limited his ability.',
+      image: 'https://i.postimg.cc/cHdMJQKG/svb-slider.jpg',
+    },
   },
   {
-    eachSlide: 'url(https://media.cmsmax.com/syu7sbneqwoxyfrc3bi9s/cbd-pets-1.jpg)',
+    player: {
+      title: 'Mike Sigel',
+      desc: 'Mike Sigel or "Captain Hook" as many like to call him is an American professional pool player with over 108 tournament wins.',
+      image: 'https://i.postimg.cc/C12h7nZn/ms-1.jpg',
+    },
   },
   {
-    eachSlide: 'url(https://www.washingtonian.com/wp-content/uploads/2021/01/header.png)',
-  },
-  {
-    eachSlide: 'url(https://www.petage.com/wp-content/uploads/2020/09/Honest-Paws-Family-Shot-002.jpg)',
+    player: {
+      title: 'Willie Mosconi',
+      desc: 'Nicknamed "Mr. Pocket Billiards," Willie Mosconi was among the first Billiard Congress of America Hall of Fame inductees.',
+      image: 'https://i.postimg.cc/NfzMDVHP/willie-mosconi-slider.jpg',
+    },
   },
 ]
 
-const Slider: React.FC = () => {
-  const theme = useTheme()
-  const categoryLinkStyle: React.CSSProperties = {
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontFamily: 'fantasy',
-    textDecoration: 'none',
-    marginTop: '60px',
-    marginLeft: '100px',
-    textDecorationLine: 'underline',
-    display: 'block',
-    color: theme.palette.text.primary,
-  }
-  const dividerStyle: React.CSSProperties = {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-  }
-  const [active, setActive] = useState<number>(0)
-  const [autoplay, setAutoplay] = useState<boolean>(false)
-  const max: number = slides.length
+const length = _items.length
+_items.push(..._items)
 
-  const intervalBetweenSlides = () =>
-    autoplay && setActive((prevActive) => (prevActive === max - 1 ? 0 : prevActive + 1))
+const sleep = (ms = 0) => {
+  return new Promise<void>((resolve) => setTimeout(resolve, ms))
+}
 
-  useEffect(() => {
-    const interval = setInterval(() => intervalBetweenSlides(), 3000) // Интервал переключения слайдов (3 секунды)
-    return () => {
-      clearInterval(interval)
-    }
-  }, [autoplay])
+interface ItemStyles {
+  transform: string
+  filter?: string
+  opacity?: number
+}
 
-  const toggleAutoPlay = () => setAutoplay(!autoplay)
-
-  const nextOne = () => active < max - 1 && setActive((prevActive) => prevActive + 1)
-
-  const prevOne = () => active > 0 && setActive((prevActive) => prevActive - 1)
-
-  const isActive = (value: number) => (active === value ? 'active' : '')
-
-  const setSliderStyles = () => {
-    const transition: number = active * -100
-
-    return {
-      width: `${slides.length * 100}vw`,
-      transform: `translateX(${transition}vw)`,
+const createItem = (position: number, idx: number) => {
+  const item = {
+    styles: {
+      transform: `translateX(${position * slideWidth}rem)`,
+    },
+    player: _items[idx].player,
+  } as {
+    styles: ItemStyles
+    player: {
+      title: string
+      desc: string
+      image: string
     }
   }
 
-  const renderSlides = () =>
-    slides.map((item, index) => (
-      <div className={`each-slide ${isActive(index)}`} key={index} style={{ backgroundImage: item.eachSlide }}>
-        <Divider sx={dividerStyle} />
-        <Link to="/catalog" style={categoryLinkStyle}>
-          <Typography variant="body1">View All Products</Typography>
-        </Link>
-      </div>
-    ))
+  switch (position) {
+    case length - 1:
+    case length + 1:
+      item.styles = { ...item.styles, filter: 'grayscale(1)' }
+      break
+    case length:
+      break
+    default:
+      item.styles = { ...item.styles, opacity: 0 }
+      break
+  }
 
-  const renderDots = () =>
-    slides.map((_, index) => (
-      <li className={`${isActive(index)} dots`} key={index}>
-        <button onClick={() => setActive(index)}>
-          <span>&#9679;</span>
-        </button>
-      </li>
-    ))
+  return item
+}
 
-  const renderPlayStop = () =>
-    autoplay ? (
-      <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24">
-        <path d="M0 0h24v24H0z" fill="none" />
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" />
-      </svg>
-    ) : (
-      <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24">
-        <path d="M0 0h24v24H0z" fill="none" />
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" />
-      </svg>
-    )
+const CarouselSlideItem: React.FC<CarouselSlideItemProps> = ({ pos, idx }) => {
+  const item = createItem(pos, idx)
 
-  const renderArrows = () => (
-    <React.Fragment>
-      <button type="button" className="arrows prev" onClick={() => prevOne()}>
-        <svg fill="#FFFFFF" width="50" height="50" viewBox="0 0 24 24">
-          <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-          <path d="M0 0h24v24H0z" fill="none" />
-        </svg>
-      </button>
-      <button type="button" className="arrows next" onClick={() => nextOne()}>
-        <svg fill="#FFFFFF" height="50" viewBox="0 0 24 24" width="50">
-          <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
-          <path d="M0 0h24v24H0z" fill="none" />
-        </svg>
-      </button>
-    </React.Fragment>
-  )
   return (
-    <section className="slider">
-      <div className="wrapper" style={setSliderStyles()}>
-        {renderSlides()}
+    <li className="carousel__slide-item" style={item.styles}>
+      <div className="carousel__slide-item-img-link">
+        <img src={item.player.image} alt={item.player.title} />
       </div>
-      {renderArrows()}
-      <ul className="dots-container">{renderDots()}</ul>
-      <button type="button" className="toggle-play" onClick={toggleAutoPlay}>
-        {renderPlayStop()}
-      </button>
-    </section>
+      <div className="carousel-slide-item__body">
+        <h4>{item.player.title}</h4>
+        <p>{item.player.desc}</p>
+      </div>
+    </li>
   )
 }
 
-export default Slider
+const keys = Array.from(Array(_items.length).keys())
+
+const Carousel: React.FC = () => {
+  const [items, setItems] = useState<number[]>(keys)
+  const [isTicking, setIsTicking] = useState(false)
+  const [activeIdx, setActiveIdx] = useState(0)
+  const bigLength = items.length
+
+  const prevClick = (jump = 1) => {
+    if (!isTicking) {
+      setIsTicking(true)
+      setItems((prev) => {
+        return prev.map((_, i) => prev[(i + jump) % bigLength])
+      })
+    }
+  }
+
+  const nextClick = (jump = 1) => {
+    if (!isTicking) {
+      setIsTicking(true)
+      setItems((prev) => {
+        return prev.map((_, i) => prev[(i - jump + bigLength) % bigLength])
+      })
+    }
+  }
+
+  const handleDotClick = (idx: number) => {
+    if (idx < activeIdx) prevClick(activeIdx - idx)
+    if (idx > activeIdx) nextClick(idx - activeIdx)
+  }
+
+  useEffect(() => {
+    if (isTicking) sleep(300).then(() => setIsTicking(false))
+  }, [isTicking])
+
+  useEffect(() => {
+    setActiveIdx((length - (items[0] % length)) % length)
+  }, [items])
+
+  return (
+    <div className="carousel__wrap">
+      <div className="carousel__inner">
+        <button className="carousel__btn carousel__btn--prev" onClick={() => prevClick()}>
+          <i className="carousel__btn-arrow carousel__btn-arrow--left" />
+        </button>
+        <div className="carousel__container">
+          <ul className="carousel__slide-list">
+            {items.map((pos, i) => (
+              <CarouselSlideItem key={i} idx={i} pos={pos} activeIdx={activeIdx} />
+            ))}
+          </ul>
+        </div>
+        <button className="carousel__btn carousel__btn--next" onClick={() => nextClick()}>
+          <i className="carousel__btn-arrow carousel__btn-arrow--right" />
+        </button>
+        <div className="carousel__dots">
+          {items.slice(0, length).map((i) => (
+            <button key={i} onClick={() => handleDotClick(i)} className={i === activeIdx ? 'dot active' : 'dot'} />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default Carousel
