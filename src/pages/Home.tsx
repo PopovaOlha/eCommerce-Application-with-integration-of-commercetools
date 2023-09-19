@@ -110,7 +110,10 @@ function Home() {
         <HomeButton />
         {/* <PromocodeList /> */}
       </div>
-      <Slider />
+      <h2 style={{ textAlign: 'center', fontSize: '30px' }}>Promocodes:</h2>
+      <div style={{ borderBottom: '80px' }}>
+        <Slider />
+      </div>
       <Footer />
     </div>
   )

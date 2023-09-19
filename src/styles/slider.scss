@@ -5,7 +5,7 @@ html {
   box-sizing: border-box;
   font-size: 15px;
   @media (max-width: 425px) {
-    font-size: 8px;
+    font-size: 15px;
   }
 }
 
@@ -117,7 +117,7 @@ a {
 
 .carousel-slide-item__body {
     bottom: -2.5rem;
-    height: 10%;
+    height: 7%;
     position: absolute;
 
     h4 {
@@ -171,6 +171,7 @@ a {
 
 .carousel__dots {
     display: inline-block;
+    top: 90%;
     left: 50%;
     margin-top: 2rem;
     position: absolute;
@@ -182,7 +183,7 @@ a {
         border-radius: 50%;
         cursor: pointer;
         height: 2rem;
-        margin: 0 0.3rem;
+        margin:  0.3rem;
         outline: none;
         transform: scale(0.5);
         width: 2rem;

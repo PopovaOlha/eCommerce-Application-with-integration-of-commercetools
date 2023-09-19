@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
         backgroundColor: '#fff',
         color: '#333',
         textAlign: 'center',
-        padding: '20px 0',
+        padding: '30px 0',
         boxShadow: '0px -4px 6px rgba(0, 0, 0, 0.1)',
         display: 'flex',
         flexDirection: 'row',

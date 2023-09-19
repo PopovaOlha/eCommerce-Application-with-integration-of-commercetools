@@ -5,6 +5,7 @@ interface Player {
   title: string
   desc: string
   image: string
+  promocode: string
 }
 
 interface CarouselSlideItemProps {
@@ -18,37 +19,42 @@ const slideWidth = 30
 const _items: { player: Player }[] = [
   {
     player: {
-      title: 'Efren Reyes',
-      desc: 'Known as "The Magician", Efren Reyes is well regarded by many professionals as the greatest all-around player of all time.',
-      image: 'https://i.postimg.cc/RhYnBf5m/er-slider.jpg',
+      title: 'Pedigree food.',
+      desc: 'PEDIGREE complete and balanced dog food for adult dogs',
+      image: 'https://cdn.shopify.com/s/files/1/0086/0795/7054/files/pedigree_pawsome.png?v=1659956072',
+      promocode: 'SAVE20CART',
     },
   },
   {
     player: {
-      title: "Ronnie O'Sullivan",
-      desc: "Ronald Antonio O'Sullivan is a six-time world champion and is the most successful player in the history of snooker.",
-      image: 'https://i.postimg.cc/qBGQNc37/ro-slider.jpg',
+      title: 'Nutritions Meals',
+      desc: 'Better food with fresher, simpler, all-natural ingredients.',
+      image: 'https://images-eu.ssl-images-amazon.com/images/G/31/img22/Pets/kmargso/pedigree_450X450.jpg',
+      promocode: 'SAVE5CART',
     },
   },
   {
     player: {
-      title: 'Shane Van Boening',
-      desc: 'The "South Dakota Kid" is hearing-impaired and uses a hearing aid, but it has not limited his ability.',
-      image: 'https://i.postimg.cc/cHdMJQKG/svb-slider.jpg',
+      title: 'Royal Canin',
+      desc: 'It comes with deliciously nutritious recipe and variety of formats & flavors that your dogs will surely love.',
+      image: ' https://lzd-img-global.slatic.net/g/ff/kf/S49c5e68731f444079196803c2650d4faW.jpg_360x360q75.jpg_.webp',
+      promocode: 'SAVE10CART',
     },
   },
   {
     player: {
-      title: 'Mike Sigel',
-      desc: 'Mike Sigel or "Captain Hook" as many like to call him is an American professional pool player with over 108 tournament wins.',
-      image: 'https://i.postimg.cc/C12h7nZn/ms-1.jpg',
+      title: 'Pedigree for puppies',
+      desc: '100% complete & balanced nutrition with 38 essential nutrients',
+      image: 'https://etimg.etb2bimg.com/photo/83146078.cms',
+      promocode: 'SAVE20CART',
     },
   },
   {
     player: {
-      title: 'Willie Mosconi',
-      desc: 'Nicknamed "Mr. Pocket Billiards," Willie Mosconi was among the first Billiard Congress of America Hall of Fame inductees.',
-      image: 'https://i.postimg.cc/NfzMDVHP/willie-mosconi-slider.jpg',
+      title: 'Royal Canin Puppi',
+      desc: 'From X-Small to Giant formulas, Royal Canin offers precise nutrition for your dog.',
+      image: 'https://media.zooplus.com/bilder/2/400/rc_spt_wet_mediumpuppy_b1_page_01_2.jpg',
+      promocode: 'SAVE5CART',
     },
   },
 ]
