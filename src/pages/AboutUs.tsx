@@ -108,6 +108,7 @@ const AboutUs: React.FC = () => {
           padding: '25px 50px',
           marginTop: '30px',
           borderRadius: '8px',
+          marginBottom: '90px',
           background: 'radial-gradient(592px at 48.2% 50%, rgba(255, 255, 249, 0.6) 0%, rgb(160, 199, 254) 74.6%)',
         }}
       >
