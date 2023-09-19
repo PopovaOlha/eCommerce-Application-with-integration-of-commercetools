@@ -30,13 +30,13 @@ class CartStore {
         `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts`
       )
       console.log()
-      return response.data.results[response.data.results.length - 1].id
+      return response.data.results[0].id
     } catch (error) {
       const response: AxiosResponse = await api.get(
         `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts`
       )
       console.log()
-      return response.data.results[response.data.results.length - 1].id
+      return response.data.results[0].id
     }
   }
   async createCart() {
