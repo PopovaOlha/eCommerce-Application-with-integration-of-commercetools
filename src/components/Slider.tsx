@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import '../styles/slider.scss'
+import '../styles/slider-mobile.scss'
 
 interface Player {
   title: string
