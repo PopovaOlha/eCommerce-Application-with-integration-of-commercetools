@@ -107,7 +107,9 @@ function Home() {
             </Grid>
           </Box>
         </Container> */}
-        <HomeButton />
+        <div style={{ marginTop: '40px' }}>
+          <HomeButton />
+        </div>
         {/* <PromocodeList /> */}
       </div>
       <h2 style={{ textAlign: 'center', fontSize: '30px' }}>Promocodes:</h2>

@@ -198,6 +198,7 @@ const CartPage = () => {
           }}
         >
           <div style={{ padding: '20px 40px' }}>
+            <h2 style={{ marginTop: '50px' }}>Shopping Basket</h2>
             <Button variant="outlined" color="primary">
               <Link to="/catalog">CONTINUE SHOPPING</Link>
             </Button>

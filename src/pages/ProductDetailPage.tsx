@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
-import { Container, Box, Typography, Button, useTheme, useMediaQuery } from '@mui/material'
+import {
+  Container,
+  Box,
+  Typography,
+  Button,
+  useTheme,
+  useMediaQuery,
+  Card,
+  CardContent,
+  CardActions,
+} from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Carousel } from 'react-responsive-carousel'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
@@ -41,6 +51,7 @@ const ProductDetailPage: React.FC = () => {
   if (!selectedProduct) {
     return <div>Loading...</div>
   }
+
   const handleAddToCart = async (productId: string) => {
     if (!isAddedToCart) {
       console.log('productId:', productId)
@@ -54,14 +65,15 @@ const ProductDetailPage: React.FC = () => {
       setIsAddedToCart(true)
     }
   }
+
   const currentLocale = 'en-US'
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   const productImageStyle: React.CSSProperties = {
-    width: 'auto',
-    maxHeight: isMobile ? '60vh' : '60vh',
+    width: '100%',
+    maxHeight: isMobile ? '80vh' : '80vh',
     objectFit: 'cover',
     borderRadius: '8px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
@@ -72,7 +84,7 @@ const ProductDetailPage: React.FC = () => {
     display: 'flex',
     alignItems: 'center',
     textDecoration: 'none',
-    color: '#555',
+    color: theme.palette.text.primary,
     marginBottom: '1rem',
   }
 
@@ -92,38 +104,47 @@ const ProductDetailPage: React.FC = () => {
 
   return (
     <Container maxWidth="md">
-      <Box mt={15}>
+      <Box mt={isMobile ? 2 : 15}>
         <Link to="/categories" style={backButtonStyle}>
           <ArrowBackIcon style={backButtonIconStyle} /> Back to catalog
         </Link>
         <Header subcategories={[]} />
-        <Typography variant="h4">{selectedProduct.name[currentLocale]}</Typography>
-        <Carousel showThumbs={false}>
-          {selectedProduct.imageUrl.map((imageUrl, index) => (
-            <div key={index} onClick={() => openImageModal(imageUrl)}>
-              <img src={imageUrl} alt={`Product Image ${index}`} style={productImageStyle} />
-            </div>
-          ))}
-        </Carousel>
-        <Typography variant="body1">
-          {selectedProduct.description ? selectedProduct.description[currentLocale] : 'No description available'}
-        </Typography>
-        <Typography variant="body2" fontSize="15px" fontWeight={'bold'} sx={{ marginTop: '0.5rem' }}>
-          Price: {selectedProduct.price.map((price) => (price / 100).toFixed(2)).join(', ')} usd
-        </Typography>
-        {productDiscount !== undefined && productDiscount > 0 && (
-          <Typography variant="body2" fontSize="15px" fontWeight={'bold'} sx={{ color: 'red' }}>
-            Discount: {`${(productDiscount / 100).toFixed(2)} usd`}
-          </Typography>
-        )}
-        <Button
-          variant="contained"
-          color="primary"
-          style={{ marginTop: '1rem' }}
-          onClick={() => handleAddToCart(selectedProduct.id)}
-        >
-          Add to Cart
-        </Button>
+        <Card>
+          <CardContent>
+            <Typography variant="h4" gutterBottom>
+              {selectedProduct.name[currentLocale]}
+            </Typography>
+            <Carousel showThumbs={false}>
+              {selectedProduct.imageUrl.map((imageUrl, index) => (
+                <div key={index} onClick={() => openImageModal(imageUrl)}>
+                  <img src={imageUrl} alt={`Product Image ${index}`} style={productImageStyle} />
+                </div>
+              ))}
+            </Carousel>
+            <Typography variant="body1" paragraph>
+              {selectedProduct.description ? selectedProduct.description[currentLocale] : 'No description available'}
+            </Typography>
+            <Typography variant="body2" fontSize="15px" fontWeight="bold" sx={{ marginTop: '0.5rem' }}>
+              Price: {selectedProduct.price.map((price) => (price / 100).toFixed(2)).join(', ')} USD
+            </Typography>
+            {productDiscount !== undefined && productDiscount > 0 && (
+              <Typography variant="body2" fontSize="15px" fontWeight="bold" sx={{ color: 'red' }}>
+                Discount: {`${(productDiscount / 100).toFixed(2)} USD`}
+              </Typography>
+            )}
+          </CardContent>
+          <CardActions>
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              onClick={() => handleAddToCart(selectedProduct.id)}
+              style={{ marginBottom: '30px' }}
+            >
+              Add to Cart
+            </Button>
+          </CardActions>
+        </Card>
       </Box>
 
       <ImageModal isOpen={isImageModalOpen} onClose={closeImageModal} imageUrl={enlargedImageUrl} />
