@@ -31,11 +31,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   const handleAddToCart = async (productId: string) => {
     if (!isAddedToCart) {
+      const cartItem = JSON.parse(localStorage.getItem('cartItem')!)
       console.log('productId:', productId)
       await cartStore.createCart()
       cartStore.addToCart(product.id)
       headerStore.setCartCount(headerStore.cartCount + 1)
+      cartStore.addToCart(productId)
       setIsAddedToCart(true)
+      console.log(cartItem)
+      if (cartItem === null || !cartItem.some((item: { productId: string }) => item.productId === productId)) {
+        headerStore.setCartCount(headerStore.cartCount + 1)
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-import axios from 'axios'
+// import axios from 'axios'
 import apiClient from '../api/axios'
 import { commercetoolsConfig } from '../commercetoolsConfig'
 import { Product, RawProduct } from '../types/interfaces'
@@ -7,15 +7,15 @@ const apiUrl = 'https://api.europe-west1.gcp.commercetools.com'
 
 export async function fetchProducts(): Promise<Product[]> {
   try {
-    const authDataString = localStorage.getItem('authData')
-    const token = JSON.parse(authDataString!)
-    const response = await axios.get<{ results: RawProduct[] }>(
-      `${apiUrl}/${commercetoolsConfig.projectKey}/products`,
-      {
-        headers: {
-          Authorization: `Bearer ${token.accessToken}`,
-        },
-      }
+    // const authDataString = localStorage.getItem('authData')
+    // const token = JSON.parse(authDataString!)
+    const response = await apiClient.get<{ results: RawProduct[] }>(
+      `${apiUrl}/${commercetoolsConfig.projectKey}/products?limit=30`
+      // {
+      //   headers: {
+      //     Authorization: `Bearer ${token.accessToken}`,
+      //   },
+      // }
     )
 
     return response.data.results.map((rawProduct) => {

@@ -60,95 +60,100 @@ export interface Addresses {
   isDefault: boolean
 }
 export interface Product {
-  id: string;
-  key: string;
-  name: { 'en-US': string };
-  description: { 'en-US': string };
-  imageUrl: string[];
-  price: number[];
-  discount?: number | null; 
+  id: string
+  key: string
+  name: { 'en-US': string }
+  description: { 'en-US': string }
+  imageUrl: string[]
+  price: number[]
+  discount?: number | null
 }
 
 export interface RawProduct {
-  id: string;
-  key: string;
+  id: string
+  key: string
   masterData: {
-    staged: any;
+    staged: any
     current: {
-      name: { 'en-US': string };
+      name: { 'en-US': string }
       staged: {
-        description: { 'en-US': string };
-      };
+        description: { 'en-US': string }
+      }
       masterVariant: {
         images: {
-          url: string;
-        }[];
+          url: string
+        }[]
         prices: {
           value: {
-            centAmount: number;
-          };
-          discounted?: { 
+            centAmount: number
+          }
+          discounted?: {
             value: {
-              centAmount: number;
-            };
-          };
-        }[];
-      };
-    };
-  };
+              centAmount: number
+            }
+          }
+        }[]
+      }
+    }
+  }
 }
 export interface HeaderProps {
-  subcategories: string[];
+  subcategories: string[]
 }
 
 export interface Category {
-  id: string;
-  name: { 'en-US': string };
-  parent?: { id: string };
+  id: string
+  name: { 'en-US': string }
+  parent?: { id: string }
 }
 
 export interface Subcategory {
-  id: string;
-  name: string;
+  id: string
+  name: string
 }
 export interface RawProductList {
-  id: string;
-  key: string;
-  name: { 'en-US': string };
+  id: string
+  key: string
+  name: { 'en-US': string }
   description: { 'en-US': string }
   masterVariant: {
-    images: { url: string }[];
+    images: { url: string }[]
     prices: {
       value: {
-        centAmount: number;
-      };
+        centAmount: number
+      }
       discounted?: {
         value: {
-          centAmount: number;
-        };
-      };
-    }[];
-  };
+          centAmount: number
+        }
+      }
+    }[]
+  }
 }
 export interface LineItem {
-  productId: string;
-  quantity: number;
+  productId: string
+  quantity: number
   price: {
     value: {
-      centAmount: number;
+      centAmount: number
     }
-  };
+    discounted?: {
+      value: {
+        centAmount: number
+      }
+    }
+  }
   totalPrice: {
-    centAmount: number;
-  };
-
+    centAmount: number
+  }
+  id: string
 }
 
 export interface CartItem {
-  productId: string;
-  quantity: number;
-  price: number;
+  productId: string
+  quantity: number
+  price: number
   totalPrice: number
+  lineId: string
+  discountPrice: number | string
 }
-
-

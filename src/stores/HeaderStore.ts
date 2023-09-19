@@ -1,22 +1,21 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable } from 'mobx'
 
 class HeaderStore {
-  cartCount = 0;
+  cartCount = JSON.parse(localStorage.getItem('cartItem') || '[]').length
 
   constructor() {
-    makeAutoObservable(this);
-
+    makeAutoObservable(this)
   }
 
   setCartCount(count: number) {
-    this.cartCount = count;
-  } 
+    this.cartCount = count
+  }
 
   decrementCartCount() {
     if (this.cartCount > 0) {
-      this.cartCount -= 1;
+      this.cartCount -= 1
     }
   }
 }
 
-export default HeaderStore;
+export default HeaderStore

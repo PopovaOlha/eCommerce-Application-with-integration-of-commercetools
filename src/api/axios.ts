@@ -45,7 +45,7 @@ api.interceptors.response.use(
     return config
   },
   async (error) => {
-    console.log(error.response.status)
+    // console.log(error.response.status)
     const originalRequest = error.config
     if (error.response.status == 401) {
       try {

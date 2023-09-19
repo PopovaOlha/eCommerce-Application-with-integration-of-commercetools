@@ -49,7 +49,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         placeholder="Search products..."
         value={searchQuery}
         onChange={handleInputChange}
-        style={{ width: '50%', margin: '15px' }}
+        style={{ width: '50%', margin: '15px', backgroundColor: 'white', borderRadius: '8px' }}
       />
       <IconButton onClick={handleSearchClick} aria-label="Search">
         <SearchIcon />
