@@ -15,6 +15,7 @@ import ProductCard from '../components/ProductCard'
 // import { Box, Container, Grid } from '@mui/material'
 import { Link } from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import Slider from '../components/Slider'
 // import PromocodeList from '../components/PromocodeList'
 
 function Home() {
@@ -106,8 +107,14 @@ function Home() {
             </Grid>
           </Box>
         </Container> */}
-        <HomeButton />
+        <div style={{ marginTop: '40px' }}>
+          <HomeButton />
+        </div>
         {/* <PromocodeList /> */}
+      </div>
+      <h2 style={{ textAlign: 'center', fontSize: '30px' }}>Promocodes:</h2>
+      <div style={{ borderBottom: '80px' }}>
+        <Slider />
       </div>
       <Footer />
     </div>
