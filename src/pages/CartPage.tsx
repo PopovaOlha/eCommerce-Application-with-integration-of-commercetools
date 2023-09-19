@@ -16,21 +16,6 @@ const CartPage = () => {
   const { cartStore, catalogStore, headerStore } = useRootStore()
   const [cartItemsLocal, setCartItemsLocal] = useState<CartItem[]>([])
 
-  /*const [promoCodeInput, setPromoCodeInput] = useState('')
-  const DataPromoCode = localStorage.getItem('promoCode')
-  const promoCode = JSON.parse(DataPromoCode!)
-  const [activePromoCodes, setActivePromoCodes] = useState<string[]>(promoCode)
-  console.log(setActivePromoCodes)
-
-  const handleApplyPromoCode = () => {
-    if (promoCodeInput && activePromoCodes.includes(promoCodeInput)) {
-      cartStore.applyPromoCode(promoCodeInput)
-      setPromoCodeInput('')
-    } else {
-      alert('Недействительный промокод')
-    }
-  }*/
-
   useEffect(() => {
     const fetchData = async () => {
       await cartStore.createCart()
@@ -201,16 +186,6 @@ const CartPage = () => {
             <Button variant="outlined" color="primary">
               <Link to="/catalog">CONTINUE SHOPPING</Link>
             </Button>
-            {/*<div>
-            <input
-              type="text"
-              placeholder="Enter promotional code"
-              value={promoCodeInput}
-              onChange={(e) => setPromoCodeInput(e.target.value)}
-              className="cart-input"
-            />
-            <button onClick={handleApplyPromoCode}>Apply</button>
-        </div>*/}
           </div>
           {hasItemsInCart && (
             <div className="cart-buttons">

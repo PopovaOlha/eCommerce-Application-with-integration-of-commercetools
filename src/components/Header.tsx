@@ -177,7 +177,7 @@ const Header: React.FC<HeaderProps> = () => {
                   Register
                 </Button>
               )}
-              <IconButton color="inherit" onClick={() => navigate('/cart')}>
+              <IconButton color="inherit" onClick={() => handleCartButtonClick()}>
                 <ShoppingCartIcon sx={{ color: '#333' }} />
                 <span className="cart-counter" style={{ color: 'red' }}>
                   {headerStore.cartCount}

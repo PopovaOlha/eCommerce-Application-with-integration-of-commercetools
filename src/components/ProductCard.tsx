@@ -34,8 +34,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       const cartItem = JSON.parse(localStorage.getItem('cartItem')!)
       console.log('productId:', productId)
       await cartStore.createCart()
-      cartStore.addToCart(product.id)
-      headerStore.setCartCount(headerStore.cartCount + 1)
       cartStore.addToCart(productId)
       setIsAddedToCart(true)
       console.log(cartItem)

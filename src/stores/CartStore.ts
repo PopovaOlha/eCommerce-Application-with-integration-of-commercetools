@@ -3,7 +3,7 @@ import api from '../api/axios'
 import { commercetoolsConfig } from '../commercetoolsConfig'
 import { AxiosResponse } from 'axios'
 // import { useRootStore } from '../App'
-import { CartItem, LineItem } from '../types/interfaces';
+import { CartItem, LineItem } from '../types/interfaces'
 
 interface ApiResponse {
   id: string
@@ -14,7 +14,7 @@ interface ApiResponse {
 
 class CartStore {
   getActivePromoCodes() {
-      throw new Error('Method not implemented.')
+    throw new Error('Method not implemented.')
   }
   isLoading = false
   cartItems: CartItem[] = []
