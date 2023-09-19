@@ -15,19 +15,27 @@
   }
   
   /* Стили для кнопок "Предыдущий" и "Следующий" на мобильных устройствах */
-  .carousel__btn {
-    width: 40px; // Ширина кнопок
-    height: 40px; // Высота кнопок
-    background-color: #007bff; // Цвет фона кнопок
-    color: #fff; // Цвет текста кнопок
-    border: none; // Убираем границы кнопок
-    border-radius: 50%; // Скругляем углы, чтобы сделать кнопки круглыми
-    cursor: pointer; // Изменяем курсор при наведении на кнопки
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    // Другие стили для кнопок на мобильных устройствах
+  .carousel__btn-arrow {
+    border: solid black;
+    border-width: 0 0.4rem 0.4rem 0;
+    height: 6rem;
+    padding: 3px;
+    width: 6rem;
+    z-index: 10;
+
+    &--left {
+        transform: rotate(135deg);
+    }
+
+    &--right {
+        transform: rotate(-45deg);
+    }
+    @media screen and (max-width: 600px) {
+      /* Применить стили для кнопок при ширине экрана >= 600px */
+      width: auto; // Сбрасываем фиксированную ширину
+      height: auto; // Сбрасываем фиксированную высоту
+      padding: 10px 20px; // Добавляем внутренние отступы для больших экранов
+    }
   }
   
   .carousel__btn--prev {
@@ -37,6 +45,7 @@
   .carousel__btn--next {
     right: 10px; // Располагаем кнопку "Следующий" справа
   }
+
   
   /* Стили для точек управления (пагинации) на мобильных устройствах */
   .carousel__dots {
@@ -57,5 +66,5 @@
       }
     }
     
-    // Другие стили для точек на мобильных устройствах
   }
+ 
