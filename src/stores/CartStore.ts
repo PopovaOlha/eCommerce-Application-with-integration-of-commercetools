@@ -13,6 +13,9 @@ interface ApiResponse {
 }
 
 class CartStore {
+  getActivePromoCodes() {
+      throw new Error('Method not implemented.')
+  }
   isLoading = false
   cartItems: CartItem[] = []
   cartId!: string

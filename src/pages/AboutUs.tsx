@@ -76,7 +76,7 @@ const AboutUs: React.FC = () => {
       <Typography
         variant="h4"
         gutterBottom
-        style={{ textAlign: 'center', margin: 'auto', marginTop: '50px', marginBottom: '20px', fontWeight: 'bold' }}
+        style={{ textAlign: 'center', margin: 'auto', marginTop: '40px', marginBottom: '10px', fontWeight: 'bold' }}
       >
         About Us
       </Typography>

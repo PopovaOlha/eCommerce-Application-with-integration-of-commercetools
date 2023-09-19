@@ -15,7 +15,6 @@ import ProductCard from '../components/ProductCard'
 import { Link } from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import PromocodeList from '../components/PromocodeList'
-import Slider from '../components/Slider'
 
 function Home() {
   const { catalogStore } = useRootStore()
@@ -92,8 +91,9 @@ function Home() {
         <HomeButton />
       </div>
       <PromocodeList />
-      <Slider />
-      <Footer />
+      <div style={{ overflowX: 'hidden' }}>
+        <Footer />
+      </div>
     </div>
   )
 }
