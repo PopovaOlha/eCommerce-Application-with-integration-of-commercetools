@@ -86,7 +86,6 @@ const RegistrationPage: React.FC = () => {
   const pageStyle: React.CSSProperties = {
     background: 'radial-gradient(circle at 18.7% 37.8%, rgb(250, 250, 250) 0%, rgb(225, 234, 238) 90%)',
     minHeight: 'calc(100vh - 70px - 64px)',
-    paddingTop: '10px',
   }
   const backButtonStyle: React.CSSProperties = {
     marginTop: '80px',
