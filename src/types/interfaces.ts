@@ -131,6 +131,11 @@ export interface RawProductList {
   }
 }
 export interface LineItem {
+  discountedPrice?: {
+    value: {
+      centAmount: number
+    }
+  }
   productId: string
   quantity: number
   price: {
@@ -156,4 +161,5 @@ export interface CartItem {
   totalPrice: number
   lineId: string
   discountPrice: number | string
+  discount: number | undefined
 }

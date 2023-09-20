@@ -10,6 +10,9 @@ interface ApiResponse {
   name: string
   lineItems: LineItem[]
   version: number
+  totalPrice: {
+    centAmount: number
+  }
 }
 
 class CartStore {
@@ -122,6 +125,7 @@ class CartStore {
         price: lineItem.price.value.centAmount,
         totalPrice: lineItem.totalPrice.centAmount,
         discountPrice: lineItem.price.discounted?.value.centAmount ?? 'no discount',
+        discount: lineItem.discountedPrice?.value.centAmount,
       }))
 
       // Присваиваем this.cartItems новый массив с товарами корзины
@@ -191,6 +195,34 @@ class CartStore {
       this.isLoading = false
     }
   }
+  async applyPromoCode(promo: string) {
+    const cartId: string = localStorage.getItem('cartId')!
+    const currentCartState = await this.getCurrentCartState(cartId)
+    const requestData = {
+      version: currentCartState.version,
+      actions: [
+        {
+          action: 'addDiscountCode',
+          code: promo,
+        },
+      ],
+    }
+
+    await api.post(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts/${cartId}`, requestData)
+    await this.getCurrentCartState(cartId)
+  }
+  // async getTotalPrice(cartId: string): Promise<{ total: number }> {
+  //   try {
+  //     const response: AxiosResponse<ApiResponse> = await api.get(
+  //       `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts/${cartId}`
+  //     )
+
+  //     return { total: response.data.totalPrice.centAmount }
+  //   } catch (error) {
+  //     console.error('Ошибка при получении текущего состояния корзины:', error)
+  //     throw error
+  //   }
+  // }
 }
 
 export default CartStore
