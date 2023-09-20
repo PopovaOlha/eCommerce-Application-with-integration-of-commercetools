@@ -103,52 +103,54 @@ const ProductDetailPage: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="md">
-      <Box mt={isMobile ? 2 : 15}>
-        <Link to="/categories" style={backButtonStyle}>
-          <ArrowBackIcon style={backButtonIconStyle} /> Back to catalog
-        </Link>
-        <Header subcategories={[]} />
-        <Card>
-          <CardContent>
-            <Typography variant="h4" gutterBottom>
-              {selectedProduct.name[currentLocale]}
-            </Typography>
-            <Carousel showThumbs={false}>
-              {selectedProduct.imageUrl.map((imageUrl, index) => (
-                <div key={index} onClick={() => openImageModal(imageUrl)}>
-                  <img src={imageUrl} alt={`Product Image ${index}`} style={productImageStyle} />
-                </div>
-              ))}
-            </Carousel>
-            <Typography variant="body1" paragraph>
-              {selectedProduct.description ? selectedProduct.description[currentLocale] : 'No description available'}
-            </Typography>
-            <Typography variant="body2" fontSize="15px" fontWeight="bold" sx={{ marginTop: '0.5rem' }}>
-              Price: {selectedProduct.price.map((price) => (price / 100).toFixed(2)).join(', ')} USD
-            </Typography>
-            {productDiscount !== undefined && productDiscount > 0 && (
-              <Typography variant="body2" fontSize="15px" fontWeight="bold" sx={{ color: 'red' }}>
-                Discount: {`${(productDiscount / 100).toFixed(2)} USD`}
+    <div>
+      <Header subcategories={[]} />
+      <Container maxWidth="md">
+        <Box mt={isMobile ? 2 : 15}>
+          <Link to="/categories" style={backButtonStyle}>
+            <ArrowBackIcon style={backButtonIconStyle} /> Back to catalog
+          </Link>
+          <Card>
+            <CardContent>
+              <Typography variant="h4" gutterBottom>
+                {selectedProduct.name[currentLocale]}
               </Typography>
-            )}
-          </CardContent>
-          <CardActions>
-            <Button
-              variant="contained"
-              color="primary"
-              fullWidth
-              onClick={() => handleAddToCart(selectedProduct.id)}
-              style={{ marginBottom: '30px' }}
-            >
-              Add to Cart
-            </Button>
-          </CardActions>
-        </Card>
-      </Box>
+              <Carousel showThumbs={false}>
+                {selectedProduct.imageUrl.map((imageUrl, index) => (
+                  <div key={index} onClick={() => openImageModal(imageUrl)}>
+                    <img src={imageUrl} alt={`Product Image ${index}`} style={productImageStyle} />
+                  </div>
+                ))}
+              </Carousel>
+              <Typography variant="body1" paragraph>
+                {selectedProduct.description ? selectedProduct.description[currentLocale] : 'No description available'}
+              </Typography>
+              <Typography variant="body2" fontSize="15px" fontWeight="bold" sx={{ marginTop: '0.5rem' }}>
+                Price: {selectedProduct.price.map((price) => (price / 100).toFixed(2)).join(', ')} USD
+              </Typography>
+              {productDiscount !== undefined && productDiscount > 0 && (
+                <Typography variant="body2" fontSize="15px" fontWeight="bold" sx={{ color: 'red' }}>
+                  Discount: {`${(productDiscount / 100).toFixed(2)} USD`}
+                </Typography>
+              )}
+            </CardContent>
+            <CardActions>
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                onClick={() => handleAddToCart(selectedProduct.id)}
+                style={{ marginBottom: '30px' }}
+              >
+                Add to Cart
+              </Button>
+            </CardActions>
+          </Card>
+        </Box>
 
-      <ImageModal isOpen={isImageModalOpen} onClose={closeImageModal} imageUrl={enlargedImageUrl} />
-    </Container>
+        <ImageModal isOpen={isImageModalOpen} onClose={closeImageModal} imageUrl={enlargedImageUrl} />
+      </Container>
+    </div>
   )
 }
 
