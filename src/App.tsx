@@ -42,7 +42,7 @@ function App() {
           <Route path="/registrations" element={<RegistrationForm />} />
           <Route path="/catalog" element={<ProductPage />} />
           <Route path="/product/:productId" element={<ProductDetailPage />} />
-          <Route path="/categories" element={<CategoriesPage />} />
+          <Route path="/categories" element={<CategoriesPage subcategories={[]} />} />
           <Route path="/user-profile" element={<UserProfilePage />} />
           <Route path="/subcategory/:categoryId" element={<SubcategoryPage />} />
           <Route path="/cart" element={<CartPage />} />
