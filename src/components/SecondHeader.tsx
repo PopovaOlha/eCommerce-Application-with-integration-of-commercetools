@@ -43,6 +43,9 @@ const Header = () => {
         </Box>
         <AdaptiveButton />
         <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
+          <RouterLink to="/about" style={{ textDecoration: 'none', color: 'inherit', marginRight: '20px' }}>
+            about us
+          </RouterLink>
           <PhoneIcon sx={{ color: '#333', mr: 1 }} />
           <Typography variant="body2">+123 456 789</Typography>
         </Box>

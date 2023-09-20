@@ -5,7 +5,6 @@ import FacebookIcon from '@mui/icons-material/Facebook'
 import InstagramIcon from '@mui/icons-material/Instagram'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import MailOutlineIcon from '@mui/icons-material/MailOutline'
-import { Link as RouterLink } from 'react-router-dom'
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear()
@@ -44,9 +43,6 @@ const Footer: React.FC = () => {
         </Typography>
       </Box>
       <div style={{ display: 'flex', gap: '10px' }}>
-        <RouterLink to="/about" style={{ textDecoration: 'none', color: 'inherit' }}>
-          about us
-        </RouterLink>
         <FacebookIcon />
         <InstagramIcon />
         <GitHubIcon />
