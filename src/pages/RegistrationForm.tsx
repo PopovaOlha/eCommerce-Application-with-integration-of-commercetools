@@ -5,7 +5,6 @@ import IconButton from '@mui/material/IconButton'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { observer } from 'mobx-react-lite'
-import Header from '../components/Header'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import {
   Typography,
@@ -31,6 +30,8 @@ import * as Yup from 'yup'
 import { registerUser } from '../utils/authUtils'
 import { RegistrationValues } from '../types/interfaces'
 import { useRootStore } from '../App'
+import Footer from '../components/Footer'
+import Header from '../components/Header'
 
 const RegistrationPage: React.FC = () => {
   const rootStore = useRootStore()
@@ -285,6 +286,7 @@ const RegistrationPage: React.FC = () => {
   })
   return (
     <div style={pageStyle}>
+      <Header subcategories={[]} />
       <Link to="/" style={backButtonStyle}>
         <ArrowBackIcon style={backButtonIconStyle} /> Back to main page
       </Link>
@@ -296,9 +298,6 @@ const RegistrationPage: React.FC = () => {
         borderRadius="8px"
         bgcolor="white"
       >
-        <div>
-          <Header subcategories={[]} />
-        </div>
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
           <Form>
             <Typography variant="h4" color="#9ba6a5">
@@ -468,6 +467,7 @@ const RegistrationPage: React.FC = () => {
           </Form>
         </Formik>
       </Box>
+      <Footer />
     </div>
   )
 }
