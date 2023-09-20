@@ -122,62 +122,64 @@ const CartPage = () => {
     if (product) {
       return (
         <>
-          <Card key={item.productId} className="cart-item">
-            <CardContent>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={3}>
-                  <Carousel showThumbs={false} dynamicHeight>
-                    {product.imageUrl.map((image, index) => (
-                      <img
-                        key={index}
-                        src={image}
-                        alt={`Product Image ${index}`}
-                        className="product-image"
-                        style={{ width: '100%', maxWidth: '300px', height: '150px' }}
-                      />
-                    ))}
-                  </Carousel>
+          <div>
+            <Card key={item.productId} className="cart-item">
+              <CardContent>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={3}>
+                    <Carousel showThumbs={false} dynamicHeight>
+                      {product.imageUrl.map((image, index) => (
+                        <img
+                          key={index}
+                          src={image}
+                          alt={`Product Image ${index}`}
+                          className="product-image"
+                          style={{ width: '100%', maxWidth: '300px', height: '150px' }}
+                        />
+                      ))}
+                    </Carousel>
+                  </Grid>
+                  <Grid item xs={12} sm={9}>
+                    <Typography variant="h6" gutterBottom>
+                      {product.name['en-US']}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" gutterBottom>
+                      Quantity: {item.quantity}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" gutterBottom>
+                      Price per unit: ${(item.price / 100).toFixed(2)}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" gutterBottom>
+                      Discount Price:{' '}
+                      {typeof item.discountPrice === 'string'
+                        ? item.discountPrice
+                        : (item.discountPrice / 100).toFixed(2)}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" gutterBottom>
+                      Total Price: ${(item.totalPrice / 100).toFixed(2)}
+                    </Typography>
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} sm={9}>
-                  <Typography variant="h6" gutterBottom>
-                    {product.name['en-US']}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" gutterBottom>
-                    Quantity: {item.quantity}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" gutterBottom>
-                    Price per unit: ${(item.price / 100).toFixed(2)}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" gutterBottom>
-                    Discount Price:{' '}
-                    {typeof item.discountPrice === 'string'
-                      ? item.discountPrice
-                      : (item.discountPrice / 100).toFixed(2)}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" gutterBottom>
-                    Total Price: ${(item.totalPrice / 100).toFixed(2)}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </CardContent>
-            <CardActions>
-              <IconButton aria-label="Remove" color="error" onClick={() => handleRemoveFromCart(item.productId)}>
-                <DeleteIcon />
-              </IconButton>
-              <IconButton
-                aria-label="Increase Quantity"
-                onClick={() => handleupdateCartItemQuantity(item.productId, item.quantity + 1)}
-              >
-                <AddIcon />
-              </IconButton>
-              <IconButton
-                aria-label="Decrease Quantity"
-                onClick={() => handleupdateCartItemQuantity(item.productId, item.quantity - 1)}
-              >
-                <RemoveIcon />
-              </IconButton>
-            </CardActions>
-          </Card>
+              </CardContent>
+              <CardActions>
+                <IconButton aria-label="Remove" color="error" onClick={() => handleRemoveFromCart(item.productId)}>
+                  <DeleteIcon />
+                </IconButton>
+                <IconButton
+                  aria-label="Increase Quantity"
+                  onClick={() => handleupdateCartItemQuantity(item.productId, item.quantity + 1)}
+                >
+                  <AddIcon />
+                </IconButton>
+                <IconButton
+                  aria-label="Decrease Quantity"
+                  onClick={() => handleupdateCartItemQuantity(item.productId, item.quantity - 1)}
+                >
+                  <RemoveIcon />
+                </IconButton>
+              </CardActions>
+            </Card>
+          </div>
         </>
       )
     } else {
@@ -187,22 +189,23 @@ const CartPage = () => {
   console.log(cartItems)
   console.log(hasItemsInCart)
   return (
-    <Container>
+    <div>
       <Header subcategories={[]} />
-      <Grid container spacing={2} className="cart-container">
-        <div
-          style={{
-            display: 'inherit',
-            margin: '50px auto auto auto',
-            marginTop: '50px',
-          }}
-        >
-          <div style={{ padding: '20px 40px' }}>
-            <h2 style={{ marginTop: '50px' }}>Shopping Basket</h2>
-            <Button variant="outlined" color="primary">
-              <Link to="/catalog">CONTINUE SHOPPING</Link>
-            </Button>
-            {/*<div>
+      <Container>
+        <Grid container spacing={2} className="cart-container">
+          <div
+            style={{
+              display: 'inherit',
+              margin: '50px auto auto auto',
+              marginTop: '50px',
+            }}
+          >
+            <div style={{ padding: '20px 40px' }}>
+              <h2 style={{ marginTop: '50px' }}>Shopping Basket</h2>
+              <Button variant="outlined" color="primary">
+                <Link to="/catalog">CONTINUE SHOPPING</Link>
+              </Button>
+              {/*<div>
             <input
               type="text"
               placeholder="Enter promotional code"
@@ -212,23 +215,23 @@ const CartPage = () => {
             />
             <button onClick={handleApplyPromoCode}>Apply</button>
         </div>*/}
-          </div>
-          {hasItemsInCart && (
-            <div className="cart-buttons">
-              <div>Total Price: ${calculateTotalPrice().toFixed(2)}</div>
-              <Button variant="contained" color="primary">
-                Сheckout
-              </Button>
             </div>
-          )}
-        </div>
-        {cartItems}
-      </Grid>
-
-      <div style={{ position: 'fixed', bottom: '0', left: '0', width: '100%' }}>
+            {hasItemsInCart && (
+              <div className="cart-buttons">
+                <div>Total Price: ${calculateTotalPrice().toFixed(2)}</div>
+                <Button variant="contained" color="primary">
+                  Сheckout
+                </Button>
+              </div>
+            )}
+          </div>
+          {cartItems}
+        </Grid>
+      </Container>
+      <div style={{ position: 'fixed', bottom: '0px', width: '100%' }}>
         <Footer />
       </div>
-    </Container>
+    </div>
   )
 }
 

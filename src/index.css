@@ -114,6 +114,9 @@ button:focus-visible {
   display: flex;
   align-self: center;
 }
+.cart-container:last-child {
+  margin-bottom: 80px;
+}
 
 .cart-item {
   display: flex;

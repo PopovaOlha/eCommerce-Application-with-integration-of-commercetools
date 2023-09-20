@@ -51,9 +51,6 @@ const Header: React.FC<HeaderProps> = () => {
     navigate('/cart')
     await cartStore.createCart()
     await cartStore.getCurrentCartState(cartId)
-    // Выполните другие действия
-    // Например, можно вызвать функцию, отправить запрос на сервер и т. д.
-    // Просто добавьте здесь нужные действия.
   }
   const handleCategoriesLinkClick = async () => {
     try {
@@ -82,7 +79,7 @@ const Header: React.FC<HeaderProps> = () => {
 
   return (
     <>
-      <AppBar sx={{ width: '100%', backgroundColor: '#fff' }}>
+      <AppBar sx={{ width: '100%', backgroundColor: '#fff', position: 'relative' }}>
         <Toolbar sx={{ justifyContent: 'space-between' }}>
           <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
             <PetsIcon sx={{ fontSize: isMobile ? 24 : 32, color: '#333' }} />

@@ -23,6 +23,7 @@ const Footer: React.FC = () => {
         justifyContent: 'space-around',
         alignItems: 'center',
         height: '30px',
+        width: '100%',
         '@media (max-width: 600px)': {
           // Медиа-запрос для мобильных устройств
           flexDirection: 'column',
