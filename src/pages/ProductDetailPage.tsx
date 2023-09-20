@@ -72,7 +72,7 @@ const ProductDetailPage: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   const productImageStyle: React.CSSProperties = {
-    width: '100%',
+    width: '50%',
     maxHeight: isMobile ? '80vh' : '80vh',
     objectFit: 'cover',
     borderRadius: '8px',
