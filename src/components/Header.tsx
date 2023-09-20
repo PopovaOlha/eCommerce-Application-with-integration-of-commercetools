@@ -156,8 +156,8 @@ const Header: React.FC<HeaderProps> = () => {
               <Button color="inherit" onClick={() => navigate('/')} sx={{ color: '#333', marginLeft: '10px' }}>
                 Home
               </Button>
-              <Button color="inherit" onClick={() => navigate('/')} sx={{ color: 'blue', marginLeft: '10px' }}>
-                <RouterLink to="/about">about us</RouterLink>
+              <Button color="inherit" onClick={() => navigate('/about')} sx={{ color: 'blue', marginLeft: '10px' }}>
+                About us
               </Button>
               <Button color="inherit" onClick={handleCategoriesLinkClick} sx={{ color: '#333' }}>
                 <RouterLink to="/categories">Categories</RouterLink>
