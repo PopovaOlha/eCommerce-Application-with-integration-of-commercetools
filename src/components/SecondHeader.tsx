@@ -35,7 +35,7 @@ const Header = () => {
               <Link component={RouterLink} to="/catalog" sx={{ color: '#333', textDecoration: 'none' }}>
                 Catalog
               </Link>
-              <RouterLink to="/about" style={{ textDecoration: 'none', color: 'inherit', marginRight: '20px' }}>
+              <RouterLink to="/about" style={{ textDecoration: 'none', color: 'blue', marginRight: '20px' }}>
                 about us
               </RouterLink>
             </>
