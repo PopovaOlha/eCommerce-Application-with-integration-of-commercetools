@@ -10,7 +10,6 @@ import IconButton from '@mui/material/IconButton'
 import { useRootStore } from '../App'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import Header from '../components/Header'
 const validationSchema = Yup.object({
   email: Yup.string()
     .required('Email is required')
@@ -69,9 +68,7 @@ function RegistrationForm() {
 
   return (
     <Box>
-      <div>
-        <Header subcategories={[]} />
-      </div>
+      <div></div>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
         <Form>
           {error && <Typography color="error">{error}</Typography>}
