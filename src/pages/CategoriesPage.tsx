@@ -1,108 +1,203 @@
-import '../index.css'
-import React, { useState, useEffect } from 'react'
-import Footer from '../components/Footer'
-import Header from '../components/Header'
+import MenuIcon from '@mui/icons-material/Menu'
 import { observer } from 'mobx-react-lite'
-import CategoryList from '../components/CategoriesList'
-import { Category } from '../types/interfaces'
-import { fetchCategoriesWithHierarchy } from '../utils/commercetoolsApi'
-import { Container, Grid, Paper, Typography, Divider, useTheme } from '@mui/material'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { Link } from 'react-router-dom'
+import PetsIcon from '@mui/icons-material/Pets'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import React, { useState } from 'react'
+import { Person } from '@mui/icons-material'
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material'
+import { Link, useNavigate } from 'react-router-dom'
 import { useRootStore } from '../App'
-import Breadcrumb from '../components/Breadcrumb'
+import { HeaderProps } from '../types/interfaces'
+import { fetchCategoriesWithHierarchy } from '../utils/commercetoolsApi'
 
-function CategoriesPage() {
+const Header: React.FC<HeaderProps> = () => {
   const theme = useTheme()
-  const [categories, setCategories] = useState<Category[]>([])
-  const { catalogStore } = useRootStore()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const { cartStore } = useRootStore()
+  const rootStore = useRootStore()
+  const { authStore, headerStore } = rootStore
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!localStorage.getItem('user'))
+  const [showAlreadyLoggedInModal, setShowAlreadyLoggedInModal] = useState<boolean>(false)
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
+  const navigate = useNavigate()
 
-  useEffect(() => {
-    const loadCategories = async () => {
-      try {
-        const { subCategories } = await fetchCategoriesWithHierarchy()
-        setCategories(subCategories)
-      } catch (error) {
-        console.error('Error loading categories:', error)
-      }
+  const handleLogin = () => {
+    if (!authStore.isAuthenticated && !localStorage.getItem('user')) {
+      navigate('/login')
+    } else {
+      setShowAlreadyLoggedInModal(true)
     }
-    loadCategories()
-  }, [])
-
-  useEffect(() => {
-    catalogStore.fetchProducts()
-  }, [])
-
-  const categoryPaperStyle = {
-    marginTop: '60px',
-    backgroundColor: '#bbe4e9',
-    listStyle: 'none',
-    padding: '16px',
-    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    transition: 'transform 0.2s ease-in-out',
-    '&:hover': {
-      transform: 'scale(1.03)',
-    },
   }
-  const backButtonStyle: React.CSSProperties = {
-    marginTop: '30px',
-    paddingLeft: '25px',
-    display: 'flex',
-    alignItems: 'center',
-    textDecoration: 'none',
-    color: '#555',
-    marginBottom: '1rem',
+  const handleCartButtonClick = async () => {
+    // Выполните первое действие, например, переход на страницу корзины
+    const cartId: string = localStorage.getItem('cartId')!
+
+    navigate('/cart')
+    await cartStore.createCart()
+    await cartStore.getCurrentCartState(cartId)
   }
-  const pageStyle: React.CSSProperties = {
-    background: 'white',
-    minHeight: 'calc(100vh - 70px - 64px)',
-    paddingTop: '10px',
+  const handleCategoriesLinkClick = async () => {
+    try {
+      const categories = await fetchCategoriesWithHierarchy()
+      console.log(categories)
+      navigate('/categories')
+    } catch (error) {
+      console.error('Error loading categories:', error)
+    }
   }
 
-  const categoryLinkStyle: React.CSSProperties = {
-    textDecoration: 'none',
-    marginTop: '60px',
-    marginLeft: '100px',
-    textDecorationLine: 'underline',
-    display: 'block',
-    color: theme.palette.text.primary,
+  const handleLogout = () => {
+    authStore.logout()
+    setIsLoggedIn(false)
+    localStorage.clear()
+    navigate('/')
   }
-  const dividerStyle: React.CSSProperties = {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
+
+  const handleCloseModal = () => {
+    setShowAlreadyLoggedInModal(false)
   }
-  const backButtonIconStyle: React.CSSProperties = {
-    marginRight: '0.5rem',
+
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!drawerOpen)
   }
 
   return (
-    <div style={pageStyle}>
-      <Header subcategories={[]} />
-      <Breadcrumb categories={[]} isSearchPage={false} />
-      <Link to="/" style={backButtonStyle}>
-        <ArrowBackIcon style={backButtonIconStyle} /> Back to main page
-      </Link>
-      <Divider sx={dividerStyle} />
-      <Link to="/catalog" style={categoryLinkStyle}>
-        <Typography variant="body1">View All Products</Typography>
-      </Link>
-      <Container style={{ marginTop: '22px' }}>
-        <Grid container spacing={3}>
-          {categories.map((category) => (
-            <Grid item key={category.id} xs={12} sm={6} md={4} lg={4}>
-              <Paper elevation={3} style={categoryPaperStyle}>
-                <CategoryList categories={[category]} />
-              </Paper>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-      <div style={{ minHeight: 'calc(100vh - 70px - 64px)', marginTop: '64px' }} className="content"></div>
-      <Footer />
-    </div>
+    <>
+      <AppBar sx={{ width: '100%', backgroundColor: '#fff', position: 'relative' }}>
+        <Toolbar sx={{ justifyContent: 'space-between' }}>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
+            <PetsIcon sx={{ fontSize: isMobile ? 24 : 32, color: '#333' }} />
+            <Typography
+              variant={isMobile ? 'h6' : 'h4'}
+              sx={{
+                color: '#333',
+                ml: 1,
+                fontFamily: 'cursive',
+                fontWeight: 'bold',
+                textDecoration: 'none',
+                animation: 'bounce 2s infinite',
+              }}
+              className="animated-title"
+            >
+              PetWorld Store
+            </Typography>
+          </Link>
+
+          {isMobile ? (
+            <>
+              <IconButton color="inherit" aria-label="menu" onClick={handleDrawerToggle} sx={{ marginRight: 1 }}>
+                <MenuIcon sx={{ color: '#333' }} />
+              </IconButton>
+              <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerToggle}>
+                <List>
+                  <ListItem button onClick={handleDrawerToggle}>
+                    <ListItemText primary="Close menu" />
+                  </ListItem>
+                  <ListItem button onClick={() => navigate('/')}>
+                    <ListItemText primary="Home"></ListItemText>
+                  </ListItem>
+                  <ListItem button onClick={handleCategoriesLinkClick}>
+                    <ListItemText primary="Categories"></ListItemText>
+                  </ListItem>
+                  {isLoggedIn ? (
+                    <>
+                      <ListItem button onClick={handleLogout}>
+                        <ListItemText primary="Logout" />
+                      </ListItem>
+                    </>
+                  ) : (
+                    <ListItem button onClick={handleLogin}>
+                      <ListItemText primary="Login" />
+                    </ListItem>
+                  )}
+                  {!isLoggedIn && (
+                    <ListItem button component={Link} to="/registrations">
+                      <ListItemText primary="Register" />
+                    </ListItem>
+                  )}
+                  <IconButton color="inherit" onClick={() => handleCartButtonClick()}>
+                    <ShoppingCartIcon sx={{ color: '#333' }} />
+                    <span className="cart-counter" style={{ color: 'red' }}>
+                      {headerStore.cartCount}
+                    </span>
+                  </IconButton>
+                  <ListItem button onClick={() => navigate('/user-profile')}>
+                    <ListItemText primary="User" />
+                  </ListItem>
+                </List>
+              </Drawer>
+              <IconButton color="inherit" onClick={() => handleCartButtonClick()}>
+                <ShoppingCartIcon sx={{ color: '#333' }} />
+                <span className="cart-counter" style={{ color: 'red' }}>
+                  {headerStore.cartCount}
+                </span>
+              </IconButton>
+            </>
+          ) : (
+            <>
+              <Button color="inherit" onClick={() => navigate('/')} sx={{ color: '#333', marginLeft: '10px' }}>
+                Home
+              </Button>
+              <Button color="inherit" onClick={handleCategoriesLinkClick} sx={{ color: '#333' }}>
+                Categories
+              </Button>
+              <Button color="inherit" onClick={handleLogin} sx={{ color: '#333' }}>
+                Login
+              </Button>
+              {isLoggedIn ? (
+                <>
+                  <Button color="inherit" onClick={handleLogout} sx={{ color: '#333' }}>
+                    Logout
+                  </Button>
+                  <Button color="inherit" onClick={() => navigate('/user-profile')} sx={{ color: '#333' }}>
+                    <Person sx={{ marginRight: '0.5rem' }} /> User
+                  </Button>
+                </>
+              ) : (
+                <Button color="inherit" component={Link} to="/registrations" sx={{ color: '#333' }}>
+                  Register
+                </Button>
+              )}
+              <IconButton color="inherit" onClick={() => handleCartButtonClick()}>
+                <ShoppingCartIcon sx={{ color: '#333' }} />
+                <span className="cart-counter" style={{ color: 'red' }}>
+                  {headerStore.cartCount}
+                </span>
+              </IconButton>
+            </>
+          )}
+        </Toolbar>
+      </AppBar>
+
+      <Dialog open={showAlreadyLoggedInModal} onClose={handleCloseModal}>
+        <DialogTitle>You are already logged in</DialogTitle>
+        <DialogContent>
+          <Typography>You are already authenticated on the website.</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModal} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   )
 }
 
-export default observer(CategoriesPage)
+export default observer(Header)

@@ -1,14 +1,10 @@
-import MenuIcon from '@mui/icons-material/Menu'
-import { observer } from 'mobx-react-lite'
-import PetsIcon from '@mui/icons-material/Pets'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import React, { useState } from 'react'
-import { Person } from '@mui/icons-material'
 import {
-  AppBar,
+  Button,
+  IconButton,
   Toolbar,
   Typography,
-  Button,
+  AppBar,
   Drawer,
   List,
   ListItem,
@@ -17,14 +13,19 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  IconButton,
   useMediaQuery,
   useTheme,
 } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
-import { useRootStore } from '../App'
+import { observer } from 'mobx-react-lite'
+import PetsIcon from '@mui/icons-material/Pets'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import MenuIcon from '@mui/icons-material/Menu'
+import Person from '@mui/icons-material/Person'
 import { HeaderProps } from '../types/interfaces'
 import { fetchCategoriesWithHierarchy } from '../utils/commercetoolsApi'
+import { useRootStore } from '../App'
+import { Link as RouterLink } from 'react-router-dom'
 
 const Header: React.FC<HeaderProps> = () => {
   const theme = useTheme()
@@ -44,14 +45,15 @@ const Header: React.FC<HeaderProps> = () => {
       setShowAlreadyLoggedInModal(true)
     }
   }
+
   const handleCartButtonClick = async () => {
-    // Выполните первое действие, например, переход на страницу корзины
     const cartId: string = localStorage.getItem('cartId')!
 
     navigate('/cart')
     await cartStore.createCart()
     await cartStore.getCurrentCartState(cartId)
   }
+
   const handleCategoriesLinkClick = async () => {
     try {
       const categories = await fetchCategoriesWithHierarchy()
@@ -110,10 +112,10 @@ const Header: React.FC<HeaderProps> = () => {
                     <ListItemText primary="Close menu" />
                   </ListItem>
                   <ListItem button onClick={() => navigate('/')}>
-                    <ListItemText primary="Home"></ListItemText>
+                    <ListItemText primary="Home" />
                   </ListItem>
                   <ListItem button onClick={handleCategoriesLinkClick}>
-                    <ListItemText primary="Categories"></ListItemText>
+                    <ListItemText primary="Categories" />
                   </ListItem>
                   {isLoggedIn ? (
                     <>
@@ -131,7 +133,7 @@ const Header: React.FC<HeaderProps> = () => {
                       <ListItemText primary="Register" />
                     </ListItem>
                   )}
-                  <IconButton color="inherit" onClick={() => handleCartButtonClick()}>
+                  <IconButton color="inherit" onClick={handleCartButtonClick}>
                     <ShoppingCartIcon sx={{ color: '#333' }} />
                     <span className="cart-counter" style={{ color: 'red' }}>
                       {headerStore.cartCount}
@@ -142,7 +144,7 @@ const Header: React.FC<HeaderProps> = () => {
                   </ListItem>
                 </List>
               </Drawer>
-              <IconButton color="inherit" onClick={() => handleCartButtonClick()}>
+              <IconButton color="inherit" onClick={handleCartButtonClick}>
                 <ShoppingCartIcon sx={{ color: '#333' }} />
                 <span className="cart-counter" style={{ color: 'red' }}>
                   {headerStore.cartCount}
@@ -153,6 +155,12 @@ const Header: React.FC<HeaderProps> = () => {
             <>
               <Button color="inherit" onClick={() => navigate('/')} sx={{ color: '#333', marginLeft: '10px' }}>
                 Home
+              </Button>
+              <Button color="inherit" onClick={() => navigate('/')} sx={{ color: '#333', marginLeft: '10px' }}>
+                Home
+              </Button>
+              <Button color="inherit" onClick={() => navigate('/')} sx={{ color: 'blue', marginLeft: '10px' }}>
+                <RouterLink to="/about">about us</RouterLink>
               </Button>
               <Button color="inherit" onClick={handleCategoriesLinkClick} sx={{ color: '#333' }}>
                 Categories
@@ -174,7 +182,7 @@ const Header: React.FC<HeaderProps> = () => {
                   Register
                 </Button>
               )}
-              <IconButton color="inherit" onClick={() => handleCartButtonClick()}>
+              <IconButton color="inherit" onClick={handleCartButtonClick}>
                 <ShoppingCartIcon sx={{ color: '#333' }} />
                 <span className="cart-counter" style={{ color: 'red' }}>
                   {headerStore.cartCount}

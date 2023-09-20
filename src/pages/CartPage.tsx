@@ -222,47 +222,71 @@ const CartPage = () => {
   })
 
   return (
-    <Container>
+    <div>
       <Header subcategories={[]} />
-      <Grid container spacing={2} className="cart-container">
+      <Container>
         <div
           style={{
             display: 'inherit',
-            margin: '50px auto auto auto',
-            marginTop: '50px',
+            margin: '20px auto auto auto', // Adjust the margin for mobile
+            padding: '20px', // Add padding for mobile
           }}
         >
-          <div style={{ padding: '20px 40px' }}>
+          <div>
             <Button variant="outlined" color="primary">
               <Link to="/catalog">CONTINUE SHOPPING</Link>
             </Button>
-            <div>
-              <input
-                type="text"
-                placeholder="Enter promotional code"
-                value={promoCodeInput}
-                onChange={(e) => setPromoCodeInput(e.target.value)}
-                className="cart-input"
-              />
-              <button onClick={handleApplyPromoCode}>Apply</button>
-            </div>
           </div>
-          {hasItemsInCart && (
-            <div className="cart-buttons">
-              <div>Total Price: ${calculateTotalPrice().toFixed(2)}</div>
-              <Button variant="contained" color="primary">
-                Сheckout
-              </Button>
-            </div>
-          )}
+          <div style={{ marginTop: '20px' }}>
+            {' '}
+            {/* Add margin-top for spacing */}
+            <input
+              type="text"
+              placeholder="Enter promotional code"
+              value={promoCodeInput}
+              onChange={(e) => setPromoCodeInput(e.target.value)}
+              style={{
+                width: '100%', // Make the input full width
+                padding: '10px', // Add padding for mobile
+              }}
+            />
+            <button
+              onClick={handleApplyPromoCode}
+              style={{
+                display: 'block', // Make the button a block element for mobile
+                margin: '10px 0', // Add margin for spacing
+                padding: '10px 20px', // Add padding for mobile
+              }}
+            >
+              Apply
+            </button>
+          </div>
         </div>
+        {hasItemsInCart && (
+          <div
+            style={{
+              padding: '20px',
+            }}
+          >
+            <div>Total Price: ${calculateTotalPrice().toFixed(2)}</div>
+            <Button variant="contained" color="primary">
+              Сheckout
+            </Button>
+          </div>
+        )}
         {cartItems}
-      </Grid>
-
-      <div style={{ position: 'fixed', bottom: '0', left: '0', width: '100%' }}>
+      </Container>
+      <div
+        style={{
+          position: 'fixed',
+          bottom: '0',
+          left: '0',
+          width: '100%',
+        }}
+      >
         <Footer />
       </div>
-    </Container>
+    </div>
   )
 }
 

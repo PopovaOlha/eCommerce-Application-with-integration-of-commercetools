@@ -51,8 +51,7 @@ function HomeButton() {
             borderRadius: '8px',
             cursor: 'pointer',
             display: 'flex',
-            flexWrap: 'wrap',
-            gap: '16px',
+            gap: '20px',
             justifyContent: 'space-between',
           }}
         >
