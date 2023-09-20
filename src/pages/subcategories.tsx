@@ -9,7 +9,7 @@ import { useRootStore } from '../App'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
-
+import DeleteIcon from '@mui/icons-material/Delete'
 const SubcategoryPage: React.FC = () => {
   const navigate = useNavigate()
   const { categoryId } = useParams()
@@ -47,6 +47,19 @@ const SubcategoryPage: React.FC = () => {
         [productId]: true, // Устанавливаем для данного продукта значение true
       }))
     }
+  }
+  const handleRemoveFromCart = async (productId: string) => {
+    await cartStore.removeFromCart(productId)
+
+    // Обновляем cartItemsLocal без использования флага
+    // const updatedCartItems = cartItemsLocal.filter((item) => item.productId !== productId)
+    // setCartItemsLocal(updatedCartItems)
+
+    headerStore.decrementCartCount()
+    setIsAddedToCartMap((prevState) => ({
+      ...prevState,
+      [productId]: false, // Устанавливаем для данного продукта значение true
+    }))
   }
 
   const handleImageClick = (index: number) => {
@@ -169,6 +182,15 @@ const SubcategoryPage: React.FC = () => {
                     >
                       <ShoppingCartIcon sx={{ color: '#333' }} />
                     </IconButton>
+                    {isAddedToCartMap[product.id] && (
+                      <IconButton
+                        color="error"
+                        style={iconStyle}
+                        onClick={() => handleRemoveFromCart(product.id)} // Добавляем обработчик для удаления товара
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    )}
                   </Typography>
                 ) : (
                   <>
@@ -185,6 +207,15 @@ const SubcategoryPage: React.FC = () => {
                       >
                         <ShoppingCartIcon sx={{ color: '#333' }} />
                       </IconButton>
+                      {isAddedToCartMap[product.id] && (
+                        <IconButton
+                          color="error"
+                          style={iconStyle}
+                          onClick={() => handleRemoveFromCart(product.id)} // Добавляем обработчик для удаления товара
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      )}
                     </Typography>
                   </>
                 )}

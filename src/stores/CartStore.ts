@@ -82,28 +82,7 @@ class CartStore {
         ],
       }
 
-      const response: AxiosResponse<ApiResponse> = await api.post(
-        `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts/${cartId}`,
-        requestData
-      )
-
-      console.log('Товар успешно добавлен в корзину:', response.data)
-
-      // const lineItem = response.data.lineItems.find((item) => item.productId === productId)
-      // // if (localStorage.getItem('cartItem') !== null) {
-      // //   const items = localStorage.getItem('cartItem')!
-      // //   const cartItemsLocal: CartItem[] = JSON.parse(items)
-      // //   this.cartItems = cartItemsLocal
-      // // }
-      // if (lineItem) {
-      //   this.cartItems.push({
-      //     productId,
-      //     quantity: lineItem.quantity,
-      //     price: lineItem.price.value.centAmount,
-      //     totalPrice: lineItem.totalPrice.centAmount,
-      //   })
-      //   localStorage.setItem('cartItem', JSON.stringify(this.cartItems))
-      // }
+      await api.post(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts/${cartId}`, requestData)
 
       this.isLoading = false
     } catch (error) {
@@ -117,7 +96,6 @@ class CartStore {
       const response: AxiosResponse<ApiResponse> = await api.get(
         `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts/${cartId}`
       )
-      console.log(response.data.lineItems)
       const cartItems = response.data.lineItems.map((lineItem) => ({
         lineId: lineItem.id,
         productId: lineItem.productId,
@@ -128,7 +106,6 @@ class CartStore {
         discount: lineItem.discountedPrice?.value.centAmount,
       }))
 
-      // Присваиваем this.cartItems новый массив с товарами корзины
       this.cartItems = cartItems
       localStorage.setItem('cartItem', JSON.stringify(this.cartItems))
       return { version: response.data.version }
@@ -211,18 +188,6 @@ class CartStore {
     await api.post(`${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts/${cartId}`, requestData)
     await this.getCurrentCartState(cartId)
   }
-  // async getTotalPrice(cartId: string): Promise<{ total: number }> {
-  //   try {
-  //     const response: AxiosResponse<ApiResponse> = await api.get(
-  //       `${commercetoolsConfig.api}/${commercetoolsConfig.projectKey}/me/carts/${cartId}`
-  //     )
-
-  //     return { total: response.data.totalPrice.centAmount }
-  //   } catch (error) {
-  //     console.error('Ошибка при получении текущего состояния корзины:', error)
-  //     throw error
-  //   }
-  // }
 }
 
 export default CartStore

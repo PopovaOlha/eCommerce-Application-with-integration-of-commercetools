@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { Carousel } from 'react-responsive-carousel'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-
+import DeleteIcon from '@mui/icons-material/Delete'
 interface ProductCardProps {
   product: Product
 }
@@ -41,6 +41,16 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         headerStore.setCartCount(headerStore.cartCount + 1)
       }
     }
+  }
+  const handleRemoveFromCart = async (productId: string) => {
+    await cartStore.removeFromCart(productId)
+
+    // Обновляем cartItemsLocal без использования флага
+    // const updatedCartItems = cartItemsLocal.filter((item) => item.productId !== productId)
+    // setCartItemsLocal(updatedCartItems)
+
+    headerStore.decrementCartCount()
+    setIsAddedToCart(false)
   }
 
   const iconStyle = {
@@ -121,6 +131,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 >
                   <ShoppingCartIcon sx={{ color: '#333' }} />
                 </IconButton>
+                {isAddedToCart && (
+                  <IconButton
+                    color="error"
+                    style={iconStyle}
+                    onClick={() => handleRemoveFromCart(product.id)} // Добавляем обработчик для удаления товара
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                )}
               </Typography>
             ) : (
               <>
@@ -137,6 +156,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                   >
                     <ShoppingCartIcon sx={{ color: '#333' }} />
                   </IconButton>
+                  {isAddedToCart && (
+                    <IconButton
+                      color="error"
+                      style={iconStyle}
+                      onClick={() => handleRemoveFromCart(product.id)} // Добавляем обработчик для удаления товара
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  )}
                 </Typography>
               </>
             )}
