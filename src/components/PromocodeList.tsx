@@ -1,7 +1,7 @@
 import { Button, Grid, Tooltip } from '@mui/material'
 
 const PromoCodeList: React.FC = () => {
-  const promo = ['SAVE5CART', 'SAVE10CART', 'SAVE20CART']
+  const promo = ['SAVE5', 'SAVE10', 'SAVE20']
 
   // Function to handle copying a promo code to the clipboard
   const copyToClipboard = (promoCode: string) => {
