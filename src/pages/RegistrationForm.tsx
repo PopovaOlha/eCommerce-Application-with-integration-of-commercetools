@@ -88,7 +88,7 @@ const RegistrationPage: React.FC = () => {
     minHeight: 'calc(100vh - 70px - 64px)',
   }
   const backButtonStyle: React.CSSProperties = {
-    marginTop: '80px',
+    marginTop: '20px',
     paddingLeft: '25px',
     display: 'flex',
     alignItems: 'center',

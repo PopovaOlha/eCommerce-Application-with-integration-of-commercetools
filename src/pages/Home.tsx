@@ -38,8 +38,9 @@ function Home() {
   }
 
   const backgroundStyle = {
-    minHeight: 'calc(170vh - 70px - 64px)',
-    marginTop: '-5px',
+    width: '90%',
+    margin: '0 auto',
+    height: '80vh', // Устанавливаем высоту 50% от высоты видимой области (viewport height)
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   }
